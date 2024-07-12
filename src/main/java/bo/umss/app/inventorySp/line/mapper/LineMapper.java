@@ -16,7 +16,7 @@ public class LineMapper implements IMapper<Line, LineDto> {
 
 	@Override
 	public LineDto toDto(Line entity) {
-		return new LineDto(entity.getName());
+		return LineDto.at(entity.getName());
 	}
 
 	@Override

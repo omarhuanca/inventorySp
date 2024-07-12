@@ -10,10 +10,6 @@ public abstract class CodeProduct {
 	public static final String LINE_CAN_NOT_BE_NULL = "Line can not be null";
 	public static final String COIN_CAN_NOT_BE_NULL = "Coin can not be null";
 
-	protected String code;
-	protected String description;
-	protected Line line;
-
 	public abstract String getCode();
 
 	public abstract String getDescription();

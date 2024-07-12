@@ -9,10 +9,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
+import bo.umss.app.inventorySp.exception.EmptyFieldException;
+
 @Entity
-@Table(name = "line")
+@Table(name = "ln_line", uniqueConstraints = { @UniqueConstraint(columnNames = { "ln_name" }) })
 public class Line implements Serializable {
 
 	private static final long serialVersionUID = -8555506285688382910L;
@@ -21,21 +24,25 @@ public class Line implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@SequenceGenerator(name = "ln_line", sequenceName = "ln_seq", initialValue = 1000)
-	@Column(name = "ID")
+	@SequenceGenerator(name = "lne_line", sequenceName = "ln_seq", initialValue = 1000)
+	@Column(name = "ln_id")
 	private Long id;
 
 	@NotNull
-	@Column(name = "NAME")
+	@Column(name = "ln_name")
 	private String name;
 
 	public Line(String name) {
 		this.name = name;
 	}
 
+	public Line() {
+		super();
+	}
+
 	public static Line at(String name) {
 		if (name.isEmpty())
-			throw new RuntimeException(NAME_CAN_NOT_BE_BLANK);
+			throw new EmptyFieldException(NAME_CAN_NOT_BE_BLANK);
 
 		return new Line(name);
 	}
@@ -50,6 +57,10 @@ public class Line implements Serializable {
 
 	public Long getId() {
 		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public void setName(String potentialName) {

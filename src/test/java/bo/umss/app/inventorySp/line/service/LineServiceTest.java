@@ -18,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import bo.umss.app.inventorySp.TestObjectBucket;
 import bo.umss.app.inventorySp.exception.EmptyFieldException;
 import bo.umss.app.inventorySp.line.model.Line;
 import bo.umss.app.inventorySp.line.repository.LineRepository;
@@ -36,12 +37,11 @@ public class LineServiceTest {
 	private LineRepository lineRepository;
 
 	private Line potentialLine;
-	private String potentialName;
+	private TestObjectBucket testObjectBucket = new TestObjectBucket();
 
 	@BeforeEach
 	public void setUp() {
-		potentialName = "calderas";
-		potentialLine = Line.at(potentialName);
+		potentialLine = testObjectBucket.createLinePlate();
 	}
 
 	@Test
@@ -53,18 +53,18 @@ public class LineServiceTest {
 	@Test
 	public void verifyWrongCompareValueName() {
 		String potentialNameCompare = "cal";
-		Mockito.when(lineRepository.findByName(potentialName)).thenReturn(potentialLine);
-		Line line = lineService.findByName(potentialName);
+		Mockito.when(lineRepository.findByName(TestObjectBucket.PLATE_NAME)).thenReturn(potentialLine);
+		Line line = lineService.findByName(TestObjectBucket.PLATE_NAME);
 
 		assertFalse(line.compareOtherName(potentialNameCompare));
 	}
 
 	@Test
 	public void verifyCorrectCompareValueName() {
-		Mockito.when(lineRepository.findByName(potentialName)).thenReturn(potentialLine);
-		Line line = lineService.findByName(potentialName);
+		Mockito.when(lineRepository.findByName(TestObjectBucket.PLATE_NAME)).thenReturn(potentialLine);
+		Line line = lineService.findByName(TestObjectBucket.PLATE_NAME);
 
-		assertTrue(line.compareOtherName(potentialName));
+		assertTrue(line.compareOtherName(TestObjectBucket.PLATE_NAME));
 	}
 
 	@Test
@@ -100,7 +100,7 @@ public class LineServiceTest {
 
 	@Test
 	public void verifyAlreadyExistLine() {
-		Mockito.when(lineRepository.existsByName(potentialName)).thenReturn(Boolean.TRUE);
+		Mockito.when(lineRepository.existsByName(TestObjectBucket.PLATE_NAME)).thenReturn(Boolean.TRUE);
 
 		assertThrows(RuntimeException.class, () -> lineService.create(potentialLine));
 	}
@@ -110,7 +110,7 @@ public class LineServiceTest {
 		Mockito.when(lineRepository.save(potentialLine)).thenReturn(potentialLine);
 		Line lineResult = lineService.create(potentialLine);
 
-		assertFalse(lineResult.compareOtherName(potentialName + "t"));
+		assertFalse(lineResult.compareOtherName(TestObjectBucket.PLATE_NAME + "t"));
 	}
 
 	@Test
@@ -118,7 +118,7 @@ public class LineServiceTest {
 		Mockito.when(lineRepository.save(potentialLine)).thenReturn(potentialLine);
 		Line lineResult = lineService.create(potentialLine);
 
-		assertTrue(lineResult.compareOtherName(potentialName));
+		assertTrue(lineResult.compareOtherName(TestObjectBucket.PLATE_NAME));
 	}
 
 	@Test
