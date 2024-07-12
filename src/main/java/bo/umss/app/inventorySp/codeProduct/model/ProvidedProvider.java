@@ -9,6 +9,12 @@ public class ProvidedProvider extends CodeProduct {
 	public static final String PROVIDER_CAN_NOT_BE_NULL = "Provider can not be null.";
 	private Provider provider;
 
+	private String code;
+
+	private String description;
+
+	private Line line;
+	
 	public ProvidedProvider(String code, String description, Line line, Provider provider) {
 		this.code = code;
 		this.description = description;

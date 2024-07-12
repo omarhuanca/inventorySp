@@ -34,9 +34,7 @@ public class TestObjectBucket {
 	public static final String INVOICE_NUMBER = "654987";
 
 	public Product createPlate() {
-		Line line = Line.at(PLATE_NAME);
-		CodeProduct notProvidedProvider = NotProvidedProvider.at(PLATE_CODE, "PLATO ZETA BOWL 8 PORCELANA CUADRADO",
-				line);
+		CodeProduct notProvidedProvider = createNotProvidedProviderPlate();
 		Coin coin = Coin.at(CODE_BS);
 		Price priceCost = Price.at(5.0, coin);
 		Price priceSale = Price.at(10.0, coin);
@@ -47,9 +45,7 @@ public class TestObjectBucket {
 	}
 
 	public Product createCup() {
-		Line line = Line.at(CUP_NAME);
-		NotProvidedProvider notProvidedProvider = NotProvidedProvider.at(CUP_CODE, "TAZA ISAYLIN PORCELANA RECTO",
-				line);
+		NotProvidedProvider notProvidedProvider = createNotProvidedProviderCup();
 		Coin coin = Coin.at(CODE_BS);
 		Price priceCost = Price.at(8.0, coin);
 		Price priceSale = Price.at(16.0, coin);
@@ -73,5 +69,24 @@ public class TestObjectBucket {
 		Stock stock = Stock.at(80, measurement);
 
 		return Product.at(notProvidedProvider, stock, priceCost, priceSale);
+	}
+
+	public NotProvidedProvider createNotProvidedProviderPlate() {
+		Line line = createLinePlate();
+		return NotProvidedProvider.at(PLATE_CODE, "PLATO ZETA BOWL 8 PORCELANA CUADRADO", line);
+	}
+
+	public Line createLinePlate() {
+		return Line.at(PLATE_NAME);
+	}
+
+	public NotProvidedProvider createNotProvidedProviderCup() {
+		Line line = createLineCup();
+		return NotProvidedProvider.at(CUP_CODE, "TAZA ISAYLIN PORCELANA RECTO", line);
+	}
+
+	public Line createLineCup() {
+		Line line = Line.at(CUP_NAME);
+		return line;
 	}
 }

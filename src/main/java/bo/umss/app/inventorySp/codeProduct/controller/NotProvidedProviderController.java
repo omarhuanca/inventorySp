@@ -1,4 +1,4 @@
-package bo.umss.app.inventorySp.line.controller;
+package bo.umss.app.inventorySp.codeProduct.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,38 +6,39 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
 
+import bo.umss.app.inventorySp.codeProduct.dto.NotProvidedProviderDto;
+import bo.umss.app.inventorySp.codeProduct.mapper.NotProvidedProviderMapper;
+import bo.umss.app.inventorySp.codeProduct.model.NotProvidedProvider;
+import bo.umss.app.inventorySp.codeProduct.service.NotProvidedProviderService;
 import bo.umss.app.inventorySp.controller.CrudController;
 import bo.umss.app.inventorySp.exception.BadParamsException;
 import bo.umss.app.inventorySp.exception.CrudException;
 import bo.umss.app.inventorySp.exception.EntityNotFoundException;
-import bo.umss.app.inventorySp.line.dto.LineDto;
-import bo.umss.app.inventorySp.line.mapper.LineMapper;
-import bo.umss.app.inventorySp.line.model.Line;
-import bo.umss.app.inventorySp.line.service.LineService;
 
 @RestController
-@RequestMapping("/api/v1/lines")
-public class LineController implements CrudController<LineDto> {
+@RequestMapping("/api/v1/notprovidedproviders")
+public class NotProvidedProviderController implements CrudController<NotProvidedProviderDto> {
 
 	@Autowired
-	private LineService service;
+	private NotProvidedProviderService service;
 
 	@Autowired
-	private LineMapper mapper;
+	private NotProvidedProviderMapper mapper;
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	@Override
-	public LineDto create(@RequestBody @Valid LineDto dto) {
+	public NotProvidedProviderDto create(@RequestBody @Valid NotProvidedProviderDto dto) {
 		try {
 			return mapper.toDto(service.create(mapper.toEntity(dto, true)));
 		} catch (BadParamsException e) {
@@ -45,8 +46,22 @@ public class LineController implements CrudController<LineDto> {
 		}
 	}
 
+	@PutMapping
+	@ResponseStatus(HttpStatus.OK)
 	@Override
-	public void update(LineDto dto) {
+	public void update(@RequestBody @Valid NotProvidedProviderDto dto) {
+		try {
+			service.update(mapper.toEntity(dto, false));
+
+		} catch (NullPointerException e) {
+			throw new BadParamsException();
+
+		} catch (CrudException e) {
+			throw new CrudException(e.getMessage());
+
+		} catch (EntityNotFoundException e) {
+			throw new EntityNotFoundException();
+		}
 
 	}
 
@@ -58,9 +73,9 @@ public class LineController implements CrudController<LineDto> {
 
 	@GetMapping(value = "/{code}")
 	@Override
-	public LineDto read(@PathVariable("code") String code) {
+	public NotProvidedProviderDto read(@PathVariable("code") String code) {
 		try {
-			return mapper.toDto(service.findByName(code));
+			return mapper.toDto(service.findByCode(code));
 		} catch (NullPointerException e) {
 			throw new BadParamsException();
 		} catch (CrudException e) {
@@ -72,11 +87,11 @@ public class LineController implements CrudController<LineDto> {
 
 	@GetMapping
 	@Override
-	public List<LineDto> findAll() {
+	public List<NotProvidedProviderDto> findAll() {
 		try {
-			List<LineDto> lineList = new ArrayList<>();
-			for (Line line : service.findAll()) {
-				lineList.add(mapper.toDto(line));
+			List<NotProvidedProviderDto> lineList = new ArrayList<>();
+			for (NotProvidedProvider entity : service.findAll()) {
+				lineList.add(mapper.toDto(entity));
 			}
 
 			return lineList;

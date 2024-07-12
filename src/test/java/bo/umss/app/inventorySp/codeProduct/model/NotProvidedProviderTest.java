@@ -1,4 +1,4 @@
-package bo.umss.app.inventorySp.codeProduct;
+package bo.umss.app.inventorySp.codeProduct.model;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import bo.umss.app.inventorySp.TestObjectBucket;
+import bo.umss.app.inventorySp.codeProduct.CodeProduct;
 import bo.umss.app.inventorySp.codeProduct.model.NotProvidedProvider;
 import bo.umss.app.inventorySp.line.model.Line;
 

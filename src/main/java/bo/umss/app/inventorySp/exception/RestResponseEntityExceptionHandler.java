@@ -23,8 +23,8 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 		return new ResponseEntity<Object>(ex.getMessage(), HttpStatus.NOT_FOUND);
 	}
 
-	@ExceptionHandler(BadParamException.class)
-	public ResponseEntity<Object> handleBadParamException(BadParamException ex, WebRequest request) {
+	@ExceptionHandler(BadParamsException.class)
+	public ResponseEntity<Object> handleBadParamException(BadParamsException ex, WebRequest request) {
 		String message = ex.getLocalizedMessage() != null ? ex.getLocalizedMessage() : "";
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiErrorMessageDto(message));
 	}
