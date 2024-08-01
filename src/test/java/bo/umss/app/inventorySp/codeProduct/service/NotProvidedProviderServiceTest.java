@@ -20,8 +20,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import bo.umss.app.inventorySp.TestObjectBucket;
-import bo.umss.app.inventorySp.codeProduct.model.NotProvidedProvider;
-import bo.umss.app.inventorySp.codeProduct.repository.NotProvidedProviderRepository;
+import bo.umss.app.inventorySp.business.codeProduct.model.NotProvidedProvider;
+import bo.umss.app.inventorySp.business.codeProduct.repository.NotProvidedProviderRepository;
+import bo.umss.app.inventorySp.business.codeProduct.service.NotProvidedProviderService;
 import bo.umss.app.inventorySp.exception.EmptyFieldException;
 import bo.umss.app.inventorySp.exception.EntityNotFoundException;
 import bo.umss.app.inventorySp.exception.UniqueViolationException;

@@ -2,7 +2,7 @@ package bo.umss.app.inventorySp;
 
 import java.time.LocalDate;
 
-import bo.umss.app.inventorySp.codeProduct.CodeProduct;
+import bo.umss.app.inventorySp.business.codeProduct.CodeProduct;
 
 public abstract class StockTransaction {
 

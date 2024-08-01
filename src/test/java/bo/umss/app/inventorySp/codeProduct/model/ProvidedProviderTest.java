@@ -6,10 +6,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import bo.umss.app.inventorySp.TestObjectBucket;
-import bo.umss.app.inventorySp.codeProduct.CodeProduct;
-import bo.umss.app.inventorySp.codeProduct.model.ProvidedProvider;
-import bo.umss.app.inventorySp.line.model.Line;
-import bo.umss.app.inventorySp.provider.model.Provider;
+import bo.umss.app.inventorySp.business.codeProduct.CodeProduct;
+import bo.umss.app.inventorySp.business.codeProduct.model.ProvidedProvider;
+import bo.umss.app.inventorySp.business.line.model.Line;
+import bo.umss.app.inventorySp.business.provider.model.Provider;
 
 public class ProvidedProviderTest {
 

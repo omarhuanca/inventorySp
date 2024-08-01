@@ -19,10 +19,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import bo.umss.app.inventorySp.TestObjectBucket;
+import bo.umss.app.inventorySp.business.line.model.Line;
+import bo.umss.app.inventorySp.business.line.repository.LineRepository;
+import bo.umss.app.inventorySp.business.line.service.LineService;
 import bo.umss.app.inventorySp.exception.EmptyFieldException;
-import bo.umss.app.inventorySp.line.model.Line;
-import bo.umss.app.inventorySp.line.repository.LineRepository;
-import bo.umss.app.inventorySp.line.service.LineService;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { LineServiceTestConfig.class })

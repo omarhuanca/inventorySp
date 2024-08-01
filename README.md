@@ -1,8 +1,5 @@
 # Inventory Spring Boot
 
-* [Requisitos](#requisitos)
-* [Ejecución](#ejecucion)
-
 ## Requisitos
 
 * Docker version 26.0.1 o superior

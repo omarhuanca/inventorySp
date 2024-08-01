@@ -5,8 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
-import bo.umss.app.inventorySp.line.service.LineService;
-import bo.umss.app.inventorySp.line.service.impl.LineServiceImpl;
+import bo.umss.app.inventorySp.business.line.service.LineService;
+import bo.umss.app.inventorySp.business.line.service.impl.LineServiceImpl;
 
 @Configuration
 public class LineServiceTestConfig {

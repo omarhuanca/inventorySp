@@ -4,8 +4,8 @@ import java.time.LocalDate;
 import java.util.Map;
 import java.util.Set;
 
-import bo.umss.app.inventorySp.price.model.Price;
-import bo.umss.app.inventorySp.product.model.Product;
+import bo.umss.app.inventorySp.business.price.model.Price;
+import bo.umss.app.inventorySp.business.product.model.Product;
 
 public abstract class NoteTransaction {
 

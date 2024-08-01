@@ -2,14 +2,14 @@ package bo.umss.app.inventorySp;
 
 import java.time.LocalDate;
 
-import bo.umss.app.inventorySp.codeProduct.CodeProduct;
-import bo.umss.app.inventorySp.codeProduct.model.NotProvidedProvider;
-import bo.umss.app.inventorySp.coin.model.Coin;
-import bo.umss.app.inventorySp.line.model.Line;
-import bo.umss.app.inventorySp.measurement.model.Measurement;
-import bo.umss.app.inventorySp.price.model.Price;
-import bo.umss.app.inventorySp.product.model.Product;
-import bo.umss.app.inventorySp.stock.model.Stock;
+import bo.umss.app.inventorySp.business.codeProduct.CodeProduct;
+import bo.umss.app.inventorySp.business.codeProduct.model.NotProvidedProvider;
+import bo.umss.app.inventorySp.business.coin.model.Coin;
+import bo.umss.app.inventorySp.business.line.model.Line;
+import bo.umss.app.inventorySp.business.measurement.model.Measurement;
+import bo.umss.app.inventorySp.business.price.model.Price;
+import bo.umss.app.inventorySp.business.product.model.Product;
+import bo.umss.app.inventorySp.business.stock.model.Stock;
 
 public class TestObjectBucket {
 
