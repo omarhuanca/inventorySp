@@ -5,7 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
-import bo.umss.app.inventorySp.codeProduct.service.impl.NotProvidedProviderServiceImpl;
+import bo.umss.app.inventorySp.business.codeProduct.service.NotProvidedProviderService;
+import bo.umss.app.inventorySp.business.codeProduct.service.impl.NotProvidedProviderServiceImpl;
 
 @Configuration
 public class NotProvidedProviderServiceTestConfig {

@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import bo.umss.app.inventorySp.line.model.Line;
+import bo.umss.app.inventorySp.business.line.model.Line;
 
 public class LineTest {
 
