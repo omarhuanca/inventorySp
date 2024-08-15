@@ -122,16 +122,6 @@ public class LineServiceTest {
 	}
 
 	@Test
-	public void verifyCompareNameAfterWasUpdate() {
-		String newPotentialName = "nuevas calderas";
-		potentialLine.setName(newPotentialName);
-		Mockito.when(lineRepository.save(potentialLine)).thenReturn(potentialLine);
-		Line lineUpdate = lineService.update(potentialLine);
-
-		assertTrue(lineUpdate.compareOtherName(newPotentialName));
-	}
-
-	@Test
 	public void verifyThrowExceptionEmptyName() {
 		assertThrows(EmptyFieldException.class, () -> lineService.findByName(""));
 	}

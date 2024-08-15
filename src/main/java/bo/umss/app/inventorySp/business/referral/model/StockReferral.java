@@ -3,7 +3,7 @@ package bo.umss.app.inventorySp.business.referral.model;
 import java.time.LocalDate;
 
 import bo.umss.app.inventorySp.StockTransaction;
-import bo.umss.app.inventorySp.business.codeProduct.CodeProduct;
+import bo.umss.app.inventorySp.business.codeProduct.model.CodeProduct;
 
 public class StockReferral extends StockTransaction {
 

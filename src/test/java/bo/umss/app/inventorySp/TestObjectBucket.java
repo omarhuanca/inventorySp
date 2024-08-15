@@ -2,7 +2,7 @@ package bo.umss.app.inventorySp;
 
 import java.time.LocalDate;
 
-import bo.umss.app.inventorySp.business.codeProduct.CodeProduct;
+import bo.umss.app.inventorySp.business.codeProduct.model.CodeProduct;
 import bo.umss.app.inventorySp.business.codeProduct.model.NotProvidedProvider;
 import bo.umss.app.inventorySp.business.coin.model.Coin;
 import bo.umss.app.inventorySp.business.line.model.Line;
@@ -35,22 +35,34 @@ public class TestObjectBucket {
 
 	public Product createPlate() {
 		CodeProduct notProvidedProvider = createNotProvidedProviderPlate();
-		Coin coin = Coin.at(CODE_BS);
+		Coin coin = createCoin();
 		Price priceCost = Price.at(5.0, coin);
 		Price priceSale = Price.at(10.0, coin);
-		Measurement measurement = Measurement.at(CODE_PZA);
-		Stock stock = Stock.at(10, measurement);
+		Measurement measurement = createMeasurementPiece();
+		Stock stock = createStock(10, measurement);
 
 		return Product.at(notProvidedProvider, stock, priceCost, priceSale);
 	}
 
+	public Stock createStock(Integer value, Measurement measurement) {
+		return Stock.at(value, measurement);
+	}
+
+	public Coin createCoin() {
+		return Coin.at(CODE_BS);
+	}
+
+	public Measurement createMeasurementPiece() {
+		return Measurement.at(CODE_PZA);
+	}
+
 	public Product createCup() {
 		NotProvidedProvider notProvidedProvider = createNotProvidedProviderCup();
-		Coin coin = Coin.at(CODE_BS);
+		Coin coin = createCoin();
 		Price priceCost = Price.at(8.0, coin);
 		Price priceSale = Price.at(16.0, coin);
-		Measurement measurement = Measurement.at(CODE_PZA);
-		Stock stock = Stock.at(10, measurement);
+		Measurement measurement = createMeasurementPiece();
+		Stock stock = createStock(10, measurement);
 
 		return Product.at(notProvidedProvider, stock, priceCost, priceSale);
 	}
@@ -65,8 +77,8 @@ public class TestObjectBucket {
 		Coin coin = Coin.at(CODE_USA);
 		Price priceCost = Price.at(205.0, coin);
 		Price priceSale = Price.at(246.0, coin);
-		Measurement measurement = Measurement.at(CODE_PZA);
-		Stock stock = Stock.at(80, measurement);
+		Measurement measurement = createMeasurementPiece();
+		Stock stock = createStock(80, measurement);
 
 		return Product.at(notProvidedProvider, stock, priceCost, priceSale);
 	}

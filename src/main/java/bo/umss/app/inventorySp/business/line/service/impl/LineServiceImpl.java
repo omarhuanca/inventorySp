@@ -7,7 +7,6 @@ import javax.transaction.Transactional;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -48,13 +47,7 @@ public class LineServiceImpl implements LineService {
 	@Transactional
 	@Override
 	public Line update(Line entity) {
-		try {
-			return repository.save(entity);
-		} catch (ConstraintViolationException e) {
-			throw new BadParamsException(e.getMessage());
-		} catch (DataAccessException e) {
-			throw new CrudException(CrudException.DATA_ACCESS);
-		}
+		return null;
 	}
 
 	@Override

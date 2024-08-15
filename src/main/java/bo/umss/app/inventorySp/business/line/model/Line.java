@@ -37,7 +37,6 @@ public class Line implements Serializable {
 	}
 
 	public Line() {
-		super();
 	}
 
 	public static Line at(String name) {

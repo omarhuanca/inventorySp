@@ -7,7 +7,7 @@ import java.util.List;
 import bo.umss.app.inventorySp.StockTransaction;
 import bo.umss.app.inventorySp.business.buy.model.StockBuy;
 import bo.umss.app.inventorySp.business.changePrice.model.ChangePrice;
-import bo.umss.app.inventorySp.business.codeProduct.CodeProduct;
+import bo.umss.app.inventorySp.business.codeProduct.model.CodeProduct;
 import bo.umss.app.inventorySp.business.price.model.Price;
 import bo.umss.app.inventorySp.business.referral.model.StockReferral;
 import bo.umss.app.inventorySp.business.stock.model.Stock;
