@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import bo.umss.app.inventorySp.StockTransaction;
 import bo.umss.app.inventorySp.TestObjectBucket;
-import bo.umss.app.inventorySp.business.codeProduct.CodeProduct;
+import bo.umss.app.inventorySp.business.codeProduct.model.CodeProduct;
 import bo.umss.app.inventorySp.business.codeProduct.model.NotProvidedProvider;
 import bo.umss.app.inventorySp.business.line.model.Line;
 import bo.umss.app.inventorySp.business.referral.model.StockReferral;

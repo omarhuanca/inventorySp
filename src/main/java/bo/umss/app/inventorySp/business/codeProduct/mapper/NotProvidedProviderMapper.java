@@ -9,6 +9,7 @@ import bo.umss.app.inventorySp.business.codeProduct.service.NotProvidedProviderS
 import bo.umss.app.inventorySp.business.line.dto.LineDto;
 import bo.umss.app.inventorySp.business.line.mapper.LineMapper;
 import bo.umss.app.inventorySp.business.line.model.Line;
+import bo.umss.app.inventorySp.business.line.service.LineService;
 import bo.umss.app.inventorySp.mapper.IMapper;
 
 @Service
@@ -20,6 +21,9 @@ public class NotProvidedProviderMapper implements IMapper<NotProvidedProvider, N
 	@Autowired
 	private LineMapper lineMapper;
 
+	@Autowired
+	private LineService lineService;
+
 	@Override
 	public NotProvidedProviderDto toDto(NotProvidedProvider entity) {
 		LineDto line = lineMapper.toDto(entity.getLine());
@@ -28,7 +32,7 @@ public class NotProvidedProviderMapper implements IMapper<NotProvidedProvider, N
 
 	@Override
 	public NotProvidedProvider toEntity(NotProvidedProviderDto dto, boolean isNew) {
-		Line line = lineMapper.toEntity(dto.getLine(), isNew);
+		Line line = lineService.findByName(dto.getLine().getName());
 
 		if (isNew) {
 			return NotProvidedProvider.at(dto.getCode(), dto.getDescription(), line);

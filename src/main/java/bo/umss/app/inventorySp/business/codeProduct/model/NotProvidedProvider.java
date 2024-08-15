@@ -15,7 +15,6 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
-import bo.umss.app.inventorySp.business.codeProduct.CodeProduct;
 import bo.umss.app.inventorySp.business.line.model.Line;
 import bo.umss.app.inventorySp.business.provider.model.Provider;
 import bo.umss.app.inventorySp.exception.EmptyFieldException;

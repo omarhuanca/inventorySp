@@ -1,6 +1,5 @@
 package bo.umss.app.inventorySp.business.codeProduct.model;
 
-import bo.umss.app.inventorySp.business.codeProduct.CodeProduct;
 import bo.umss.app.inventorySp.business.line.model.Line;
 import bo.umss.app.inventorySp.business.provider.model.Provider;
 
@@ -33,7 +32,6 @@ public class ProvidedProvider extends CodeProduct {
 			throw new RuntimeException(PROVIDER_CAN_NOT_BE_NULL);
 
 		return new ProvidedProvider(code, description, line, provider);
-
 	}
 
 	@Override

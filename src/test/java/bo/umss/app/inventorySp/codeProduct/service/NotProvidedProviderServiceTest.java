@@ -20,6 +20,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import bo.umss.app.inventorySp.TestObjectBucket;
+import bo.umss.app.inventorySp.business.codeProduct.model.CodeProduct;
 import bo.umss.app.inventorySp.business.codeProduct.model.NotProvidedProvider;
 import bo.umss.app.inventorySp.business.codeProduct.repository.NotProvidedProviderRepository;
 import bo.umss.app.inventorySp.business.codeProduct.service.NotProvidedProviderService;
@@ -51,6 +52,7 @@ public class NotProvidedProviderServiceTest {
 	public void verifyGetListResultIsEmpty() {
 		List<NotProvidedProvider> notProvidedProviderList = notProvidedProviderService.findAll();
 		Mockito.when(notProvidedProviderRepository.findAll()).thenReturn(notProvidedProviderList);
+
 		assertEquals(0, notProvidedProviderList.size());
 	}
 
@@ -61,13 +63,21 @@ public class NotProvidedProviderServiceTest {
 				.createNotProvidedProviderPlate();
 		notProvidedProviderList.add(notProvidedProvider);
 		Mockito.when(notProvidedProviderRepository.findAll()).thenReturn(notProvidedProviderList);
+
 		assertEquals(1, notProvidedProviderList.size());
+	}
+
+	@Test
+	public void verifyCanNotBeEmptyCodeProduct() {
+		assertThrows(EmptyFieldException.class, () -> notProvidedProviderService.existsByCode(""),
+				CodeProduct.CODE_CAN_NOT_BE_BLANK);
 	}
 
 	@Test
 	public void verifyCodeDoesnotFound() {
 		String potentialCode = TestObjectBucket.PLATE_CODE;
 		Mockito.when(notProvidedProviderRepository.existsByCode(potentialCode)).thenReturn(false);
+
 		assertFalse(notProvidedProviderService.existsByCode(potentialCode));
 	}
 
@@ -75,12 +85,14 @@ public class NotProvidedProviderServiceTest {
 	public void verifycodeWasFound() {
 		String potentialCode = TestObjectBucket.PLATE_CODE;
 		Mockito.when(notProvidedProviderRepository.existsByCode(potentialCode)).thenReturn(true);
+
 		assertTrue(notProvidedProviderService.existsByCode(potentialCode));
 	}
 
 	@Test
 	public void executeFoundCodeAfterThrowException() {
 		Mockito.when(notProvidedProviderRepository.existsByCode(TestObjectBucket.PLATE_CODE)).thenReturn(true);
+
 		assertThrows(UniqueViolationException.class, () -> notProvidedProviderService.create(notProvidedProvider));
 	}
 
@@ -113,6 +125,7 @@ public class NotProvidedProviderServiceTest {
 		NotProvidedProvider anotherNotProvidedProvider = testObjectBucket.createNotProvidedProviderCup();
 		Mockito.when(notProvidedProviderRepository.save(notProvidedProvider)).thenReturn(anotherNotProvidedProvider);
 		NotProvidedProvider recovered = notProvidedProviderService.create(notProvidedProvider);
+
 		assertFalse(recovered.compareAnotherCode(notProvidedProvider));
 	}
 
@@ -120,6 +133,7 @@ public class NotProvidedProviderServiceTest {
 	public void verifyCorrectCompareCode() {
 		Mockito.when(notProvidedProviderRepository.save(notProvidedProvider)).thenReturn(notProvidedProvider);
 		NotProvidedProvider recovered = notProvidedProviderService.create(notProvidedProvider);
+
 		assertTrue(recovered.compareAnotherCode(notProvidedProvider));
 	}
 
@@ -128,6 +142,7 @@ public class NotProvidedProviderServiceTest {
 		NotProvidedProvider anotherNotProvidedProvider = testObjectBucket.createNotProvidedProviderCup();
 		Mockito.when(notProvidedProviderRepository.save(notProvidedProvider)).thenReturn(anotherNotProvidedProvider);
 		NotProvidedProvider recovered = notProvidedProviderService.update(notProvidedProvider);
+
 		assertTrue(recovered.compareAnotherCode(anotherNotProvidedProvider));
 	}
 
