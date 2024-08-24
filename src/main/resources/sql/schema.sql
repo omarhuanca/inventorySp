@@ -6,6 +6,8 @@ CREATE SEQUENCE ln_seq;
 CREATE SEQUENCE ntp_seq;
 CREATE SEQUENCE ms_seq;
 CREATE SEQUENCE cn_seq;
+CREATE SEQUENCE st_seq;
+CREATE SEQUENCE pr_seq;
 
 /*==============================================================*/
 /* Table: Line                                                  */
@@ -50,10 +52,41 @@ ALTER TABLE ms_measurement
 /* Table: Coin                                                  */
 /*==============================================================*/
 CREATE TABLE cn_coin (
-	cn_id		BIGINT			NOT NULL,
-	cn_code		VARCHAR(45)		NOT NULL
+    cn_id       BIGINT          NOT NULL,
+    cn_code     VARCHAR(45)     NOT NULL
 );
 
 ALTER TABLE cn_coin
-	ALTER COLUMN	cn_id 		SET DEFAULT nextval('cn_seq'),
-	ADD CONSTRAINT 	pk_cn_id	PRIMARY KEY(cn_id);
+    ALTER COLUMN    cn_id       SET DEFAULT nextval('cn_seq'),
+    ADD CONSTRAINT  pk_cn_id    PRIMARY KEY(cn_id);
+
+/*==============================================================*/
+/* Table: Stock                                                 */
+/*==============================================================*/
+CREATE TABLE st_stock (
+    st_id       BIGINT          NOT NULL,
+    st_code     VARCHAR(45)     NOT NULL,
+    st_value    INTEGER         NOT NULL,
+    st_ms_id    BIGINT          NOT NULL
+);
+
+ALTER TABLE st_stock
+    ALTER COLUMN    st_id           SET DEFAULT nextval('st_seq'),
+    ADD CONSTRAINT  pk_st_id        PRIMARY KEY(st_id),
+    ADD CONSTRAINT  uq_st_code      UNIQUE(st_code),
+    ADD CONSTRAINT  fk_st_ms_id     FOREIGN KEY(st_ms_id) REFERENCES ms_measurement(ms_id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+/*==============================================================*/
+/* Table: Price                                                 */
+/*==============================================================*/
+CREATE TABLE pr_price (
+    pr_id       BIGINT          NOT NULL,
+    pr_code     VARCHAR(45)     NOT NULL,
+    pr_value    INTEGER         NOT NULL,
+    pr_cn_id    BIGINT          NOT NULL
+);
+
+ALTER TABLE pr_price
+    ALTER COLUMN    pr_id           SET DEFAULT nextval('pr_seq'),
+    ADD CONSTRAINT  pk_pr_id        PRIMARY KEY(pr_id),
+    ADD CONSTRAINT  fk_pr_cn_id    	FOREIGN KEY(pr_cn_id) REFERENCES cn_coin(cn_id) ON UPDATE CASCADE ON DELETE CASCADE;

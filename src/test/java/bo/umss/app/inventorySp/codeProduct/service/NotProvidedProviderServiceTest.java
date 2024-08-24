@@ -41,17 +41,17 @@ public class NotProvidedProviderServiceTest {
 	private NotProvidedProviderRepository notProvidedProviderRepository;
 
 	private NotProvidedProvider notProvidedProvider;
-	private TestObjectBucket testObjectBucket = new TestObjectBucket();
+	private TestObjectBucket testObjectBucket;
 
 	@BeforeEach
 	public void setUp() {
+		testObjectBucket = new TestObjectBucket();
 		notProvidedProvider = testObjectBucket.createNotProvidedProviderPlate();
 	}
 
 	@Test
 	public void verifyGetListResultIsEmpty() {
 		List<NotProvidedProvider> notProvidedProviderList = notProvidedProviderService.findAll();
-		Mockito.when(notProvidedProviderRepository.findAll()).thenReturn(notProvidedProviderList);
 
 		assertEquals(0, notProvidedProviderList.size());
 	}
@@ -149,6 +149,7 @@ public class NotProvidedProviderServiceTest {
 	@Test
 	public void verifyThrowException() {
 		Long key = 5L;
+
 		assertThrows(EntityNotFoundException.class, () -> notProvidedProviderService.read(key));
 	}
 

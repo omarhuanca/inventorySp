@@ -39,11 +39,12 @@ public class MeasurementServiceTest {
 	private MeasurementRepository measurementRepository;
 
 	private Measurement potentialMeasurement;
-	private TestObjectBucket testObjectBucket = new TestObjectBucket();
+	private TestObjectBucket testObjectBucket;
 	private String potentialCode;
 
 	@BeforeEach
 	public void setUp() {
+		testObjectBucket = new TestObjectBucket();
 		potentialMeasurement = testObjectBucket.createMeasurementPiece();
 		potentialCode = TestObjectBucket.CODE_PZA;
 	}

@@ -1,6 +1,7 @@
 package bo.umss.app.inventorySp.business.measurement.dto;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -21,7 +22,7 @@ public class MeasurementDto {
 	public MeasurementDto() {
 	}
 
-	public static MeasurementDto at(String code) {
+	public static MeasurementDto at(@NotNull String code) {
 		if (code.isEmpty())
 			throw new RuntimeException(Measurement.CODE_CAN_NOT_BE_BLANK);
 

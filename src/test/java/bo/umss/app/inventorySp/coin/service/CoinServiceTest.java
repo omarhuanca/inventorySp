@@ -37,11 +37,12 @@ public class CoinServiceTest {
 	private CoinRepository coinRepository;
 
 	private Coin potentialCoin;
-	private TestObjectBucket testObjectBucket = new TestObjectBucket();
+	private TestObjectBucket testObjectBucket;
 
 	@BeforeEach
 	public void setUp() {
-		potentialCoin = testObjectBucket.createCoin();
+		testObjectBucket = new TestObjectBucket();
+		potentialCoin = testObjectBucket.createCoin(TestObjectBucket.CODE_BS);
 	}
 
 	@Test

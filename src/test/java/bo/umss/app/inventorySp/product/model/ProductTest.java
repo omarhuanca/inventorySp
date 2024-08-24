@@ -39,10 +39,10 @@ public class ProductTest {
 		notProvidedProvider = NotProvidedProvider.at(TestObjectBucket.BOWL8_CODE, TestObjectBucket.BOWL8_DESCRIPTION,
 				line);
 		coin = Coin.at(TestObjectBucket.CODE_USA);
-		priceCost = Price.at(5.0, coin);
-		priceSale = Price.at(10.0, coin);
+		priceCost = Price.at("PR-1", 5.0, coin);
+		priceSale = Price.at("PR-1", 10.0, coin);
 		measurement = Measurement.at(TestObjectBucket.CODE_PZA);
-		stock = Stock.at(10, measurement);
+		stock = Stock.at("ST-1", 10, measurement);
 
 		plate = Product.at(notProvidedProvider, stock, priceCost, priceSale);
 
@@ -51,31 +51,34 @@ public class ProductTest {
 
 	@Test
 	public void notLetInvalidStock() {
-		Price priceCost2 = Price.at(5.0, coin);
-		Price priceSale2 = Price.at(6.0, coin);
+		Price priceCost2 = Price.at("PR-1", 5.0, coin);
+		Price priceSale2 = Price.at("PR-1", 6.0, coin);
+
 		assertThrows(RuntimeException.class, () -> Product.at(notProvidedProvider, null, priceCost2, priceSale2),
 				Product.STOCK_CAN_NOT_BE_NULL);
 	}
 
 	@Test
 	public void notLetPriceCostBeNull() {
-		Price priceSale2 = Price.at(6.0, coin);
-		Stock stock2 = Stock.at(1, measurement);
+		Price priceSale2 = Price.at("PR-1", 6.0, coin);
+		Stock stock2 = Stock.at("ST-1", 1, measurement);
+
 		assertThrows(RuntimeException.class, () -> Product.at(notProvidedProvider, stock2, null, priceSale2),
 				Product.PRICE_COST_CAN_NOT_BE_NULL);
 	}
 
 	@Test
 	public void notLetPriceSaleBeNull() {
-		Price priceCost2 = Price.at(5.0, coin);
-		Stock stock2 = Stock.at(1, measurement);
+		Price priceCost2 = Price.at("PR-1", 5.0, coin);
+		Stock stock2 = Stock.at("ST-1", 1, measurement);
+
 		assertThrows(RuntimeException.class, () -> Product.at(notProvidedProvider, stock2, priceCost2, null),
 				Product.PRICE_SALE_CAN_NOT_BE_NULL);
 	}
 
 	@Test
 	public void notLetNoExistCodeProduct() {
-		Stock stock2 = Stock.at(1, measurement);
+		Stock stock2 = Stock.at("ST-1", 1, measurement);
 		Product plate = Product.at(notProvidedProvider, stock2, priceCost, priceSale);
 
 		assertTrue(plate.alreadyCodeProduct());
@@ -83,7 +86,7 @@ public class ProductTest {
 
 	@Test
 	public void notLetAnyItemOfListTransaction() {
-		Stock stock2 = Stock.at(1, measurement);
+		Stock stock2 = Stock.at("ST-1", 1, measurement);
 		Product plate = Product.at(notProvidedProvider, stock2, priceCost, priceSale);
 
 		assertFalse(plate.listTransactionCompareGreatherThanZero(0));
@@ -93,7 +96,7 @@ public class ProductTest {
 	public void changeSizeListChangePriceAfterIncreasePriceCost() {
 		Product plate = Product.at(notProvidedProvider, stock, priceCost, priceSale);
 
-		Price priceCostOther = Price.at(4.0, coin);
+		Price priceCostOther = Price.at("PR-1", 4.0, coin);
 		plate.changePriceBuy(priceCostOther, plate.getStock());
 
 		assertEquals(0, plate.getListChangePriceCost().size());
@@ -103,9 +106,9 @@ public class ProductTest {
 	public void changePriceCostAfterIncreaseValueTwoTimes() {
 		Product plate = Product.at(notProvidedProvider, stock, priceCost, priceSale);
 
-		Price priceCostOther1 = Price.at(8.0, coin);
+		Price priceCostOther1 = Price.at("PR-1", 8.0, coin);
 		plate.changePriceBuy(priceCostOther1, plate.getStock());
-		Price priceCostOther2 = Price.at(4.0, coin);
+		Price priceCostOther2 = Price.at("PR-1", 4.0, coin);
 		plate.changePriceBuy(priceCostOther2, plate.getStock());
 
 		assertEquals(1, plate.getListChangePriceCost().size());
@@ -116,7 +119,7 @@ public class ProductTest {
 		Product plate = Product.at(notProvidedProvider, stock, priceCost, priceSale);
 
 		Coin coin2 = Coin.at(TestObjectBucket.CODE_BS);
-		Price priceCostOther1 = Price.at(8.0, coin2);
+		Price priceCostOther1 = Price.at("PR-1", 8.0, coin2);
 		plate.changePriceBuy(priceCostOther1, plate.getStock());
 
 		assertEquals(0, plate.getListChangePriceCost().size());
@@ -137,7 +140,7 @@ public class ProductTest {
 		StockBuy buy = StockBuy.at(notProvidedProvider, 5, date, TestObjectBucket.PLATE_PURCHEASE_DESCRIPTION);
 		plate.addBuy(buy);
 
-		assertTrue(plate.getStock().compareValue(15));
+		assertTrue(plate.getStock().compareOtherValue(15));
 	}
 
 	@Test
@@ -145,7 +148,7 @@ public class ProductTest {
 		StockReferral referral = StockReferral.at(plate.getCodeProduct(), 5, date);
 		plate.addReferral(referral);
 
-		assertTrue(plate.getStock().compareValue(5));
+		assertTrue(plate.getStock().compareOtherValue(5));
 		assertEquals(1, plate.getListTransaction().size());
 	}
 
@@ -156,7 +159,6 @@ public class ProductTest {
 
 		assertThrows(RuntimeException.class, () -> plate.addReferral(referral), Stock.AMOUNT_GREATER_THAN_AVAILABLE);
 		assertEquals(0, plate.getListTransaction().size());
-
 	}
 
 	@Test
@@ -166,6 +168,5 @@ public class ProductTest {
 		plate.addReferral(referral);
 
 		assertEquals(1, plate.getListTransaction().size());
-
 	}
 }

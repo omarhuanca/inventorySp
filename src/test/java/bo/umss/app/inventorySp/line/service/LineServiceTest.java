@@ -37,16 +37,18 @@ public class LineServiceTest {
 	private LineRepository lineRepository;
 
 	private Line potentialLine;
-	private TestObjectBucket testObjectBucket = new TestObjectBucket();
+	private TestObjectBucket testObjectBucket;
 
 	@BeforeEach
 	public void setUp() {
+		testObjectBucket = new TestObjectBucket();
 		potentialLine = testObjectBucket.createLinePlate();
 	}
 
 	@Test
 	public void verifyNoFoundName() {
 		String potentialName = "calderas";
+
 		assertThrows(RuntimeException.class, () -> lineService.findByName(potentialName));
 	}
 

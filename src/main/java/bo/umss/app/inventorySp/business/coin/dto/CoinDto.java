@@ -18,12 +18,11 @@ public class CoinDto {
 		this.code = code;
 	}
 
-	
 	public CoinDto() {
 
 	}
 
-	public static CoinDto at(String code) {
+	public static CoinDto at(@NotBlank String code) {
 		if (code.isEmpty())
 			throw new RuntimeException(Coin.CODE_CAN_NOT_BE_BLANK);
 

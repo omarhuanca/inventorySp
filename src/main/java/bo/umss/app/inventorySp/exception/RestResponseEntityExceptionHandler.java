@@ -42,4 +42,9 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	public ResponseEntity<Object> handleEmptyFieldException(EmptyFieldException ex, WebRequest request) {
 		return new ResponseEntity<Object>(ex.getMessage(), HttpStatus.NOT_FOUND);
 	}
+
+	@ExceptionHandler(NegativeFieldException.class)
+	public ResponseEntity<Object> handleNegativeFieldException(NegativeFieldException ex, WebRequest request) {
+		return new ResponseEntity<Object>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+	}
 }
