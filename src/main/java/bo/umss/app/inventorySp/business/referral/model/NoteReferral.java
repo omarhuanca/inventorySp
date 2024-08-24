@@ -55,7 +55,7 @@ public class NoteReferral extends NoteTransaction {
 						.addWithOtherPrice(subtotal);
 			}
 			mapResponse.put(productOutput.getPriceSale().getCoin().getCode(),
-					Price.at(sumarizePrice, subtotal.getCoin()));
+					Price.at(subtotal.getCode(), sumarizePrice, subtotal.getCoin()));
 		}
 
 		return mapResponse;
@@ -71,5 +71,4 @@ public class NoteReferral extends NoteTransaction {
 
 		return response;
 	}
-
 }

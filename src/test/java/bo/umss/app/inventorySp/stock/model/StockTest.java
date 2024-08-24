@@ -22,34 +22,56 @@ public class StockTest {
 
 	@Test
 	public void canNotBeLessThanZeroValue() {
-		assertThrows(RuntimeException.class, () -> Stock.at(0, measurement), Stock.VALUE_CAN_NOT_BE_LESS_THAN_ZERO);
+		assertThrows(RuntimeException.class, () -> Stock.at("ST-1", -1, measurement),
+				Stock.VALUE_CAN_NOT_BE_LESS_THAN_ZERO);
 	}
 
 	@Test
 	public void canNotBeNullMeasurement() {
-		assertThrows(RuntimeException.class, () -> Stock.at(5, null), Stock.MEASUREMENT_CAN_NOT_BE_NULL);
+		assertThrows(RuntimeException.class, () -> Stock.at("ST-1", 5, null), Stock.MEASUREMENT_CAN_NOT_BE_NULL);
 	}
 
 	@Test
 	public void verifyPotentialValueIsLessThan() {
-		Stock stock = Stock.at(5, measurement);
+		Stock stock = Stock.at("ST-1", 5, measurement);
 
 		assertTrue(stock.verifyValueGreaterThanPotentialValue(2));
 	}
 
 	@Test
 	public void verifyPotentialValueIsGreaterThan() {
-		Stock stock = Stock.at(5, measurement);
+		Stock stock = Stock.at("ST-1", 5, measurement);
 
 		assertFalse(stock.verifyValueGreaterThanPotentialValue(7));
 	}
 
 	@Test
 	public void verifyDecrementValue() {
-		Stock stock = Stock.at(10, measurement);
+		Stock stock = Stock.at("ST-1", 10, measurement);
 		stock.todoDecrementStock(3);
 
-		assertTrue(stock.compareValue(7));
+		assertTrue(stock.compareOtherValue(7));
+	}
+
+	@Test
+	public void verifyCompareWrongCode() {
+		Stock stock = Stock.at("ST-1", 10, measurement);
+
+		assertFalse(stock.compareOtherCode("ST-2"));
+	}
+
+	@Test
+	public void verifyValueDoesntNegative() {
+		Stock stock = Stock.at("ST-1", 25, measurement);
+
+		assertFalse(stock.verifyValueIsNegative());
+	}
+
+	@Test
+	public void verifyValueIsNegative() {
+		Stock stock = Stock.at("ST-1", 25, measurement);
+		stock.setValue(-5);
+
+		assertTrue(stock.verifyValueIsNegative());
 	}
 }
-

@@ -130,7 +130,7 @@ public class Product {
 	}
 
 	public void changeMesurementStock(Stock potentialStock) {
-		if (stock.compareValue(potentialStock.getValue())) {
+		if (stock.compareOtherValue(potentialStock.getValue())) {
 			setStock(potentialStock);
 		}
 	}
@@ -141,10 +141,10 @@ public class Product {
 	}
 
 	public Price calculateSubtotalWithCoin() {
-		return Price.at(priceSale.getValue() * stock.getValue(), priceSale.getCoin());
+		return Price.at("PR-1", priceSale.getValue() * stock.getValue(), priceSale.getCoin());
 	}
 
 	public Price generateSubtotal() {
-		return Price.at(priceSale.getValue() * stock.getValue(), priceSale.getCoin());
+		return Price.at("PR-1", priceSale.getValue() * stock.getValue(), priceSale.getCoin());
 	}
 }

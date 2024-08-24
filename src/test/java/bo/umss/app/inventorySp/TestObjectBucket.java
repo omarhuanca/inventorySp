@@ -35,21 +35,25 @@ public class TestObjectBucket {
 
 	public Product createPlate() {
 		CodeProduct notProvidedProvider = createNotProvidedProviderPlate();
-		Coin coin = createCoin();
-		Price priceCost = Price.at(5.0, coin);
-		Price priceSale = Price.at(10.0, coin);
+		Coin coin = createCoin(CODE_BS);
+		Price priceCost = createPrice("PR-1", 5.0, coin);
+		Price priceSale = createPrice("PR-2", 10.0, coin);
 		Measurement measurement = createMeasurementPiece();
-		Stock stock = createStock(10, measurement);
+		Stock stock = createStock(10, "ST-1", measurement);
 
 		return Product.at(notProvidedProvider, stock, priceCost, priceSale);
 	}
 
-	public Stock createStock(Integer value, Measurement measurement) {
-		return Stock.at(value, measurement);
+	public Price createPrice(String code, Double value, Coin coin) {
+		return Price.at(code, value, coin);
 	}
 
-	public Coin createCoin() {
-		return Coin.at(CODE_BS);
+	public Stock createStock(Integer value, String code, Measurement measurement) {
+		return Stock.at(code, value, measurement);
+	}
+
+	public Coin createCoin(String code) {
+		return Coin.at(code);
 	}
 
 	public Measurement createMeasurementPiece() {
@@ -58,11 +62,11 @@ public class TestObjectBucket {
 
 	public Product createCup() {
 		NotProvidedProvider notProvidedProvider = createNotProvidedProviderCup();
-		Coin coin = createCoin();
-		Price priceCost = Price.at(8.0, coin);
-		Price priceSale = Price.at(16.0, coin);
+		Coin coin = createCoin(CODE_BS);
+		Price priceCost = createPrice("PR-1", 8.0, coin);
+		Price priceSale = createPrice("PR-2", 16.0, coin);
 		Measurement measurement = createMeasurementPiece();
-		Stock stock = createStock(10, measurement);
+		Stock stock = createStock(10, "ST-1", measurement);
 
 		return Product.at(notProvidedProvider, stock, priceCost, priceSale);
 	}
@@ -75,10 +79,10 @@ public class TestObjectBucket {
 		Line line = Line.at(POT_NAME);
 		NotProvidedProvider notProvidedProvider = NotProvidedProvider.at(POT_CODE, "OLLA TRILLIUM INOX 3 PCS", line);
 		Coin coin = Coin.at(CODE_USA);
-		Price priceCost = Price.at(205.0, coin);
-		Price priceSale = Price.at(246.0, coin);
+		Price priceCost = createPrice("PR-1", 205.0, coin);
+		Price priceSale = createPrice("PR-2", 246.0, coin);
 		Measurement measurement = createMeasurementPiece();
-		Stock stock = createStock(80, measurement);
+		Stock stock = createStock(80, "ST-1", measurement);
 
 		return Product.at(notProvidedProvider, stock, priceCost, priceSale);
 	}

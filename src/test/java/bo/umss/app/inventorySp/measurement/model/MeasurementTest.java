@@ -10,7 +10,6 @@ public class MeasurementTest {
 
 	@Test
 	public void canNotBeEmptyName() {
-		assertThrows(RuntimeException.class, () -> Measurement.at(""),
-				Measurement.CODE_CAN_NOT_BE_BLANK);
+		assertThrows(RuntimeException.class, () -> Measurement.at(""), Measurement.CODE_CAN_NOT_BE_BLANK);
 	}
 }
