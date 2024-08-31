@@ -2,14 +2,14 @@ package bo.umss.app.inventorySp;
 
 import java.time.LocalDate;
 
-import bo.umss.app.inventorySp.codeProduct.CodeProduct;
-import bo.umss.app.inventorySp.codeProduct.model.NotProvidedProvider;
-import bo.umss.app.inventorySp.coin.model.Coin;
-import bo.umss.app.inventorySp.line.model.Line;
-import bo.umss.app.inventorySp.measurement.model.Measurement;
-import bo.umss.app.inventorySp.price.model.Price;
-import bo.umss.app.inventorySp.product.model.Product;
-import bo.umss.app.inventorySp.stock.model.Stock;
+import bo.umss.app.inventorySp.business.codeProduct.model.CodeProduct;
+import bo.umss.app.inventorySp.business.codeProduct.model.NotProvidedProvider;
+import bo.umss.app.inventorySp.business.coin.model.Coin;
+import bo.umss.app.inventorySp.business.line.model.Line;
+import bo.umss.app.inventorySp.business.measurement.model.Measurement;
+import bo.umss.app.inventorySp.business.price.model.Price;
+import bo.umss.app.inventorySp.business.product.model.Product;
+import bo.umss.app.inventorySp.business.stock.model.Stock;
 
 public class TestObjectBucket {
 
@@ -34,27 +34,39 @@ public class TestObjectBucket {
 	public static final String INVOICE_NUMBER = "654987";
 
 	public Product createPlate() {
-		Line line = Line.at(PLATE_NAME);
-		CodeProduct notProvidedProvider = NotProvidedProvider.at(PLATE_CODE, "PLATO ZETA BOWL 8 PORCELANA CUADRADO",
-				line);
-		Coin coin = Coin.at(CODE_BS);
-		Price priceCost = Price.at(5.0, coin);
-		Price priceSale = Price.at(10.0, coin);
-		Measurement measurement = Measurement.at(CODE_PZA);
-		Stock stock = Stock.at(10, measurement);
+		CodeProduct notProvidedProvider = createNotProvidedProviderPlate();
+		Coin coin = createCoin(CODE_BS);
+		Price priceCost = createPrice("PR-1", 5.0, coin);
+		Price priceSale = createPrice("PR-2", 10.0, coin);
+		Measurement measurement = createMeasurementPiece();
+		Stock stock = createStock(10, "ST-1", measurement);
 
 		return Product.at(notProvidedProvider, stock, priceCost, priceSale);
 	}
 
+	public Price createPrice(String code, Double value, Coin coin) {
+		return Price.at(code, value, coin);
+	}
+
+	public Stock createStock(Integer value, String code, Measurement measurement) {
+		return Stock.at(code, value, measurement);
+	}
+
+	public Coin createCoin(String code) {
+		return Coin.at(code);
+	}
+
+	public Measurement createMeasurementPiece() {
+		return Measurement.at(CODE_PZA);
+	}
+
 	public Product createCup() {
-		Line line = Line.at(CUP_NAME);
-		NotProvidedProvider notProvidedProvider = NotProvidedProvider.at(CUP_CODE, "TAZA ISAYLIN PORCELANA RECTO",
-				line);
-		Coin coin = Coin.at(CODE_BS);
-		Price priceCost = Price.at(8.0, coin);
-		Price priceSale = Price.at(16.0, coin);
-		Measurement measurement = Measurement.at(CODE_PZA);
-		Stock stock = Stock.at(10, measurement);
+		NotProvidedProvider notProvidedProvider = createNotProvidedProviderCup();
+		Coin coin = createCoin(CODE_BS);
+		Price priceCost = createPrice("PR-1", 8.0, coin);
+		Price priceSale = createPrice("PR-2", 16.0, coin);
+		Measurement measurement = createMeasurementPiece();
+		Stock stock = createStock(10, "ST-1", measurement);
 
 		return Product.at(notProvidedProvider, stock, priceCost, priceSale);
 	}
@@ -67,11 +79,30 @@ public class TestObjectBucket {
 		Line line = Line.at(POT_NAME);
 		NotProvidedProvider notProvidedProvider = NotProvidedProvider.at(POT_CODE, "OLLA TRILLIUM INOX 3 PCS", line);
 		Coin coin = Coin.at(CODE_USA);
-		Price priceCost = Price.at(205.0, coin);
-		Price priceSale = Price.at(246.0, coin);
-		Measurement measurement = Measurement.at(CODE_PZA);
-		Stock stock = Stock.at(80, measurement);
+		Price priceCost = createPrice("PR-1", 205.0, coin);
+		Price priceSale = createPrice("PR-2", 246.0, coin);
+		Measurement measurement = createMeasurementPiece();
+		Stock stock = createStock(80, "ST-1", measurement);
 
 		return Product.at(notProvidedProvider, stock, priceCost, priceSale);
+	}
+
+	public NotProvidedProvider createNotProvidedProviderPlate() {
+		Line line = createLinePlate();
+		return NotProvidedProvider.at(PLATE_CODE, "PLATO ZETA BOWL 8 PORCELANA CUADRADO", line);
+	}
+
+	public Line createLinePlate() {
+		return Line.at(PLATE_NAME);
+	}
+
+	public NotProvidedProvider createNotProvidedProviderCup() {
+		Line line = createLineCup();
+		return NotProvidedProvider.at(CUP_CODE, "TAZA ISAYLIN PORCELANA RECTO", line);
+	}
+
+	public Line createLineCup() {
+		Line line = Line.at(CUP_NAME);
+		return line;
 	}
 }
