@@ -52,7 +52,7 @@ public class StockServiceTest {
 		potentialCode = "ST-1";
 		testObjectBucket = new TestObjectBucket();
 		Measurement measurement = testObjectBucket.createMeasurementPiece();
-		potentialStock = testObjectBucket.createStock(defaultValue, potentialCode, measurement);
+		potentialStock = testObjectBucket.createStock(potentialCode, defaultValue, measurement);
 	}
 
 	@Test

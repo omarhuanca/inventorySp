@@ -8,6 +8,7 @@ CREATE SEQUENCE cn_seq;
 CREATE SEQUENCE st_seq;
 CREATE SEQUENCE pr_seq;
 CREATE SEQUENCE prv_seq;
+CREATE SEQUENCE chp_seq;
 CREATE SEQUENCE stcr_seq;
 
 /*==============================================================*/
@@ -90,6 +91,24 @@ CREATE TABLE prv_provider (
 ALTER TABLE prv_provider
     ALTER COLUMN    prv_id           SET DEFAULT nextval('prv_seq'),
     ADD CONSTRAINT  pk_prv_id        PRIMARY KEY(prv_id);
+
+/*==============================================================*/
+/* Table: ChangePrice                                           */
+/*==============================================================*/
+CREATE TABLE chp_change_price (
+    chp_id              BIGINT          NOT NULL,
+    chp_pr_id           BIGINT          NOT NULL,
+    chp_sc_pr_id        BIGINT          NOT NULL,
+    chp_st_id           BIGINT          NOT NULL,
+    chp_current_date    TIMESTAMP       NOT NULL
+);
+
+ALTER TABLE chp_change_price
+    ALTER COLUMN    chp_id              SET DEFAULT nextval('chp_seq'),
+    ADD CONSTRAINT  pk_chp_id           PRIMARY KEY(chp_id),
+    ADD CONSTRAINT  fk_chp_pr_id    	FOREIGN KEY(chp_pr_id) REFERENCES pr_price(pr_id) ON UPDATE CASCADE ON DELETE CASCADE,
+    ADD CONSTRAINT  fk_chp_sc_pr_id    	FOREIGN KEY(chp_sc_pr_id) REFERENCES pr_price(pr_id) ON UPDATE CASCADE ON DELETE CASCADE,
+    ADD CONSTRAINT  fk_chp_st_id    	FOREIGN KEY(chp_st_id) REFERENCES st_stock(st_id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 /*==============================================================*/
 /* Table: StockReferral                                         */
