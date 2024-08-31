@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS cn_coin;
 DROP TABLE IF EXISTS st_stock;
 DROP TABLE IF EXISTS pr_price;
 DROP TABLE IF EXISTS prv_provider;
+DROP TABLE IF EXISTS chp_change_price;
 DROP TABLE IF EXISTS stcr_stock_referral;
 
 /* **********************************************
@@ -18,4 +19,5 @@ DROP SEQUENCE IF EXISTS cn_seq;
 DROP SEQUENCE IF EXISTS st_seq;
 DROP SEQUENCE IF EXISTS pr_seq;
 DROP SEQUENCE IF EXISTS prv_seq;
+DROP SEQUENCE IF EXISTS chp_seq;
 DROP SEQUENCE IF EXISTS stcr_seq;
