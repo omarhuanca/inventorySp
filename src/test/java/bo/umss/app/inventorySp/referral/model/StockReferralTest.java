@@ -9,22 +9,18 @@ import org.junit.jupiter.api.Test;
 
 import bo.umss.app.inventorySp.StockTransaction;
 import bo.umss.app.inventorySp.TestObjectBucket;
-import bo.umss.app.inventorySp.business.codeProduct.model.CodeProduct;
-import bo.umss.app.inventorySp.business.codeProduct.model.NotProvidedProvider;
-import bo.umss.app.inventorySp.business.line.model.Line;
+import bo.umss.app.inventorySp.business.product.model.Product;
 import bo.umss.app.inventorySp.business.referral.model.StockReferral;
 
 public class StockReferralTest {
 
-	private CodeProduct notProvidedProvider;
+	private Product potentialProduct;
 	private LocalDate date;
 	private final TestObjectBucket testObjectBucket = new TestObjectBucket();
 
 	@BeforeEach
 	public void setUp() {
-		Line line = Line.at(TestObjectBucket.PLATE_NAME);
-		notProvidedProvider = NotProvidedProvider.at(TestObjectBucket.BOWL8_CODE, TestObjectBucket.BOWL8_DESCRIPTION,
-				line);
+		potentialProduct = testObjectBucket.createPlate();
 		date = testObjectBucket.createDate();
 	}
 
@@ -36,13 +32,13 @@ public class StockReferralTest {
 
 	@Test
 	public void canNotBeLessThanZeroAmount() {
-		assertThrows(RuntimeException.class, () -> StockReferral.at(notProvidedProvider, -1, date),
+		assertThrows(RuntimeException.class, () -> StockReferral.at(potentialProduct, -1, date),
 				StockTransaction.AMOUNT_CAN_NOT_BE_LESS_THAN_ZERO);
 	}
 
 	@Test
 	public void canNotBeNullDate() {
-		assertThrows(RuntimeException.class, () -> StockReferral.at(notProvidedProvider, 5, null),
+		assertThrows(RuntimeException.class, () -> StockReferral.at(potentialProduct, 5, null),
 				StockTransaction.DATE_CAN_NOT_BE_NULL);
 	}
 }

@@ -1,57 +1,86 @@
 package bo.umss.app.inventorySp.business.product.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import bo.umss.app.inventorySp.StockTransaction;
 import bo.umss.app.inventorySp.business.buy.model.StockBuy;
 import bo.umss.app.inventorySp.business.changePrice.model.ChangePrice;
-import bo.umss.app.inventorySp.business.codeProduct.model.CodeProduct;
+import bo.umss.app.inventorySp.business.line.model.Line;
 import bo.umss.app.inventorySp.business.price.model.Price;
+import bo.umss.app.inventorySp.business.provider.model.Provider;
 import bo.umss.app.inventorySp.business.referral.model.StockReferral;
 import bo.umss.app.inventorySp.business.stock.model.Stock;
+import bo.umss.app.inventorySp.exception.EmptyFieldException;
 
-public class Product {
+public class Product implements Serializable {
 
-	public static final String CODE_CAN_NOT_BE_NULL = "Code product can not be null";
-	public static final String DESCRIPTION_CAN_NOT_BE_NULL = "Description can not be null";
+	private static final long serialVersionUID = -3585952891558067223L;
+
+	public static final String CODE_CAN_NOT_BE_BLANK = "Code can not be blank";
+	public static final String DESCRIPTION_CAN_NOT_BE_BLANK = "Description can not be blank";
 	public static final String STOCK_CAN_NOT_BE_NULL = "Stock can not be null";
 	public static final String CODE_PRODUCT_DUPLICATE = "Code product already exists";
 	public static final String PRICE_COST_CAN_NOT_BE_NULL = "Price cost can not be null";
 	public static final String PRICE_SALE_CAN_NOT_BE_NULL = "Price sale can not be null";
+	public static final String LINE_CAN_NOT_BE_NULL = "Line can not be null";
 
-	private CodeProduct codeProduct;
+	private String code;
+
+	private String description;
+
 	private Stock stock;
-	private Price priceCost;
-	private Price priceSale;
-	private List<ChangePrice> listChangePriceCost;
-	private List<StockTransaction> listTransaction;
 
-	public Product(CodeProduct codeProduct, Stock stock, Price priceCost, Price priceSale) {
-		this.codeProduct = codeProduct;
+	private Price priceCost;
+
+	private Price priceSale;
+
+	private Line line;
+
+	private Provider provider;
+	private List<ChangePrice> listChangePriceCost;
+	private List<StockBuy> listStockBuy;
+	private List<StockReferral> listReferral;
+
+	public Product(String code, String description, Stock stock, Price priceCost, Price priceSale, Line line,
+			Provider provider) {
+		this.code = code;
+		this.description = description;
 		this.stock = stock;
 		this.priceCost = priceCost;
 		this.priceSale = priceSale;
-		this.listChangePriceCost = new ArrayList<>();
-		this.listTransaction = new ArrayList<>();
+		this.line = line;
+		this.provider = provider;
+		listChangePriceCost = new ArrayList<>();
+		listStockBuy = new ArrayList<>();
+		listReferral = new ArrayList<>();
 	}
 
-	public static Product at(CodeProduct codeProduct, Stock stock, Price priceCost, Price priceSale) {
-		if (null == codeProduct)
-			throw new RuntimeException(CODE_CAN_NOT_BE_NULL);
+	public static Product at(String code, String description, Stock stock, Price priceCost, Price priceSale, Line line,
+			Provider provider) {
+		if (code.isEmpty())
+			throw new EmptyFieldException(CODE_CAN_NOT_BE_BLANK);
+		if (description.isEmpty())
+			throw new EmptyFieldException(DESCRIPTION_CAN_NOT_BE_BLANK);
 		if (null == stock)
 			throw new RuntimeException(STOCK_CAN_NOT_BE_NULL);
 		if (null == priceCost)
 			throw new RuntimeException(PRICE_COST_CAN_NOT_BE_NULL);
 		if (null == priceSale)
 			throw new RuntimeException(PRICE_SALE_CAN_NOT_BE_NULL);
+		if (null == line)
+			throw new EmptyFieldException(LINE_CAN_NOT_BE_NULL);
 
-		return new Product(codeProduct, stock, priceCost, priceSale);
+		return new Product(code, description, stock, priceCost, priceSale, line, provider);
 	}
 
-	public CodeProduct getCodeProduct() {
-		return codeProduct;
+	public String getCode() {
+		return code;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 
 	public Stock getStock() {
@@ -74,26 +103,36 @@ public class Product {
 		return priceSale;
 	}
 
+	public Line getLine() {
+		return line;
+	}
+
+	public Provider getProvider() {
+		return provider;
+	}
+
 	public List<ChangePrice> getListChangePriceCost() {
 		return listChangePriceCost;
 	}
 
-	public List<StockTransaction> getListTransaction() {
-		return listTransaction;
+	public List<StockBuy> getListStockBuy() {
+		return listStockBuy;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		Product potentialProduct = (Product) obj;
-		return codeProduct.compareAnotherCode(potentialProduct.getCodeProduct());
+	public List<StockReferral> getListReferral() {
+		return listReferral;
+	}
+
+	public void setListReferral(List<StockReferral> listReferral) {
+		this.listReferral = listReferral;
+	}
+
+	public boolean equals(Product potentialProduct) {
+		return code.equalsIgnoreCase(potentialProduct.getCode());
 	}
 
 	public Boolean listTransactionCompareGreatherThanZero(Integer count) {
-		return listTransaction.size() > count;
-	}
-
-	public Boolean alreadyCodeProduct() {
-		return null != codeProduct;
+		return listStockBuy.size() > count;
 	}
 
 	public void addBuy(StockBuy buy) {
@@ -102,7 +141,7 @@ public class Product {
 			if (stock.verifyPotentialValueGreaterZero(buy.getAmount())) {
 				stock.todoIncreaseStock(buy.getAmount());
 			}
-			listTransaction.add(buy);
+			listStockBuy.add(buy);
 		}
 	}
 
@@ -137,7 +176,7 @@ public class Product {
 
 	public void addReferral(StockReferral referral) {
 		todoDecrementStock(referral.getAmount());
-		listTransaction.add(referral);
+		listReferral.add(referral);
 	}
 
 	public Price calculateSubtotalWithCoin() {

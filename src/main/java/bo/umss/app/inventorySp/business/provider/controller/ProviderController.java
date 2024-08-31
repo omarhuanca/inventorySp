@@ -1,4 +1,4 @@
-package bo.umss.app.inventorySp.business.codeProduct.controller;
+package bo.umss.app.inventorySp.business.provider.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,29 +16,29 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
 
-import bo.umss.app.inventorySp.business.codeProduct.dto.NotProvidedProviderDto;
-import bo.umss.app.inventorySp.business.codeProduct.mapper.NotProvidedProviderMapper;
-import bo.umss.app.inventorySp.business.codeProduct.model.NotProvidedProvider;
-import bo.umss.app.inventorySp.business.codeProduct.service.NotProvidedProviderService;
+import bo.umss.app.inventorySp.business.provider.dto.ProviderDto;
+import bo.umss.app.inventorySp.business.provider.mapper.ProviderMapper;
+import bo.umss.app.inventorySp.business.provider.model.Provider;
+import bo.umss.app.inventorySp.business.provider.service.ProviderService;
 import bo.umss.app.inventorySp.controller.CrudController;
 import bo.umss.app.inventorySp.exception.BadParamsException;
 import bo.umss.app.inventorySp.exception.CrudException;
 import bo.umss.app.inventorySp.exception.EntityNotFoundException;
 
 @RestController
-@RequestMapping("/v1/notprovidedproviders")
-public class NotProvidedProviderController implements CrudController<NotProvidedProviderDto> {
+@RequestMapping("/v1/providers")
+public class ProviderController implements CrudController<ProviderDto> {
 
 	@Autowired
-	private NotProvidedProviderService service;
+	private ProviderService service;
 
 	@Autowired
-	private NotProvidedProviderMapper mapper;
+	private ProviderMapper mapper;
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	@Override
-	public NotProvidedProviderDto create(@RequestBody @Valid NotProvidedProviderDto dto) {
+	public ProviderDto create(@RequestBody @Valid ProviderDto dto) {
 		try {
 			return mapper.toDto(service.create(mapper.toEntity(dto, true)));
 		} catch (BadParamsException e) {
@@ -49,7 +49,7 @@ public class NotProvidedProviderController implements CrudController<NotProvided
 	@PutMapping
 	@ResponseStatus(HttpStatus.OK)
 	@Override
-	public void update(@RequestBody @Valid NotProvidedProviderDto dto) {
+	public void update(@RequestBody @Valid ProviderDto dto) {
 		try {
 			service.update(mapper.toEntity(dto, false));
 
@@ -62,7 +62,6 @@ public class NotProvidedProviderController implements CrudController<NotProvided
 		} catch (EntityNotFoundException e) {
 			throw new EntityNotFoundException();
 		}
-
 	}
 
 	@Override
@@ -73,9 +72,9 @@ public class NotProvidedProviderController implements CrudController<NotProvided
 
 	@GetMapping(value = "/{code}")
 	@Override
-	public NotProvidedProviderDto read(@PathVariable("code") String code) {
+	public ProviderDto read(@PathVariable("code") String code) {
 		try {
-			return mapper.toDto(service.findByCode(code));
+			return mapper.toDto(service.findByName(code));
 		} catch (NullPointerException e) {
 			throw new BadParamsException();
 		} catch (CrudException e) {
@@ -87,10 +86,10 @@ public class NotProvidedProviderController implements CrudController<NotProvided
 
 	@GetMapping
 	@Override
-	public List<NotProvidedProviderDto> findAll() {
+	public List<ProviderDto> findAll() {
 		try {
-			List<NotProvidedProviderDto> lineList = new ArrayList<>();
-			for (NotProvidedProvider entity : service.findAll()) {
+			List<ProviderDto> lineList = new ArrayList<>();
+			for (Provider entity : service.findAll()) {
 				lineList.add(mapper.toDto(entity));
 			}
 
@@ -99,4 +98,5 @@ public class NotProvidedProviderController implements CrudController<NotProvided
 			throw new CrudException();
 		}
 	}
+
 }

@@ -3,11 +3,12 @@
  ************************************************/
 
 CREATE SEQUENCE ln_seq;
-CREATE SEQUENCE ntp_seq;
 CREATE SEQUENCE ms_seq;
 CREATE SEQUENCE cn_seq;
 CREATE SEQUENCE st_seq;
 CREATE SEQUENCE pr_seq;
+CREATE SEQUENCE prv_seq;
+CREATE SEQUENCE stcr_seq;
 
 /*==============================================================*/
 /* Table: Line                                                  */
@@ -20,21 +21,6 @@ CREATE TABLE ln_line (
 ALTER TABLE ln_line
     ALTER COLUMN    ln_id       SET DEFAULT nextval('ln_seq'),
     ADD CONSTRAINT  pk_ln_id    PRIMARY KEY(ln_id);
-
-/*==============================================================*/
-/* Table: Not Provided Provider                                 */
-/*==============================================================*/
-CREATE TABLE ntp_not_provided_provider (
-    ntp_id          BIGINT          NOT NULL,
-    ntp_code        VARCHAR(45)     NOT NULL,
-    ntp_description VARCHAR(100)    NOT NULL,
-    ntp_ln_id       BIGINT          NOT NULL
-);
-
-ALTER TABLE ntp_not_provided_provider
-    ALTER COLUMN    ntp_id          SET DEFAULT nextval('ntp_seq'),
-    ADD CONSTRAINT  pk_ntp_id       PRIMARY KEY(ntp_id),
-    ADD CONSTRAINT  fk_ntp_ln_id    FOREIGN KEY(ntp_ln_id) REFERENCES ln_line(ln_id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 /*==============================================================*/
 /* Table: Measurement                                           */
@@ -90,3 +76,32 @@ ALTER TABLE pr_price
     ALTER COLUMN    pr_id           SET DEFAULT nextval('pr_seq'),
     ADD CONSTRAINT  pk_pr_id        PRIMARY KEY(pr_id),
     ADD CONSTRAINT  fk_pr_cn_id    	FOREIGN KEY(pr_cn_id) REFERENCES cn_coin(cn_id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+/*==============================================================*/
+/* Table: Provider                                              */
+/*==============================================================*/
+CREATE TABLE prv_provider (
+    prv_id              BIGINT          NOT NULL,
+    prv_name            VARCHAR(45)     NOT NULL,
+    prv_phone_number    VARCHAR(45)     NOT NULL
+);
+
+ALTER TABLE prv_provider
+    ALTER COLUMN    prv_id           SET DEFAULT nextval('prv_seq'),
+    ADD CONSTRAINT  pk_prv_id        PRIMARY KEY(prv_id);
+
+/*==============================================================*/
+/* Table: StockReferral                                         */
+/*==============================================================*/
+CREATE TABLE stcr_stock_referral (
+    stcr_id         BIGINT          NOT NULL,
+    stcr_prd_id     BIGINT          NOT NULL,
+    stcr_amount     INTEGER         NOT NULL,
+    stcr_local_date TIMESTAMP       NOT NULL
+);
+
+ALTER TABLE stcr_stock_referral
+    ALTER COLUMN    stcr_id         SET DEFAULT nextval('stcr_seq'),
+    ADD CONSTRAINT  pk_stcr_id      PRIMARY KEY(stcr_id),
+    ADD CONSTRAINT  fk_stcr_prd_id  FOREIGN KEY(stcr_prd_id) REFERENCES prd_product(prd_id) ON UPDATE CASCADE ON DELETE CASCADE;

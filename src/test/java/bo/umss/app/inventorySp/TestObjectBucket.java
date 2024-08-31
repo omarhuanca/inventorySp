@@ -2,22 +2,23 @@ package bo.umss.app.inventorySp;
 
 import java.time.LocalDate;
 
-import bo.umss.app.inventorySp.business.codeProduct.model.CodeProduct;
-import bo.umss.app.inventorySp.business.codeProduct.model.NotProvidedProvider;
+import bo.umss.app.inventorySp.business.buy.model.StockBuy;
 import bo.umss.app.inventorySp.business.coin.model.Coin;
 import bo.umss.app.inventorySp.business.line.model.Line;
 import bo.umss.app.inventorySp.business.measurement.model.Measurement;
 import bo.umss.app.inventorySp.business.price.model.Price;
 import bo.umss.app.inventorySp.business.product.model.Product;
+import bo.umss.app.inventorySp.business.provider.model.Provider;
+import bo.umss.app.inventorySp.business.referral.model.StockReferral;
 import bo.umss.app.inventorySp.business.stock.model.Stock;
 
 public class TestObjectBucket {
 
 	public static final String JUAN_PEREZ_NAME = "Juan Perez";
 	public static final String JUAN_PEREZ_NIT = "123456";
-	public static final String JUAN_PEREZ_CELLPHONE = "88888888";
-	public static final String PLATE_PURCHEASE_DESCRIPTION = "purchase porcelain plates";
-	public static final String CUP_PURCHASE_DESCRIPTION = "purchase porcelain cupes";
+	public static final String JUAN_PEREZ_CELLPHONE = "71476576";
+	public static final String PLATE_PURCHEASE_DESCRIPTION = "PLATO ZETA BOWL 8 PORCELANA CUADRADO";
+	public static final String CUP_PURCHASE_DESCRIPTION = "TAZA ISAYLIN PORCELANA RECTO";
 	public static final String BOWL7_DESCRIPTION = "bowl7 a round plate of porcelain";
 	public static final String PLATE_CODE = "PLA-1";
 	public static final String PLATE_NAME = "bowl8 porcelain";
@@ -34,14 +35,16 @@ public class TestObjectBucket {
 	public static final String INVOICE_NUMBER = "654987";
 
 	public Product createPlate() {
-		CodeProduct notProvidedProvider = createNotProvidedProviderPlate();
+		Line line = createLinePlate();
 		Coin coin = createCoin(CODE_BS);
 		Price priceCost = createPrice("PR-1", 5.0, coin);
 		Price priceSale = createPrice("PR-2", 10.0, coin);
 		Measurement measurement = createMeasurementPiece();
 		Stock stock = createStock(10, "ST-1", measurement);
+		Provider provider = Provider.at(JUAN_PEREZ_NAME, JUAN_PEREZ_CELLPHONE);
 
-		return Product.at(notProvidedProvider, stock, priceCost, priceSale);
+		return Product.at(PLATE_CODE, "PLATO ZETA BOWL 8 PORCELANA CUADRADO", stock, priceCost, priceSale, line,
+				provider);
 	}
 
 	public Price createPrice(String code, Double value, Coin coin) {
@@ -61,14 +64,15 @@ public class TestObjectBucket {
 	}
 
 	public Product createCup() {
-		NotProvidedProvider notProvidedProvider = createNotProvidedProviderCup();
+		Line line = createLineCup();
 		Coin coin = createCoin(CODE_BS);
 		Price priceCost = createPrice("PR-1", 8.0, coin);
 		Price priceSale = createPrice("PR-2", 16.0, coin);
 		Measurement measurement = createMeasurementPiece();
 		Stock stock = createStock(10, "ST-1", measurement);
+		Provider provider = Provider.at(JUAN_PEREZ_NAME, JUAN_PEREZ_CELLPHONE);
 
-		return Product.at(notProvidedProvider, stock, priceCost, priceSale);
+		return Product.at(CUP_CODE, CUP_PURCHASE_DESCRIPTION, stock, priceCost, priceSale, line, provider);
 	}
 
 	public LocalDate createDate() {
@@ -77,32 +81,60 @@ public class TestObjectBucket {
 
 	public Product createPot() {
 		Line line = Line.at(POT_NAME);
-		NotProvidedProvider notProvidedProvider = NotProvidedProvider.at(POT_CODE, "OLLA TRILLIUM INOX 3 PCS", line);
 		Coin coin = Coin.at(CODE_USA);
 		Price priceCost = createPrice("PR-1", 205.0, coin);
 		Price priceSale = createPrice("PR-2", 246.0, coin);
 		Measurement measurement = createMeasurementPiece();
 		Stock stock = createStock(80, "ST-1", measurement);
+		Provider provider = Provider.at(JUAN_PEREZ_NAME, JUAN_PEREZ_CELLPHONE);
 
-		return Product.at(notProvidedProvider, stock, priceCost, priceSale);
-	}
-
-	public NotProvidedProvider createNotProvidedProviderPlate() {
-		Line line = createLinePlate();
-		return NotProvidedProvider.at(PLATE_CODE, "PLATO ZETA BOWL 8 PORCELANA CUADRADO", line);
+		return Product.at(POT_CODE, "OLLA TRILLIUM INOX 3 PCS", stock, priceCost, priceSale, line, provider);
 	}
 
 	public Line createLinePlate() {
 		return Line.at(PLATE_NAME);
 	}
 
-	public NotProvidedProvider createNotProvidedProviderCup() {
-		Line line = createLineCup();
-		return NotProvidedProvider.at(CUP_CODE, "TAZA ISAYLIN PORCELANA RECTO", line);
-	}
-
 	public Line createLineCup() {
 		Line line = Line.at(CUP_NAME);
 		return line;
+	}
+
+	public Provider createDefaultProvider() {
+		return Provider.at(JUAN_PEREZ_NAME, JUAN_PEREZ_CELLPHONE);
+	}
+
+	public StockBuy createStockBuyPlate() {
+		Product product = createPlate();
+		Integer amount = 10;
+		LocalDate localDate = LocalDate.now();
+		String description = "buy plate";
+
+		return StockBuy.at(product, amount, localDate, description);
+	}
+
+	public StockBuy createStockBuyCup() {
+		Product product = createCup();
+		Integer amount = 5;
+		LocalDate localDate = LocalDate.now();
+		String description = "buy cup";
+
+		return StockBuy.at(product, amount, localDate, description);
+	}
+
+	public StockReferral createStockReferralPot() {
+		Product product = createPot();
+		Integer amount = 10;
+		LocalDate localDate = LocalDate.now();
+
+		return StockReferral.at(product, amount, localDate);
+	}
+
+	public StockReferral createStockReferralPlate() {
+		Product product = createPlate();
+		Integer amount = 25;
+		LocalDate localDate = LocalDate.now();
+
+		return StockReferral.at(product, amount, localDate);
 	}
 }
