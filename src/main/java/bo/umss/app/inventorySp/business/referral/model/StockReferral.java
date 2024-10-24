@@ -47,7 +47,7 @@ public class StockReferral extends StockTransaction implements Serializable {
 
 	public static StockReferral at(Product product, Integer amount, LocalDate localDate) {
 		if (null == product)
-			throw new RuntimeException(StockTransaction.CODE_PRODUCT_CAN_NOT_BE_NULL);
+			throw new RuntimeException(StockTransaction.PRODUCT_CAN_NOT_BE_NULL);
 		if (0 >= amount)
 			throw new RuntimeException(StockTransaction.AMOUNT_CAN_NOT_BE_LESS_THAN_ZERO);
 		if (null == localDate)

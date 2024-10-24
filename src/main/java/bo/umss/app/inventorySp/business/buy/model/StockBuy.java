@@ -54,7 +54,7 @@ public class StockBuy extends StockTransaction implements Serializable {
 
 	public static StockBuy at(Product product, Integer amount, LocalDate localDate, String description) {
 		if (null == product)
-			throw new RuntimeException(StockTransaction.CODE_PRODUCT_CAN_NOT_BE_NULL);
+			throw new RuntimeException(StockTransaction.PRODUCT_CAN_NOT_BE_NULL);
 		if (0 >= amount)
 			throw new RuntimeException(StockTransaction.AMOUNT_CAN_NOT_BE_LESS_THAN_ZERO);
 		if (null == localDate)

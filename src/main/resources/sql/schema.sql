@@ -10,6 +10,8 @@ CREATE SEQUENCE pr_seq;
 CREATE SEQUENCE prv_seq;
 CREATE SEQUENCE chp_seq;
 CREATE SEQUENCE stcr_seq;
+CREATE SEQUENCE stc_seq;
+
 
 /*==============================================================*/
 /* Table: Line                                                  */
@@ -122,4 +124,21 @@ CREATE TABLE stcr_stock_referral (
 
 ALTER TABLE stcr_stock_referral
     ALTER COLUMN    stcr_id         SET DEFAULT nextval('stcr_seq'),
-    ADD CONSTRAINT  pk_stcr_id      PRIMARY KEY(stcr_id);
+    ADD CONSTRAINT  pk_stcr_id      PRIMARY KEY(stcr_id),
+    ADD CONSTRAINT  fk_stcr_prd_id  FOREIGN KEY(stcr_prd_id) REFERENCES prd_product(prd_id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+/*==============================================================*/
+/* Table: StockBuy                                              */
+/*==============================================================*/
+CREATE TABLE stc_stock_buy (
+    stc_id          BIGINT          NOT NULL,
+    stc_prd_id      BIGINT          NOT NULL,
+    stc_amount      INTEGER         NOT NULL,
+    stc_local_date  TIMESTAMP       NOT NULL,
+    stc_description VARCHAR(100)    NOT NULL
+);
+
+ALTER TABLE stc_stock_buy
+    ALTER COLUMN    stc_id         SET DEFAULT nextval('stc_seq'),
+    ADD CONSTRAINT  pk_stc_id      PRIMARY KEY(stc_id),
+    ADD CONSTRAINT  fk_stc_prd_id  FOREIGN KEY(stc_prd_id) REFERENCES prd_product(prd_id) ON UPDATE CASCADE ON DELETE CASCADE;

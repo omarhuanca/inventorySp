@@ -1,4 +1,4 @@
-package bo.umss.app.inventorySp.business.provider.service.impl;
+package bo.umss.app.inventorySp.business.product.service.impl;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,9 +14,9 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import bo.umss.app.inventorySp.business.provider.model.Provider;
-import bo.umss.app.inventorySp.business.provider.repository.ProviderRepository;
-import bo.umss.app.inventorySp.business.provider.service.ProviderService;
+import bo.umss.app.inventorySp.business.product.model.Product;
+import bo.umss.app.inventorySp.business.product.repository.ProductRepository;
+import bo.umss.app.inventorySp.business.product.service.ProductService;
 import bo.umss.app.inventorySp.exception.BadParamsException;
 import bo.umss.app.inventorySp.exception.CrudException;
 import bo.umss.app.inventorySp.exception.EmptyFieldException;
@@ -24,17 +24,25 @@ import bo.umss.app.inventorySp.exception.EntityNotFoundException;
 import bo.umss.app.inventorySp.exception.UniqueViolationException;
 
 @Service
-public class ProviderServiceImpl implements ProviderService {
+public class ProductServiceImpl implements ProductService {
 
 	private Logger log = LogManager.getLogger(getClass());
 
 	@Autowired
-	private ProviderRepository repository;
+	private ProductRepository repository;
 
 	@Override
-	public Provider create(Provider entity) {
-		if (existsByName(entity.getName())) {
+	public Product create(Product entity) {
+		if (existsByCode(entity.getCode())) {
 			throw new UniqueViolationException(UniqueViolationException.DATA_DUPLICATE);
+		}
+
+		if (StringUtils.isBlank(entity.getCode())) {
+			throw new EmptyFieldException(Product.CODE_CAN_NOT_BE_BLANK);
+		}
+
+		if (StringUtils.isBlank(entity.getDescription())) {
+			throw new EmptyFieldException(Product.DESCRIPTION_CAN_NOT_BE_BLANK);
 		}
 
 		try {
@@ -48,7 +56,15 @@ public class ProviderServiceImpl implements ProviderService {
 
 	@Transactional
 	@Override
-	public Provider update(Provider entity) {
+	public Product update(Product entity) {
+		if (StringUtils.isBlank(entity.getCode())) {
+			throw new EmptyFieldException(Product.CODE_CAN_NOT_BE_BLANK);
+		}
+
+		if (StringUtils.isBlank(entity.getDescription())) {
+			throw new EmptyFieldException(Product.DESCRIPTION_CAN_NOT_BE_BLANK);
+		}
+
 		try {
 			return repository.save(entity);
 		} catch (ConstraintViolationException e) {
@@ -65,9 +81,9 @@ public class ProviderServiceImpl implements ProviderService {
 	}
 
 	@Override
-	public Provider read(Long key) {
+	public Product read(Long key) {
 		try {
-			Optional<Provider> entityOptional = repository.findById(key);
+			Optional<Product> entityOptional = repository.findById(key);
 			if (!entityOptional.isPresent()) {
 				throw new EntityNotFoundException();
 			}
@@ -80,7 +96,7 @@ public class ProviderServiceImpl implements ProviderService {
 	}
 
 	@Override
-	public List<Provider> findAll() {
+	public List<Product> findAll() {
 		try {
 			return repository.findAll();
 		} catch (DataAccessException e) {
@@ -90,13 +106,13 @@ public class ProviderServiceImpl implements ProviderService {
 	}
 
 	@Override
-	public Provider findByName(String potentialName) {
-		if (StringUtils.isBlank(potentialName)) {
-			throw new EmptyFieldException(Provider.NAME_CAN_NOT_BE_BLANK);
+	public Product findByCode(String potentialCode) {
+		if (StringUtils.isBlank(potentialCode)) {
+			throw new EmptyFieldException(Product.CODE_CAN_NOT_BE_BLANK);
 		}
 
 		try {
-			Provider entity = repository.findByName(potentialName);
+			Product entity = repository.findByCode(potentialCode);
 			if (null != entity) {
 				return entity;
 			} else {
@@ -109,17 +125,16 @@ public class ProviderServiceImpl implements ProviderService {
 	}
 
 	@Override
-	public boolean existsByName(String potentialName) {
-		if (StringUtils.isBlank(potentialName)) {
-			throw new EmptyFieldException(Provider.NAME_CAN_NOT_BE_BLANK);
+	public boolean existsByCode(String potentialCode) {
+		if (StringUtils.isBlank(potentialCode)) {
+			throw new EmptyFieldException(Product.CODE_CAN_NOT_BE_BLANK);
 		}
 
 		try {
-			return repository.existsByName(potentialName);
+			return repository.existsByCode(potentialCode);
 		} catch (DataAccessException e) {
 			log.error(e.getMessage(), e);
 			throw new CrudException(CrudException.DATA_ACCESS);
 		}
 	}
-
 }

@@ -154,10 +154,34 @@ public class ProductTest {
 
 	@Test
 	public void toDoReferralAmountLessThanValueStock() {
-		// The amount referral should be grether than stock value
+		// The amount referral should be greater than stock value
 		StockReferral referral = StockReferral.at(plate, 8, date);
 		plate.addReferral(referral);
 
 		assertEquals(1, plate.getListReferral().size());
+	}
+
+	@Test
+	public void verifyCompareCodeSuccess() {
+		plate.setCode("");
+
+		assertTrue(plate.compareOtherCode(""));
+	}
+
+	@Test
+	public void verifyCompareCodeWrong() {
+		assertFalse(plate.compareOtherCode(""));
+	}
+
+	@Test
+	public void verifyCompareDescriptionCorrect() {
+		plate.setDescription("");
+
+		assertTrue(plate.compareOtherDescription(""));
+	}
+
+	@Test
+	public void verifyCompareDescriptionWrong() {
+		assertFalse(plate.compareOtherDescription(""));
 	}
 }
