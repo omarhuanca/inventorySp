@@ -122,5 +122,4 @@ CREATE TABLE stcr_stock_referral (
 
 ALTER TABLE stcr_stock_referral
     ALTER COLUMN    stcr_id         SET DEFAULT nextval('stcr_seq'),
-    ADD CONSTRAINT  pk_stcr_id      PRIMARY KEY(stcr_id),
-    ADD CONSTRAINT  fk_stcr_prd_id  FOREIGN KEY(stcr_prd_id) REFERENCES prd_product(prd_id) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT  pk_stcr_id      PRIMARY KEY(stcr_id);
