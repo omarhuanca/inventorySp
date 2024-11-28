@@ -32,9 +32,11 @@ public class ProductTest {
 	private Product plate;
 	private LocalDate date;
 	private Provider provider;
+	private TestObjectBucket testObjectBucket;
 
 	@BeforeEach
 	public void setUp() {
+		testObjectBucket = new TestObjectBucket();
 		line = Line.at(TestObjectBucket.PLATE_NAME);
 		coin = Coin.at(TestObjectBucket.CODE_USA);
 		priceCost = Price.at("PR-1", 5.0, coin);
@@ -183,5 +185,71 @@ public class ProductTest {
 	@Test
 	public void verifyCompareDescriptionWrong() {
 		assertFalse(plate.compareOtherDescription(""));
+	}
+
+	@Test
+	public void verifyCompareStockCorrect() {
+		assertTrue(plate.compareStock(stock));
+	}
+
+	@Test
+	public void verifyCompareStockWrong() {
+		Measurement measurement = testObjectBucket.createMeasurementPiece();
+		Stock potentialStock = testObjectBucket.createStock("ST-2", 20, measurement);
+
+		assertFalse(plate.compareStock(potentialStock));
+	}
+
+	@Test
+	public void verifyComparePriceCostCorrect() {
+		assertTrue(plate.comparePriceCost(priceCost));
+	}
+
+	@Test
+	public void verifyComparePriceCostWrong() {
+		Coin coin = testObjectBucket.createCoin(TestObjectBucket.CODE_BS);
+		Price potentialPriceCost = testObjectBucket.createPrice("PR-4", 7.0, coin);
+
+		assertFalse(plate.comparePriceSale(potentialPriceCost));
+	}
+
+	@Test
+	public void verifyComparePriceSaleCorrect() {
+		assertTrue(plate.comparePriceSale(priceSale));
+	}
+
+	@Test
+	public void verifyComparePriceSaleWrong() {
+		Coin coin = testObjectBucket.createCoin(TestObjectBucket.CODE_BS);
+		Price potentialPriceSale = testObjectBucket.createPrice("PR-3", 30.0, coin);
+
+		assertFalse(plate.comparePriceSale(potentialPriceSale));
+	}
+
+	@Test
+	public void verifyCompareLineCorrect() {
+		assertTrue(plate.compareLine(line));
+	}
+
+	@Test
+	public void verifyCompareLineWrong() {
+		Line potentialLine = testObjectBucket.createLinePlate();
+		plate.setLine(potentialLine);
+
+		assertFalse(plate.compareLine(line));
+	}
+
+	@Test
+	public void test60() {
+		assertTrue(plate.compareProvider(provider));
+	}
+
+	@Test
+	public void test61() {
+		Provider potentialProvider = Provider.at(TestObjectBucket.JUAN_PEREZ_NAME + "a",
+				TestObjectBucket.JUAN_PEREZ_CELLPHONE);
+		plate.setProvider(potentialProvider);
+
+		assertFalse(plate.compareProvider(provider));
 	}
 }

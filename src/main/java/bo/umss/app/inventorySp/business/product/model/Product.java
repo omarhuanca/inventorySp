@@ -45,6 +45,7 @@ public class Product implements Serializable {
 	public static final String PRICE_COST_CAN_NOT_BE_NULL = "Price cost can not be null";
 	public static final String PRICE_SALE_CAN_NOT_BE_NULL = "Price sale can not be null";
 	public static final String LINE_CAN_NOT_BE_NULL = "Line can not be null";
+	public static final String PROVIDER_CAN_NOT_BE_NULL = "Provider can not be null";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -72,7 +73,7 @@ public class Product implements Serializable {
 
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "prd_pr_id", nullable = false)
+	@JoinColumn(name = "prd_sc_pr_id", nullable = false)
 	private Price priceSale;
 
 	@NotNull
@@ -90,9 +91,15 @@ public class Product implements Serializable {
 	@JoinColumn(name = "chp_id_id")
 	private List<ChangePrice> listChangePriceCost;
 
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "stc_id")
 	private List<StockBuy> listStockBuy;
 
-	private List<StockReferral> listReferral;
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "stcr_id")
+	private List<StockReferral> listStockReferral;
 
 	public Product(String code, String description, Stock stock, Price priceCost, Price priceSale, Line line,
 			Provider provider) {
@@ -105,7 +112,7 @@ public class Product implements Serializable {
 		this.provider = provider;
 		listChangePriceCost = new ArrayList<>();
 		listStockBuy = new ArrayList<>();
-		listReferral = new ArrayList<>();
+		listStockReferral = new ArrayList<>();
 	}
 
 	public static Product at(String code, String description, Stock stock, Price priceCost, Price priceSale, Line line,
@@ -146,7 +153,7 @@ public class Product implements Serializable {
 		return stock;
 	}
 
-	private void setStock(Stock potentialStock) {
+	public void setStock(Stock potentialStock) {
 		stock = potentialStock;
 	}
 
@@ -162,12 +169,24 @@ public class Product implements Serializable {
 		return priceSale;
 	}
 
+	public void setPriceSale(Price potentialPriceSale) {
+		priceSale = potentialPriceSale;
+	}
+
 	public Line getLine() {
 		return line;
 	}
 
+	public void setLine(Line potentialLine) {
+		line = potentialLine;
+	}
+
 	public Provider getProvider() {
 		return provider;
+	}
+
+	public void setProvider(Provider potentialProvider) {
+		provider = potentialProvider;
 	}
 
 	public List<ChangePrice> getListChangePriceCost() {
@@ -179,11 +198,11 @@ public class Product implements Serializable {
 	}
 
 	public List<StockReferral> getListReferral() {
-		return listReferral;
+		return listStockReferral;
 	}
 
 	public void setListReferral(List<StockReferral> listReferral) {
-		this.listReferral = listReferral;
+		this.listStockReferral = listReferral;
 	}
 
 	public boolean equals(Product potentialProduct) {
@@ -235,7 +254,7 @@ public class Product implements Serializable {
 
 	public void addReferral(StockReferral referral) {
 		todoDecrementStock(referral.getAmount());
-		listReferral.add(referral);
+		listStockReferral.add(referral);
 	}
 
 	public Price calculateSubtotalWithCoin() {
@@ -252,5 +271,25 @@ public class Product implements Serializable {
 
 	public Boolean compareOtherDescription(String potentialDescription) {
 		return description.equalsIgnoreCase(potentialDescription);
+	}
+
+	public Boolean compareStock(Stock potentialStock) {
+		return stock.equals(potentialStock);
+	}
+
+	public Boolean comparePriceSale(Price potentialPriceSale) {
+		return priceSale.equals(potentialPriceSale);
+	}
+
+	public Boolean comparePriceCost(Price potentialPriceCost) {
+		return priceCost.equals(potentialPriceCost);
+	}
+
+	public Boolean compareLine(Line potentialLine) {
+		return line.equals(potentialLine);
+	}
+
+	public Boolean compareProvider(Provider potentialProvider) {
+		return provider.equals(potentialProvider);
 	}
 }

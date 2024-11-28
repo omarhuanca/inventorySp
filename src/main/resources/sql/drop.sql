@@ -1,6 +1,7 @@
 /* **********************************************
  * TABLES                                       *
  ************************************************/
+DROP TABLE IF EXISTS prd_product;
 DROP TABLE IF EXISTS ln_line;
 DROP TABLE IF EXISTS chp_change_price;
 DROP TABLE IF EXISTS st_stock;
@@ -13,6 +14,7 @@ DROP TABLE IF EXISTS stcr_stock_referral;
 /* **********************************************
  * SEQUENCES                                    *
  ************************************************/
+DROP SEQUENCE IF EXISTS prd_seq;
 DROP SEQUENCE IF EXISTS ln_seq;
 DROP SEQUENCE IF EXISTS chp_seq;
 DROP SEQUENCE IF EXISTS st_seq;

@@ -8,10 +8,10 @@ CREATE SEQUENCE cn_seq;
 CREATE SEQUENCE st_seq;
 CREATE SEQUENCE pr_seq;
 CREATE SEQUENCE prv_seq;
+CREATE SEQUENCE prd_seq;
 CREATE SEQUENCE chp_seq;
 CREATE SEQUENCE stcr_seq;
 CREATE SEQUENCE stc_seq;
-
 
 /*==============================================================*/
 /* Table: Line                                                  */
@@ -93,6 +93,30 @@ CREATE TABLE prv_provider (
 ALTER TABLE prv_provider
     ALTER COLUMN    prv_id           SET DEFAULT nextval('prv_seq'),
     ADD CONSTRAINT  pk_prv_id        PRIMARY KEY(prv_id);
+
+/*==============================================================*/
+/* Table: Product                                               */
+/*==============================================================*/
+CREATE TABLE prd_product (
+    prd_id          BIGINT          NOT NULL,
+    prd_st_id       BIGINT          NOT NULL,
+    prd_pr_id       BIGINT          NOT NULL,
+    prd_sc_pr_id    BIGINT          NOT NULL,
+    prd_ln_id       BIGINT          NOT NULL,
+    prd_prv_id      BIGINT          NOT NULL,
+    prd_code        VARCHAR(45)     NOT NULL,
+    prd_description VARCHAR(200)    NOT NULL
+);
+
+ALTER TABLE prd_product
+    ALTER COLUMN    prd_id             SET DEFAULT nextval('prd_seq'),
+    ADD CONSTRAINT  pk_prd_id          PRIMARY KEY(prd_id),
+    ADD CONSTRAINT  fk_prd_st_id       FOREIGN KEY(prd_st_id) REFERENCES st_stock(st_id) ON UPDATE CASCADE ON DELETE CASCADE,
+    ADD CONSTRAINT  fk_prd_pr_id       FOREIGN KEY(prd_pr_id) REFERENCES pr_price(pr_id) ON UPDATE CASCADE ON DELETE CASCADE,
+    ADD CONSTRAINT  fk_prd_sc_pr_id    FOREIGN KEY(prd_sc_pr_id) REFERENCES pr_price(pr_id) ON UPDATE CASCADE ON DELETE CASCADE,
+    ADD CONSTRAINT  fk_prd_ln_id       FOREIGN KEY(prd_ln_id) REFERENCES ln_line(ln_id) ON UPDATE CASCADE ON DELETE CASCADE,
+    ADD CONSTRAINT  fk_prd_prv_id      FOREIGN KEY(prd_prv_id) REFERENCES prv_provider(prv_id) ON UPDATE CASCADE ON DELETE CASCADE;
+
 
 /*==============================================================*/
 /* Table: ChangePrice                                           */
