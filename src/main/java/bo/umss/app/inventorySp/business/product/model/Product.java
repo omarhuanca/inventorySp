@@ -129,6 +129,8 @@ public class Product implements Serializable {
 			throw new RuntimeException(PRICE_SALE_CAN_NOT_BE_NULL);
 		if (null == line)
 			throw new EmptyFieldException(LINE_CAN_NOT_BE_NULL);
+		if (null == provider)
+			throw new EmptyFieldException(PROVIDER_CAN_NOT_BE_NULL);
 
 		return new Product(code, description, stock, priceCost, priceSale, line, provider);
 	}

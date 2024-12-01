@@ -240,12 +240,12 @@ public class ProductTest {
 	}
 
 	@Test
-	public void test60() {
+	public void verifyCompareProviderCorrect() {
 		assertTrue(plate.compareProvider(provider));
 	}
 
 	@Test
-	public void test61() {
+	public void verifyCompareProviderWrong() {
 		Provider potentialProvider = Provider.at(TestObjectBucket.JUAN_PEREZ_NAME + "a",
 				TestObjectBucket.JUAN_PEREZ_CELLPHONE);
 		plate.setProvider(potentialProvider);
