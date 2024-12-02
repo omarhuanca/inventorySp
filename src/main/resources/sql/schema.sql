@@ -54,7 +54,6 @@ ALTER TABLE cn_coin
 /*==============================================================*/
 CREATE TABLE st_stock (
     st_id       BIGINT          NOT NULL,
-    st_code     VARCHAR(45)     NOT NULL,
     st_value    INTEGER         NOT NULL,
     st_ms_id    BIGINT          NOT NULL
 );
@@ -62,7 +61,6 @@ CREATE TABLE st_stock (
 ALTER TABLE st_stock
     ALTER COLUMN    st_id           SET DEFAULT nextval('st_seq'),
     ADD CONSTRAINT  pk_st_id        PRIMARY KEY(st_id),
-    ADD CONSTRAINT  uq_st_code      UNIQUE(st_code),
     ADD CONSTRAINT  fk_st_ms_id     FOREIGN KEY(st_ms_id) REFERENCES ms_measurement(ms_id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 /*==============================================================*/

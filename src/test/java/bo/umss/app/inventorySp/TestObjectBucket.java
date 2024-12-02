@@ -41,7 +41,7 @@ public class TestObjectBucket {
 		Price priceCost = createPrice("PR-1", 5.0, coin);
 		Price priceSale = createPrice("PR-2", 10.0, coin);
 		Measurement measurement = createMeasurementPiece();
-		Stock stock = createStock("ST-1", 10, measurement);
+		Stock stock = createStock(10, measurement);
 		Provider provider = Provider.at(JUAN_PEREZ_NAME, JUAN_PEREZ_CELLPHONE);
 
 		return Product.at(PLATE_CODE, "PLATO ZETA BOWL 8 PORCELANA CUADRADO", stock, priceCost, priceSale, line,
@@ -52,8 +52,8 @@ public class TestObjectBucket {
 		return Price.at(code, value, coin);
 	}
 
-	public Stock createStock(String code, Integer value, Measurement measurement) {
-		return Stock.at(code, value, measurement);
+	public Stock createStock(Integer value, Measurement measurement) {
+		return Stock.at(value, measurement);
 	}
 
 	public Coin createCoin(String code) {
@@ -70,7 +70,7 @@ public class TestObjectBucket {
 		Price priceCost = createPrice("PR-1", 8.0, coin);
 		Price priceSale = createPrice("PR-2", 16.0, coin);
 		Measurement measurement = createMeasurementPiece();
-		Stock stock = createStock("ST-1", 10, measurement);
+		Stock stock = createStock(10, measurement);
 		Provider provider = Provider.at(JUAN_PEREZ_NAME, JUAN_PEREZ_CELLPHONE);
 
 		return Product.at(CUP_CODE, CUP_PURCHASE_DESCRIPTION, stock, priceCost, priceSale, line, provider);
@@ -86,7 +86,7 @@ public class TestObjectBucket {
 		Price priceCost = createPrice("PR-1", 205.0, coin);
 		Price priceSale = createPrice("PR-2", 246.0, coin);
 		Measurement measurement = createMeasurementPiece();
-		Stock stock = createStock("ST-1", 80, measurement);
+		Stock stock = createStock(80, measurement);
 		Provider provider = Provider.at(JUAN_PEREZ_NAME, JUAN_PEREZ_CELLPHONE);
 
 		return Product.at(POT_CODE, "OLLA TRILLIUM INOX 3 PCS", stock, priceCost, priceSale, line, provider);
@@ -144,7 +144,7 @@ public class TestObjectBucket {
 		Price newPrice = createPrice("PR-1", 5.0, coin);
 		Price oldPrice = createPrice("PR-2", 5.0, coin);
 		Measurement measurement = createMeasurementPiece();
-		Stock stock = createStock("ST-1", 80, measurement);
+		Stock stock = createStock(80, measurement);
 
 		return ChangePrice.at(newPrice, oldPrice, stock, LocalDate.now());
 	}

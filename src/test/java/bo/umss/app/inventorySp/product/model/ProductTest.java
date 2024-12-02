@@ -42,7 +42,7 @@ public class ProductTest {
 		priceCost = Price.at("PR-1", 5.0, coin);
 		priceSale = Price.at("PR-1", 10.0, coin);
 		measurement = Measurement.at(TestObjectBucket.CODE_PZA);
-		stock = Stock.at("ST-1", 10, measurement);
+		stock = Stock.at(10, measurement);
 		provider = Provider.at(TestObjectBucket.JUAN_PEREZ_NAME, TestObjectBucket.JUAN_PEREZ_CELLPHONE);
 
 		plate = Product.at(TestObjectBucket.BOWL8_CODE, TestObjectBucket.BOWL8_DESCRIPTION, stock, priceCost, priceSale,
@@ -65,7 +65,7 @@ public class ProductTest {
 	@Test
 	public void notLetPriceCostBeNull() {
 		Price priceSale2 = Price.at("PR-1", 6.0, coin);
-		Stock stock2 = Stock.at("ST-1", 1, measurement);
+		Stock stock2 = Stock.at(1, measurement);
 
 		assertThrows(
 				RuntimeException.class, () -> Product.at(TestObjectBucket.BOWL8_CODE,
@@ -76,7 +76,7 @@ public class ProductTest {
 	@Test
 	public void notLetPriceSaleBeNull() {
 		Price priceCost2 = Price.at("PR-1", 5.0, coin);
-		Stock stock2 = Stock.at("ST-1", 1, measurement);
+		Stock stock2 = Stock.at(1, measurement);
 
 		assertThrows(
 				RuntimeException.class, () -> Product.at(TestObjectBucket.BOWL8_CODE,
@@ -86,7 +86,7 @@ public class ProductTest {
 
 	@Test
 	public void notLetAnyItemOfListTransaction() {
-		Stock stock2 = Stock.at("ST-1", 1, measurement);
+		Stock stock2 = Stock.at(1, measurement);
 		Product anotherPlate = Product.at(TestObjectBucket.BOWL8_CODE, TestObjectBucket.BOWL8_DESCRIPTION, stock2,
 				priceCost, priceSale, line, provider);
 
@@ -195,7 +195,7 @@ public class ProductTest {
 	@Test
 	public void verifyCompareStockWrong() {
 		Measurement measurement = testObjectBucket.createMeasurementPiece();
-		Stock potentialStock = testObjectBucket.createStock("ST-2", 20, measurement);
+		Stock potentialStock = testObjectBucket.createStock(20, measurement);
 
 		assertFalse(plate.compareStock(potentialStock));
 	}

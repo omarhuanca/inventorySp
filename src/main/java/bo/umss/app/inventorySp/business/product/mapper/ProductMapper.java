@@ -68,7 +68,7 @@ public class ProductMapper implements IMapper<Product, ProductDto> {
 
 	@Override
 	public Product toEntity(ProductDto dto, boolean isNew) {
-		Stock stock = stockService.findByCode(dto.getStock().getCode());
+		Stock stock = stockService.findById(dto.getStock().getId());
 		Price priceCost = priceService.findByCode(dto.getPriceCost().getCode());
 		Price priceSale = priceService.findByCode(dto.getPriceSale().getCode());
 		Line line = lineService.findByName(dto.getLine().getName());

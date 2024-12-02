@@ -16,16 +16,15 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 import bo.umss.app.inventorySp.business.measurement.model.Measurement;
-import bo.umss.app.inventorySp.exception.EmptyFieldException;
 import bo.umss.app.inventorySp.exception.NegativeFieldException;
 
 @Entity
-@Table(name = "st_stock", uniqueConstraints = { @UniqueConstraint(columnNames = { "st_code" }) })
+@Table(name = "st_stock", uniqueConstraints = { @UniqueConstraint(columnNames = { "st_id" }) })
 public class Stock implements Serializable {
 
 	private static final long serialVersionUID = 8389217286958445461L;
 
-	public static final String CODE_CAN_NOT_BE_BLANK = "Code can not be blank";
+	public static final String ID_CAN_NOT_BE_LESS_THAN_ZERO = "Id can not be less zero";
 	public static final String VALUE_CAN_NOT_BE_LESS_THAN_ZERO = "Value can not be less zero";
 	public static final String MEASUREMENT_CAN_NOT_BE_NULL = "Measurement can not be null";
 	public static final String AMOUNT_GREATER_THAN_AVAILABLE = "Amount greater than available";
@@ -37,10 +36,6 @@ public class Stock implements Serializable {
 	private Long id;
 
 	@NotNull
-	@Column(name = "st_code")
-	private String code;
-
-	@NotNull
 	@Column(name = "st_value")
 	private Integer value;
 
@@ -49,8 +44,7 @@ public class Stock implements Serializable {
 	@JoinColumn(name = "st_ms_id", nullable = false)
 	private Measurement measurement;
 
-	public Stock(String code, Integer value, Measurement measurement) {
-		this.code = code;
+	public Stock(Integer value, Measurement measurement) {
 		this.value = value;
 		this.measurement = measurement;
 	}
@@ -58,21 +52,19 @@ public class Stock implements Serializable {
 	public Stock() {
 	}
 
-	public static Stock at(String code, Integer value, Measurement measurement) {
-		if (code.isEmpty())
-			throw new EmptyFieldException(CODE_CAN_NOT_BE_BLANK);
+	public static Stock at(Integer value, Measurement measurement) {
 		if (0 > value)
 			throw new NegativeFieldException(VALUE_CAN_NOT_BE_LESS_THAN_ZERO);
 		if (null == measurement)
 			throw new RuntimeException(MEASUREMENT_CAN_NOT_BE_NULL);
 
-		return new Stock(code, value, measurement);
-	}
-
-	public String getCode() {
-		return code;
+		return new Stock(value, measurement);
 	}
 	
+	public Long getId() {
+		return id;
+	}
+
 	public Integer getValue() {
 		return value;
 	}
@@ -113,10 +105,6 @@ public class Stock implements Serializable {
 		if (value > 0) {
 			value = value + potentialValue;
 		}
-	}
-
-	public Boolean compareOtherCode(String potentialCode) {
-		return code.equalsIgnoreCase(potentialCode);
 	}
 
 	public void setMeasurement(Measurement potentialMeasurement) {

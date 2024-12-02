@@ -70,11 +70,10 @@ public class StockController implements CrudController<StockDto> {
 
 	}
 
-	@GetMapping(value = "/{code}")
-	@Override
-	public StockDto read(@PathVariable("code") String code) {
+	@GetMapping(value = "/readyById/{id}")
+	public StockDto readById(@PathVariable("id") Long id) {
 		try {
-			return mapper.toDto(service.findByCode(code));
+			return mapper.toDto(service.findById(id));
 		} catch (NullPointerException e) {
 			throw new BadParamsException();
 		} catch (CrudException e) {
@@ -97,5 +96,10 @@ public class StockController implements CrudController<StockDto> {
 		} catch (CrudException e) {
 			throw new CrudException();
 		}
+	}
+
+	@Override
+	public StockDto read(String code) {
+		return null;
 	}
 }
