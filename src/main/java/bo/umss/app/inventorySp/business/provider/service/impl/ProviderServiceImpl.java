@@ -14,8 +14,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import bo.umss.app.inventorySp.business.product.repository.ProviderRepository;
 import bo.umss.app.inventorySp.business.provider.model.Provider;
+import bo.umss.app.inventorySp.business.provider.repository.ProviderRepository;
 import bo.umss.app.inventorySp.business.provider.service.ProviderService;
 import bo.umss.app.inventorySp.exception.BadParamsException;
 import bo.umss.app.inventorySp.exception.CrudException;

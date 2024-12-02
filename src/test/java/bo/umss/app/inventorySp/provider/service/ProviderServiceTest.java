@@ -18,8 +18,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import bo.umss.app.inventorySp.TestObjectBucket;
-import bo.umss.app.inventorySp.business.product.repository.ProviderRepository;
 import bo.umss.app.inventorySp.business.provider.model.Provider;
+import bo.umss.app.inventorySp.business.provider.repository.ProviderRepository;
 import bo.umss.app.inventorySp.business.provider.service.ProviderService;
 import bo.umss.app.inventorySp.exception.EmptyFieldException;
 

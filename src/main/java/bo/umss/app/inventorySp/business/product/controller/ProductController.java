@@ -1,4 +1,4 @@
-package bo.umss.app.inventorySp.business.stock.controller;
+package bo.umss.app.inventorySp.business.product.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,29 +16,29 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
 
-import bo.umss.app.inventorySp.business.stock.dto.StockDto;
-import bo.umss.app.inventorySp.business.stock.mapper.StockMapper;
-import bo.umss.app.inventorySp.business.stock.model.Stock;
-import bo.umss.app.inventorySp.business.stock.service.StockService;
+import bo.umss.app.inventorySp.business.product.dto.ProductDto;
+import bo.umss.app.inventorySp.business.product.mapper.ProductMapper;
+import bo.umss.app.inventorySp.business.product.model.Product;
+import bo.umss.app.inventorySp.business.product.service.ProductService;
 import bo.umss.app.inventorySp.controller.CrudController;
 import bo.umss.app.inventorySp.exception.BadParamsException;
 import bo.umss.app.inventorySp.exception.CrudException;
 import bo.umss.app.inventorySp.exception.EntityNotFoundException;
 
 @RestController
-@RequestMapping("/v1/stocks")
-public class StockController implements CrudController<StockDto> {
+@RequestMapping("/v1/products")
+public class ProductController implements CrudController<ProductDto> {
 
 	@Autowired
-	private StockService service;
+	private ProductService service;
 
 	@Autowired
-	private StockMapper mapper;
+	private ProductMapper mapper;
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	@Override
-	public StockDto create(@RequestBody @Valid StockDto dto) {
+	public ProductDto create(@RequestBody @Valid ProductDto dto) {
 		try {
 			return mapper.toDto(service.create(mapper.toEntity(dto, true)));
 		} catch (BadParamsException e) {
@@ -49,7 +49,7 @@ public class StockController implements CrudController<StockDto> {
 	@PutMapping
 	@ResponseStatus(HttpStatus.OK)
 	@Override
-	public void update(@RequestBody @Valid StockDto dto) {
+	public void update(@RequestBody @Valid ProductDto dto) {
 		try {
 			service.update(mapper.toEntity(dto, false));
 
@@ -70,10 +70,11 @@ public class StockController implements CrudController<StockDto> {
 
 	}
 
-	@GetMapping(value = "/readyById/{id}")
-	public StockDto readById(@PathVariable("id") Long id) {
+	@GetMapping(value = "/{code}")
+	@Override
+	public ProductDto read(@PathVariable("code") String code) {
 		try {
-			return mapper.toDto(service.findById(id));
+			return mapper.toDto(service.findByCode(code));
 		} catch (NullPointerException e) {
 			throw new BadParamsException();
 		} catch (CrudException e) {
@@ -85,10 +86,10 @@ public class StockController implements CrudController<StockDto> {
 
 	@GetMapping
 	@Override
-	public List<StockDto> findAll() {
+	public List<ProductDto> findAll() {
 		try {
-			List<StockDto> lineList = new ArrayList<>();
-			for (Stock entity : service.findAll()) {
+			List<ProductDto> lineList = new ArrayList<>();
+			for (Product entity : service.findAll()) {
 				lineList.add(mapper.toDto(entity));
 			}
 
@@ -96,10 +97,5 @@ public class StockController implements CrudController<StockDto> {
 		} catch (CrudException e) {
 			throw new CrudException();
 		}
-	}
-
-	@Override
-	public StockDto read(String code) {
-		return null;
 	}
 }

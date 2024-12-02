@@ -27,20 +27,20 @@ public class StockMapper implements IMapper<Stock, StockDto> {
 	@Override
 	public StockDto toDto(Stock entity) {
 		MeasurementDto measurementDto = measurementMapper.toDto(entity.getMeasurement());
-		return StockDto.at(entity.getCode(), entity.getValue(), measurementDto);
+		return StockDto.at(entity.getId(), entity.getValue(), measurementDto);
 	}
 
 	@Override
 	public Stock toEntity(StockDto dto, boolean isNew) {
 		Measurement measurement = measurementService.findByCode(dto.getMeasurement().getCode());
 
-		if(isNew) {
-			return Stock.at(dto.getCode(), dto.getValue(), measurement);
+		if (isNew) {
+			return Stock.at(dto.getValue(), measurement);
 		} else {
-			Stock recover = service.findByCode(dto.getCode());
+			Stock recover = service.findById(dto.getId());
 			recover.setValue(dto.getValue());
 			recover.setMeasurement(measurement);
-			
+
 			return recover;
 		}
 	}

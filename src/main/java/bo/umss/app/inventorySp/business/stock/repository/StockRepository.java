@@ -8,7 +8,4 @@ import bo.umss.app.inventorySp.business.stock.model.Stock;
 @Repository
 public interface StockRepository extends JpaRepository<Stock, Long> {
 
-	Stock findByCode(String code);
-
-	boolean existsByCode(String code);
 }

@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,10 +23,8 @@ import bo.umss.app.inventorySp.business.measurement.model.Measurement;
 import bo.umss.app.inventorySp.business.stock.model.Stock;
 import bo.umss.app.inventorySp.business.stock.repository.StockRepository;
 import bo.umss.app.inventorySp.business.stock.service.StockService;
-import bo.umss.app.inventorySp.exception.EmptyFieldException;
 import bo.umss.app.inventorySp.exception.EntityNotFoundException;
 import bo.umss.app.inventorySp.exception.NegativeFieldException;
-import bo.umss.app.inventorySp.exception.UniqueViolationException;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { StockServiceTestConfig.class })
@@ -44,15 +41,13 @@ public class StockServiceTest {
 	private Stock potentialStock;
 	private TestObjectBucket testObjectBucket;
 	private Integer defaultValue;
-	private String potentialCode;
 
 	@BeforeEach
 	public void setUp() {
 		defaultValue = 10;
-		potentialCode = "ST-1";
 		testObjectBucket = new TestObjectBucket();
 		Measurement measurement = testObjectBucket.createMeasurementPiece();
-		potentialStock = testObjectBucket.createStock(potentialCode, defaultValue, measurement);
+		potentialStock = testObjectBucket.createStock(defaultValue, measurement);
 	}
 
 	@Test
@@ -70,53 +65,6 @@ public class StockServiceTest {
 		List<Stock> stockList = stockService.findAll();
 
 		assertEquals(1, stockList.size());
-	}
-
-	@Test
-	public void verifyIsEmptyCode() {
-		assertThrows(EmptyFieldException.class, () -> stockService.existsByCode(""), Stock.CODE_CAN_NOT_BE_BLANK);
-	}
-
-	@Test
-	public void verifyDoesntExistCode() {
-		Mockito.when(stockRepository.existsByCode(Mockito.anyString())).thenReturn(false);
-
-		assertFalse(stockService.existsByCode(potentialCode));
-	}
-
-	@Test
-	public void verifyExistsCode() {
-		Mockito.when(stockRepository.existsByCode(Mockito.anyString())).thenReturn(true);
-
-		assertTrue(stockService.existsByCode(potentialCode));
-	}
-
-	@Test
-	public void verifyAlreadyCodeCreate() {
-		Mockito.when(stockRepository.existsByCode(Mockito.anyString())).thenReturn(true);
-
-		assertThrows(UniqueViolationException.class, () -> stockService.create(potentialStock));
-	}
-
-	@Test
-	public void verifyIsEmptyFindByCode() {
-		assertThrows(EmptyFieldException.class, () -> stockService.findByCode(""));
-	}
-
-	@Test
-	public void verifyCompareCorrectFindByCode() {
-		Mockito.when(stockRepository.findByCode(Mockito.anyString())).thenReturn(potentialStock);
-		Stock recover = stockService.findByCode(potentialCode);
-
-		assertTrue(recover.compareOtherCode(potentialCode));
-	}
-
-	@Test
-	public void verifyCompareWrongFindByCode() {
-		Mockito.when(stockRepository.findByCode(Mockito.anyString())).thenReturn(potentialStock);
-		Stock recover = stockService.findByCode(potentialCode);
-
-		assertFalse(recover.compareOtherCode(potentialCode + "t"));
 	}
 
 	@Test
@@ -176,25 +124,5 @@ public class StockServiceTest {
 		Long key = 5L;
 
 		assertThrows(EntityNotFoundException.class, () -> stockService.read(key));
-	}
-
-	@Test
-	public void verifyCorrectFindById() {
-		Long key = 5L;
-		Optional<Stock> optionalStock = Optional.of(potentialStock);
-		Mockito.when(stockRepository.findById(Mockito.any())).thenReturn(optionalStock);
-		Stock recover = stockService.read(key);
-
-		assertTrue(recover.compareOtherCode(potentialCode));
-	}
-
-	@Test
-	public void verifyWrongFindById() {
-		Long key = 5L;
-		Optional<Stock> optionalStock = Optional.of(potentialStock);
-		Mockito.when(stockRepository.findById(Mockito.any())).thenReturn(optionalStock);
-		Stock recover = stockService.read(key);
-
-		assertFalse(recover.compareOtherCode(potentialCode + "t"));
 	}
 }

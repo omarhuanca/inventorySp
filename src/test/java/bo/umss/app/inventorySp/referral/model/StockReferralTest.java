@@ -27,7 +27,7 @@ public class StockReferralTest {
 	@Test
 	public void canNotBeNullCodeProduct() {
 		assertThrows(RuntimeException.class, () -> StockReferral.at(null, 1, date),
-				StockTransaction.CODE_PRODUCT_CAN_NOT_BE_NULL);
+				StockTransaction.PRODUCT_CAN_NOT_BE_NULL);
 	}
 
 	@Test

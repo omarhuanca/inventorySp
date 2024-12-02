@@ -25,7 +25,7 @@ public class ChangePriceTest {
 		currentDate = LocalDate.now();
 		coin = Coin.at(TestObjectBucket.CODE_USA);
 		Measurement measurement = Measurement.at(TestObjectBucket.CODE_PZA);
-		stock = Stock.at("ST-1", 2, measurement);
+		stock = Stock.at(2, measurement);
 	}
 
 	@Test

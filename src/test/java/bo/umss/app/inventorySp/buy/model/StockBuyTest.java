@@ -29,7 +29,7 @@ public class StockBuyTest {
 	@Test
 	public void canNotByNullCodeProduct() {
 		assertThrows(RuntimeException.class, () -> StockBuy.at(null, 1, date, TestObjectBucket.BOWL7_DESCRIPTION),
-				StockBuy.CODE_PRODUCT_CAN_NOT_BE_NULL);
+				StockBuy.PRODUCT_CAN_NOT_BE_NULL);
 	}
 
 	@Test

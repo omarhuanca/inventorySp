@@ -8,8 +8,10 @@ CREATE SEQUENCE cn_seq;
 CREATE SEQUENCE st_seq;
 CREATE SEQUENCE pr_seq;
 CREATE SEQUENCE prv_seq;
+CREATE SEQUENCE prd_seq;
 CREATE SEQUENCE chp_seq;
 CREATE SEQUENCE stcr_seq;
+CREATE SEQUENCE stc_seq;
 
 /*==============================================================*/
 /* Table: Line                                                  */
@@ -52,7 +54,6 @@ ALTER TABLE cn_coin
 /*==============================================================*/
 CREATE TABLE st_stock (
     st_id       BIGINT          NOT NULL,
-    st_code     VARCHAR(45)     NOT NULL,
     st_value    INTEGER         NOT NULL,
     st_ms_id    BIGINT          NOT NULL
 );
@@ -60,7 +61,6 @@ CREATE TABLE st_stock (
 ALTER TABLE st_stock
     ALTER COLUMN    st_id           SET DEFAULT nextval('st_seq'),
     ADD CONSTRAINT  pk_st_id        PRIMARY KEY(st_id),
-    ADD CONSTRAINT  uq_st_code      UNIQUE(st_code),
     ADD CONSTRAINT  fk_st_ms_id     FOREIGN KEY(st_ms_id) REFERENCES ms_measurement(ms_id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 /*==============================================================*/
@@ -93,6 +93,30 @@ ALTER TABLE prv_provider
     ADD CONSTRAINT  pk_prv_id        PRIMARY KEY(prv_id);
 
 /*==============================================================*/
+/* Table: Product                                               */
+/*==============================================================*/
+CREATE TABLE prd_product (
+    prd_id          BIGINT          NOT NULL,
+    prd_st_id       BIGINT          NOT NULL,
+    prd_pr_id       BIGINT          NOT NULL,
+    prd_sc_pr_id    BIGINT          NOT NULL,
+    prd_ln_id       BIGINT          NOT NULL,
+    prd_prv_id      BIGINT          NOT NULL,
+    prd_code        VARCHAR(45)     NOT NULL,
+    prd_description VARCHAR(200)    NOT NULL
+);
+
+ALTER TABLE prd_product
+    ALTER COLUMN    prd_id             SET DEFAULT nextval('prd_seq'),
+    ADD CONSTRAINT  pk_prd_id          PRIMARY KEY(prd_id),
+    ADD CONSTRAINT  fk_prd_st_id       FOREIGN KEY(prd_st_id) REFERENCES st_stock(st_id) ON UPDATE CASCADE ON DELETE CASCADE,
+    ADD CONSTRAINT  fk_prd_pr_id       FOREIGN KEY(prd_pr_id) REFERENCES pr_price(pr_id) ON UPDATE CASCADE ON DELETE CASCADE,
+    ADD CONSTRAINT  fk_prd_sc_pr_id    FOREIGN KEY(prd_sc_pr_id) REFERENCES pr_price(pr_id) ON UPDATE CASCADE ON DELETE CASCADE,
+    ADD CONSTRAINT  fk_prd_ln_id       FOREIGN KEY(prd_ln_id) REFERENCES ln_line(ln_id) ON UPDATE CASCADE ON DELETE CASCADE,
+    ADD CONSTRAINT  fk_prd_prv_id      FOREIGN KEY(prd_prv_id) REFERENCES prv_provider(prv_id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+/*==============================================================*/
 /* Table: ChangePrice                                           */
 /*==============================================================*/
 CREATE TABLE chp_change_price (
@@ -122,4 +146,21 @@ CREATE TABLE stcr_stock_referral (
 
 ALTER TABLE stcr_stock_referral
     ALTER COLUMN    stcr_id         SET DEFAULT nextval('stcr_seq'),
-    ADD CONSTRAINT  pk_stcr_id      PRIMARY KEY(stcr_id);
+    ADD CONSTRAINT  pk_stcr_id      PRIMARY KEY(stcr_id),
+    ADD CONSTRAINT  fk_stcr_prd_id  FOREIGN KEY(stcr_prd_id) REFERENCES prd_product(prd_id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+/*==============================================================*/
+/* Table: StockBuy                                              */
+/*==============================================================*/
+CREATE TABLE stc_stock_buy (
+    stc_id          BIGINT          NOT NULL,
+    stc_prd_id      BIGINT          NOT NULL,
+    stc_amount      INTEGER         NOT NULL,
+    stc_local_date  TIMESTAMP       NOT NULL,
+    stc_description VARCHAR(100)    NOT NULL
+);
+
+ALTER TABLE stc_stock_buy
+    ALTER COLUMN    stc_id         SET DEFAULT nextval('stc_seq'),
+    ADD CONSTRAINT  pk_stc_id      PRIMARY KEY(stc_id),
+    ADD CONSTRAINT  fk_stc_prd_id  FOREIGN KEY(stc_prd_id) REFERENCES prd_product(prd_id) ON UPDATE CASCADE ON DELETE CASCADE;

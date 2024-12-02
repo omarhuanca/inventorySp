@@ -32,15 +32,17 @@ public class ProductTest {
 	private Product plate;
 	private LocalDate date;
 	private Provider provider;
+	private TestObjectBucket testObjectBucket;
 
 	@BeforeEach
 	public void setUp() {
+		testObjectBucket = new TestObjectBucket();
 		line = Line.at(TestObjectBucket.PLATE_NAME);
 		coin = Coin.at(TestObjectBucket.CODE_USA);
 		priceCost = Price.at("PR-1", 5.0, coin);
 		priceSale = Price.at("PR-1", 10.0, coin);
 		measurement = Measurement.at(TestObjectBucket.CODE_PZA);
-		stock = Stock.at("ST-1", 10, measurement);
+		stock = Stock.at(10, measurement);
 		provider = Provider.at(TestObjectBucket.JUAN_PEREZ_NAME, TestObjectBucket.JUAN_PEREZ_CELLPHONE);
 
 		plate = Product.at(TestObjectBucket.BOWL8_CODE, TestObjectBucket.BOWL8_DESCRIPTION, stock, priceCost, priceSale,
@@ -63,7 +65,7 @@ public class ProductTest {
 	@Test
 	public void notLetPriceCostBeNull() {
 		Price priceSale2 = Price.at("PR-1", 6.0, coin);
-		Stock stock2 = Stock.at("ST-1", 1, measurement);
+		Stock stock2 = Stock.at(1, measurement);
 
 		assertThrows(
 				RuntimeException.class, () -> Product.at(TestObjectBucket.BOWL8_CODE,
@@ -74,7 +76,7 @@ public class ProductTest {
 	@Test
 	public void notLetPriceSaleBeNull() {
 		Price priceCost2 = Price.at("PR-1", 5.0, coin);
-		Stock stock2 = Stock.at("ST-1", 1, measurement);
+		Stock stock2 = Stock.at(1, measurement);
 
 		assertThrows(
 				RuntimeException.class, () -> Product.at(TestObjectBucket.BOWL8_CODE,
@@ -84,7 +86,7 @@ public class ProductTest {
 
 	@Test
 	public void notLetAnyItemOfListTransaction() {
-		Stock stock2 = Stock.at("ST-1", 1, measurement);
+		Stock stock2 = Stock.at(1, measurement);
 		Product anotherPlate = Product.at(TestObjectBucket.BOWL8_CODE, TestObjectBucket.BOWL8_DESCRIPTION, stock2,
 				priceCost, priceSale, line, provider);
 
@@ -154,10 +156,100 @@ public class ProductTest {
 
 	@Test
 	public void toDoReferralAmountLessThanValueStock() {
-		// The amount referral should be grether than stock value
+		// The amount referral should be greater than stock value
 		StockReferral referral = StockReferral.at(plate, 8, date);
 		plate.addReferral(referral);
 
 		assertEquals(1, plate.getListReferral().size());
+	}
+
+	@Test
+	public void verifyCompareCodeSuccess() {
+		plate.setCode("");
+
+		assertTrue(plate.compareOtherCode(""));
+	}
+
+	@Test
+	public void verifyCompareCodeWrong() {
+		assertFalse(plate.compareOtherCode(""));
+	}
+
+	@Test
+	public void verifyCompareDescriptionCorrect() {
+		plate.setDescription("");
+
+		assertTrue(plate.compareOtherDescription(""));
+	}
+
+	@Test
+	public void verifyCompareDescriptionWrong() {
+		assertFalse(plate.compareOtherDescription(""));
+	}
+
+	@Test
+	public void verifyCompareStockCorrect() {
+		assertTrue(plate.compareStock(stock));
+	}
+
+	@Test
+	public void verifyCompareStockWrong() {
+		Measurement measurement = testObjectBucket.createMeasurementPiece();
+		Stock potentialStock = testObjectBucket.createStock(20, measurement);
+
+		assertFalse(plate.compareStock(potentialStock));
+	}
+
+	@Test
+	public void verifyComparePriceCostCorrect() {
+		assertTrue(plate.comparePriceCost(priceCost));
+	}
+
+	@Test
+	public void verifyComparePriceCostWrong() {
+		Coin coin = testObjectBucket.createCoin(TestObjectBucket.CODE_BS);
+		Price potentialPriceCost = testObjectBucket.createPrice("PR-4", 7.0, coin);
+
+		assertFalse(plate.comparePriceSale(potentialPriceCost));
+	}
+
+	@Test
+	public void verifyComparePriceSaleCorrect() {
+		assertTrue(plate.comparePriceSale(priceSale));
+	}
+
+	@Test
+	public void verifyComparePriceSaleWrong() {
+		Coin coin = testObjectBucket.createCoin(TestObjectBucket.CODE_BS);
+		Price potentialPriceSale = testObjectBucket.createPrice("PR-3", 30.0, coin);
+
+		assertFalse(plate.comparePriceSale(potentialPriceSale));
+	}
+
+	@Test
+	public void verifyCompareLineCorrect() {
+		assertTrue(plate.compareLine(line));
+	}
+
+	@Test
+	public void verifyCompareLineWrong() {
+		Line potentialLine = testObjectBucket.createLinePlate();
+		plate.setLine(potentialLine);
+
+		assertFalse(plate.compareLine(line));
+	}
+
+	@Test
+	public void verifyCompareProviderCorrect() {
+		assertTrue(plate.compareProvider(provider));
+	}
+
+	@Test
+	public void verifyCompareProviderWrong() {
+		Provider potentialProvider = Provider.at(TestObjectBucket.JUAN_PEREZ_NAME + "a",
+				TestObjectBucket.JUAN_PEREZ_CELLPHONE);
+		plate.setProvider(potentialProvider);
+
+		assertFalse(plate.compareProvider(provider));
 	}
 }
