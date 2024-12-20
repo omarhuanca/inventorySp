@@ -260,11 +260,11 @@ public class Product implements Serializable {
 	}
 
 	public Price calculateSubtotalWithCoin() {
-		return Price.at("PR-1", priceSale.getValue() * stock.getValue(), priceSale.getCoin());
+		return Price.at(priceSale.getValue() * stock.getValue(), priceSale.getCoin());
 	}
 
 	public Price generateSubtotal() {
-		return Price.at("PR-1", priceSale.getValue() * stock.getValue(), priceSale.getCoin());
+		return Price.at(priceSale.getValue() * stock.getValue(), priceSale.getCoin());
 	}
 
 	public Boolean compareOtherCode(String potentialCode) {

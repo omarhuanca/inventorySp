@@ -21,17 +21,17 @@ public class PriceTest {
 	@BeforeEach
 	public void setUp() {
 		coin = Coin.at(TestObjectBucket.CODE_USA);
-		potentialPrice = Price.at("PR-1", 30.0, coin);
+		potentialPrice = Price.at(30.0, coin);
 	}
 
 	@Test
 	public void canNotBeLessThanZeroValue() {
-		assertThrows(RuntimeException.class, () -> Price.at("PR-1", -3.0, coin), Price.VALUE_CAN_NOT_BE_LESS_ZERO);
+		assertThrows(RuntimeException.class, () -> Price.at(-3.0, coin), Price.VALUE_CAN_NOT_BE_LESS_ZERO);
 	}
 
 	@Test
 	public void canNotEqualZeroValue() {
-		assertThrows(RuntimeException.class, () -> Price.at("PR-1", 0.0, coin), Price.VALUE_CAN_NOT_BE_LESS_ZERO);
+		assertThrows(RuntimeException.class, () -> Price.at(0.0, coin), Price.VALUE_CAN_NOT_BE_LESS_ZERO);
 	}
 
 	@Test
@@ -46,7 +46,7 @@ public class PriceTest {
 
 	@Test
 	public void addTwoPriceSale() {
-		Price priceTwo = Price.at("PR-2", 4.0, coin);
+		Price priceTwo = Price.at(4.0, coin);
 
 		assertEquals(34.0, potentialPrice.addWithOtherPrice(priceTwo));
 	}
@@ -75,19 +75,5 @@ public class PriceTest {
 		potentialPrice.setValue(-8.0);
 
 		assertTrue(potentialPrice.isNegativeValue());
-	}
-
-	@Test
-	public void verifyWrongCompareCode() {
-		Price anotherPrice = Price.at("PR-2", 50.0, coin);
-
-		assertFalse(potentialPrice.compareAnotherCode(anotherPrice.getCode()));
-	}
-
-	@Test
-	public void verifyCorrectCompareCode() {
-		Price similarPrice = Price.at("PR-1", 20.0, coin);
-
-		assertTrue(potentialPrice.compareAnotherCode(similarPrice.getCode()));
 	}
 }
