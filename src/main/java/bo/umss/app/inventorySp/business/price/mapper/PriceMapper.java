@@ -27,7 +27,7 @@ public class PriceMapper implements IMapper<Price, PriceDto> {
 	@Override
 	public PriceDto toDto(Price entity) {
 		CoinDto coinDto = coinMapper.toDto(entity.getCoin());
-		return PriceDto.at(entity.getCode(), entity.getValue(), coinDto);
+		return PriceDto.at(entity.getId(), entity.getValue(), coinDto);
 	}
 
 	@Override
@@ -35,9 +35,9 @@ public class PriceMapper implements IMapper<Price, PriceDto> {
 		Coin coin = coinService.findByCode(dto.getCoin().getCode());
 
 		if (isNew) {
-			return Price.at(dto.getCode(), dto.getValue(), coin);
+			return Price.at(dto.getValue(), coin);
 		} else {
-			Price recover = service.findByCode(dto.getCode());
+			Price recover = service.findById(dto.getId());
 			recover.setValue(dto.getValue());
 			recover.setCoin(coin);
 

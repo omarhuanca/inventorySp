@@ -70,11 +70,10 @@ public class PriceController implements CrudController<PriceDto> {
 
 	}
 
-	@GetMapping(value = "/{code}")
-	@Override
-	public PriceDto read(@PathVariable("code") String code) {
+	@GetMapping(value = "/readById/{id}")
+	public PriceDto readById(@PathVariable("id") Long id) {
 		try {
-			return mapper.toDto(service.findByCode(code));
+			return mapper.toDto(service.findById(id));
 		} catch (NullPointerException e) {
 			throw new BadParamsException();
 		} catch (CrudException e) {
@@ -83,7 +82,7 @@ public class PriceController implements CrudController<PriceDto> {
 			throw new EntityNotFoundException();
 		}
 	}
-
+	
 	@GetMapping
 	@Override
 	public List<PriceDto> findAll() {
@@ -97,5 +96,10 @@ public class PriceController implements CrudController<PriceDto> {
 		} catch (CrudException e) {
 			throw new CrudException();
 		}
+	}
+
+	@Override
+	public PriceDto read(String code) {
+		return null;
 	}
 }

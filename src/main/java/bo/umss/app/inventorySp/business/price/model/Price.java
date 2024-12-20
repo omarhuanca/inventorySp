@@ -19,16 +19,15 @@ import javax.validation.constraints.NotNull;
 
 import bo.umss.app.inventorySp.business.coin.model.Coin;
 import bo.umss.app.inventorySp.business.discount.model.Discount;
-import bo.umss.app.inventorySp.exception.EmptyFieldException;
 import bo.umss.app.inventorySp.exception.NegativeFieldException;
 
 @Entity
-@Table(name = "pr_price", uniqueConstraints = { @UniqueConstraint(columnNames = { "pr_code" }) })
+@Table(name = "pr_price", uniqueConstraints = { @UniqueConstraint(columnNames = { "pr_id" }) })
 public class Price implements Serializable {
 
 	private static final long serialVersionUID = 4936765486395174270L;
 
-	public static final String CODE_CAN_NOT_BE_BLANK = "Code can not be blank";
+	public static final String ID_CAN_NOT_BE_BLANK = "Id can not be blank";
 	public static final String VALUE_CAN_NOT_BE_LESS_ZERO = "Value can not be less than zero";
 	public static final String COIN_CAN_NOT_BE_NULL = "Coin can not be null";
 
@@ -39,10 +38,6 @@ public class Price implements Serializable {
 	private Long id;
 
 	@NotNull
-	@Column(name = "pr_code")
-	private String code;
-
-	@NotNull
 	@Column(name = "pr_value")
 	private Double value;
 
@@ -51,8 +46,7 @@ public class Price implements Serializable {
 	@JoinColumn(name = "pr_cn_id", nullable = false)
 	private Coin coin;
 
-	public Price(String code, double value, Coin coin) {
-		this.code = code;
+	public Price(double value, Coin coin) {
 		this.value = value;
 		this.coin = coin;
 	}
@@ -60,19 +54,17 @@ public class Price implements Serializable {
 	public Price() {
 	}
 
-	public static Price at(String code, Double value, Coin coin) {
-		if (code.isEmpty())
-			throw new EmptyFieldException(CODE_CAN_NOT_BE_BLANK);
+	public static Price at(Double value, Coin coin) {
 		if (0 >= value)
 			throw new NegativeFieldException(VALUE_CAN_NOT_BE_LESS_ZERO);
 		if (null == coin)
 			throw new RuntimeException(COIN_CAN_NOT_BE_NULL);
 
-		return new Price(code, value, coin);
+		return new Price(value, coin);
 	}
 
-	public String getCode() {
-		return code;
+	public Long getId() {
+		return id;
 	}
 
 	public Double getValue() {
@@ -94,7 +86,7 @@ public class Price implements Serializable {
 	public Map<Coin, Price> addPriceSumarize(Price potentialPrice) {
 		Map<Coin, Price> result = new HashMap<>();
 		if (coin.compareCode(potentialPrice.getCoin())) {
-			result.put(coin, Price.at(code, value + potentialPrice.getValue(), coin));
+			result.put(coin, Price.at(value + potentialPrice.getValue(), coin));
 		} else {
 			result.put(potentialPrice.getCoin(), potentialPrice);
 		}
@@ -111,9 +103,9 @@ public class Price implements Serializable {
 	}
 
 	public Price applyDiscount(Discount discount) {
-		Price response = Price.at(code, value, coin);
+		Price response = Price.at(value, coin);
 		if (value > discount.getValue()) {
-			response = Price.at(code, value - discount.getValue(), coin);
+			response = Price.at(value - discount.getValue(), coin);
 		}
 
 		return response;
@@ -125,10 +117,6 @@ public class Price implements Serializable {
 
 	public Boolean isNegativeValue() {
 		return 0 > value;
-	}
-
-	public Boolean compareAnotherCode(String potentialCode) {
-		return code.equalsIgnoreCase(potentialCode);
 	}
 
 	public void setCoin(Coin potentialCoin) {

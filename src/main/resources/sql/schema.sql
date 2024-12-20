@@ -68,7 +68,6 @@ ALTER TABLE st_stock
 /*==============================================================*/
 CREATE TABLE pr_price (
     pr_id       BIGINT          NOT NULL,
-    pr_code     VARCHAR(45)     NOT NULL,
     pr_value    INTEGER         NOT NULL,
     pr_cn_id    BIGINT          NOT NULL
 );

@@ -8,7 +8,4 @@ import bo.umss.app.inventorySp.business.price.model.Price;
 @Repository
 public interface PriceRepository extends JpaRepository<Price, Long> {
 
-	Price findByCode(String code);
-
-	boolean existsByCode(String code);
 }

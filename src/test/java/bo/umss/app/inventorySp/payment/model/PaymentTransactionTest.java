@@ -30,7 +30,7 @@ public class PaymentTransactionTest {
 	@BeforeEach
 	public void setUp() {
 		Coin coin = Coin.at(TestObjectBucket.CODE_USA);
-		total = Price.at("PR-1", 10.0, coin);
+		total = Price.at(10.0, coin);
 		discount = Discount.at(0);
 		LocalDate date = testObjectBucket.createDate();
 		noteReferral = NoteReferral.at(date);

@@ -7,14 +7,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import bo.umss.app.inventorySp.business.coin.dto.CoinDto;
 import bo.umss.app.inventorySp.business.price.model.Price;
-import bo.umss.app.inventorySp.exception.EmptyFieldException;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PriceDto {
 
 	@NotNull
-	private String code;
+	private Long id;
 
 	@NotNull
 	private Double value;
@@ -22,8 +21,8 @@ public class PriceDto {
 	@NotNull
 	private CoinDto coin;
 
-	public PriceDto(String code, double value, CoinDto coin) {
-		this.code = code;
+	public PriceDto(Long id, double value, CoinDto coin) {
+		this.id = id;
 		this.value = value;
 		this.coin = coin;
 	}
@@ -31,19 +30,17 @@ public class PriceDto {
 	public PriceDto() {
 	}
 
-	public static PriceDto at(@NotNull String code, @NotNull Double value, @NotNull CoinDto coin) {
-		if (code.isEmpty())
-			throw new EmptyFieldException(Price.CODE_CAN_NOT_BE_BLANK);
+	public static PriceDto at(Long id, @NotNull Double value, @NotNull CoinDto coin) {
 		if (0 >= value)
 			throw new RuntimeException(Price.VALUE_CAN_NOT_BE_LESS_ZERO);
 		if (null == coin)
 			throw new RuntimeException(Price.COIN_CAN_NOT_BE_NULL);
 
-		return new PriceDto(code, value, coin);
+		return new PriceDto(id, value, coin);
 	}
 
-	public String getCode() {
-		return code;
+	public Long getId() {
+		return id;
 	}
 
 	public Double getValue() {

@@ -38,8 +38,8 @@ public class TestObjectBucket {
 	public Product createPlate() {
 		Line line = createLinePlate();
 		Coin coin = createCoin(CODE_BS);
-		Price priceCost = createPrice("PR-1", 5.0, coin);
-		Price priceSale = createPrice("PR-2", 10.0, coin);
+		Price priceCost = createPrice(5.0, coin);
+		Price priceSale = createPrice(10.0, coin);
 		Measurement measurement = createMeasurementPiece();
 		Stock stock = createStock(10, measurement);
 		Provider provider = Provider.at(JUAN_PEREZ_NAME, JUAN_PEREZ_CELLPHONE);
@@ -48,8 +48,8 @@ public class TestObjectBucket {
 				provider);
 	}
 
-	public Price createPrice(String code, Double value, Coin coin) {
-		return Price.at(code, value, coin);
+	public Price createPrice(Double value, Coin coin) {
+		return Price.at(value, coin);
 	}
 
 	public Stock createStock(Integer value, Measurement measurement) {
@@ -67,8 +67,8 @@ public class TestObjectBucket {
 	public Product createCup() {
 		Line line = createLineCup();
 		Coin coin = createCoin(CODE_BS);
-		Price priceCost = createPrice("PR-1", 8.0, coin);
-		Price priceSale = createPrice("PR-2", 16.0, coin);
+		Price priceCost = createPrice(8.0, coin);
+		Price priceSale = createPrice(16.0, coin);
 		Measurement measurement = createMeasurementPiece();
 		Stock stock = createStock(10, measurement);
 		Provider provider = Provider.at(JUAN_PEREZ_NAME, JUAN_PEREZ_CELLPHONE);
@@ -83,8 +83,8 @@ public class TestObjectBucket {
 	public Product createPot() {
 		Line line = Line.at(POT_NAME);
 		Coin coin = Coin.at(CODE_USA);
-		Price priceCost = createPrice("PR-1", 205.0, coin);
-		Price priceSale = createPrice("PR-2", 246.0, coin);
+		Price priceCost = createPrice(205.0, coin);
+		Price priceSale = createPrice(246.0, coin);
 		Measurement measurement = createMeasurementPiece();
 		Stock stock = createStock(80, measurement);
 		Provider provider = Provider.at(JUAN_PEREZ_NAME, JUAN_PEREZ_CELLPHONE);
@@ -141,8 +141,8 @@ public class TestObjectBucket {
 
 	public ChangePrice createChangePrice() {
 		Coin coin = createCoin(CODE_BS);
-		Price newPrice = createPrice("PR-1", 5.0, coin);
-		Price oldPrice = createPrice("PR-2", 5.0, coin);
+		Price newPrice = createPrice(5.0, coin);
+		Price oldPrice = createPrice(5.0, coin);
 		Measurement measurement = createMeasurementPiece();
 		Stock stock = createStock(80, measurement);
 

@@ -5,7 +5,5 @@ import bo.umss.app.inventorySp.service.CrudService;
 
 public interface PriceService extends CrudService<Price, Long> {
 
-	Price findByCode(String potentialCode);
-
-	boolean existsByCode(String potentialCode);
+	Price findById(Long potentialId);
 }

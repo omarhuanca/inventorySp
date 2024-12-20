@@ -6,7 +6,6 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 import javax.validation.ConstraintViolationException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +18,8 @@ import bo.umss.app.inventorySp.business.price.repository.PriceRepository;
 import bo.umss.app.inventorySp.business.price.service.PriceService;
 import bo.umss.app.inventorySp.exception.BadParamsException;
 import bo.umss.app.inventorySp.exception.CrudException;
-import bo.umss.app.inventorySp.exception.EmptyFieldException;
 import bo.umss.app.inventorySp.exception.EntityNotFoundException;
 import bo.umss.app.inventorySp.exception.NegativeFieldException;
-import bo.umss.app.inventorySp.exception.UniqueViolationException;
 
 @Service
 public class PriceServiceImpl implements PriceService {
@@ -34,10 +31,6 @@ public class PriceServiceImpl implements PriceService {
 
 	@Override
 	public Price create(Price entity) {
-		if (existsByCode(entity.getCode())) {
-			throw new UniqueViolationException(UniqueViolationException.DATA_DUPLICATE);
-		}
-
 		if (entity.isNegativeValue()) {
 			throw new NegativeFieldException(Price.VALUE_CAN_NOT_BE_LESS_ZERO);
 		}
@@ -98,33 +91,24 @@ public class PriceServiceImpl implements PriceService {
 		}
 	}
 
-	@Override
-	public Price findByCode(String potentialCode) {
-		if (StringUtils.isBlank(potentialCode)) {
-			throw new EmptyFieldException(Price.CODE_CAN_NOT_BE_BLANK);
-		}
-
+	public Price findById(Long potentialId) {
 		try {
-			Price entity = repository.findByCode(potentialCode);
-			if (null != entity) {
-				return entity;
-			} else {
-				throw new EntityNotFoundException();
-			}
+			Price entity = repository.findById(potentialId).orElseThrow(() -> new EntityNotFoundException());
+
+			return entity;
 		} catch (DataAccessException e) {
 			log.error(e.getMessage(), e);
 			throw new CrudException(CrudException.DATA_ACCESS);
 		}
 	}
 
-	@Override
-	public boolean existsByCode(String potentialCode) {
-		if (StringUtils.isBlank(potentialCode)) {
-			throw new EmptyFieldException(Price.CODE_CAN_NOT_BE_BLANK);
+	public boolean existsById(Long potentialId) {
+		if (potentialId < 0) {
+			throw new NegativeFieldException(Price.ID_CAN_NOT_BE_BLANK);
 		}
 
 		try {
-			return repository.existsByCode(potentialCode);
+			return repository.existsById(potentialId);
 		} catch (DataAccessException e) {
 			log.error(e.getMessage(), e);
 			throw new CrudException(CrudException.DATA_ACCESS);
