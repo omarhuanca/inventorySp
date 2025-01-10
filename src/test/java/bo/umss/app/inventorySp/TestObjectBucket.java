@@ -29,7 +29,7 @@ public class TestObjectBucket {
 	public static final String BOWL8_DESCRIPTION = "bowl8 porcelain plate";
 	public static final String CODE_PZA = "pza";
 	public static final String CODE_DOC = "doc";
-	public static final String CODE_USA = "USD";
+	public static final String CODE_USD = "USD";
 	public static final String CODE_BS = "BS";
 	public static final String POT_CODE = "POT-1";
 	public static final String POT_NAME = "Set of pot";
@@ -82,7 +82,7 @@ public class TestObjectBucket {
 
 	public Product createPot() {
 		Line line = Line.at(POT_NAME);
-		Coin coin = Coin.at(CODE_USA);
+		Coin coin = Coin.at(CODE_USD);
 		Price priceCost = createPrice(205.0, coin);
 		Price priceSale = createPrice(246.0, coin);
 		Measurement measurement = createMeasurementPiece();

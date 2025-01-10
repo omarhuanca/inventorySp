@@ -30,7 +30,9 @@ import bo.umss.app.inventorySp.business.price.model.Price;
 import bo.umss.app.inventorySp.business.provider.model.Provider;
 import bo.umss.app.inventorySp.business.referral.model.StockReferral;
 import bo.umss.app.inventorySp.business.stock.model.Stock;
+import bo.umss.app.inventorySp.exception.CompareException;
 import bo.umss.app.inventorySp.exception.EmptyFieldException;
+import bo.umss.app.inventorySp.exception.ValueLessThanOtherException;
 
 @Entity
 @Table(name = "prd_product", uniqueConstraints = { @UniqueConstraint(columnNames = { "prd_code" }) })
@@ -46,6 +48,8 @@ public class Product implements Serializable {
 	public static final String PRICE_SALE_CAN_NOT_BE_NULL = "Price sale can not be null";
 	public static final String LINE_CAN_NOT_BE_NULL = "Line can not be null";
 	public static final String PROVIDER_CAN_NOT_BE_NULL = "Provider can not be null";
+	public static final String PRICE_COST_COIN_DIFF_PRICE_SALE_COIN = "Coin diff between price cost and price sale";
+	public static final String PRICE_SALE_CHEAPER_THAN_PRICE_COST = "Price sale can not be cheaper than price cost";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -88,7 +92,7 @@ public class Product implements Serializable {
 
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "chp_id_id")
+	@JoinColumn(name = "chp_id")
 	private List<ChangePrice> listChangePriceCost;
 
 	@LazyCollection(LazyCollectionOption.FALSE)
@@ -127,12 +131,19 @@ public class Product implements Serializable {
 			throw new RuntimeException(PRICE_COST_CAN_NOT_BE_NULL);
 		if (null == priceSale)
 			throw new RuntimeException(PRICE_SALE_CAN_NOT_BE_NULL);
+		if (!priceCost.lessThanValue(priceSale))
+			throw new ValueLessThanOtherException(PRICE_SALE_CHEAPER_THAN_PRICE_COST);
+		if (!priceCost.compareOtherCoin(priceSale))
+			throw new CompareException(PRICE_COST_COIN_DIFF_PRICE_SALE_COIN);
 		if (null == line)
 			throw new EmptyFieldException(LINE_CAN_NOT_BE_NULL);
 		if (null == provider)
 			throw new EmptyFieldException(PROVIDER_CAN_NOT_BE_NULL);
 
 		return new Product(code, description, stock, priceCost, priceSale, line, provider);
+	}
+
+	public Product() {
 	}
 
 	public String getCode() {

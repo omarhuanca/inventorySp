@@ -68,6 +68,9 @@ public class ProductDto {
 
 		return new ProductDto(code, description, stock, priceCost, priceSale, line, provider);
 	}
+	
+	public ProductDto() {
+	}
 
 	public String getCode() {
 		return code;

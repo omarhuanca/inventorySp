@@ -75,8 +75,8 @@ public class Price implements Serializable {
 		return coin;
 	}
 
-	public Boolean lessThanValue(Price potentialPriceCost) {
-		return value < potentialPriceCost.getValue();
+	public Boolean lessThanValue(Price potentialPrice) {
+		return value < potentialPrice.getValue();
 	}
 
 	public Boolean compareValueLessThanPotentialValue(Integer potentialValue) {
@@ -121,5 +121,9 @@ public class Price implements Serializable {
 
 	public void setCoin(Coin potentialCoin) {
 		coin = potentialCoin;
+	}
+
+	public Boolean compareOtherCoin(Price potentialPrice) {
+		return coin.compareCode(potentialPrice.getCoin());
 	}
 }

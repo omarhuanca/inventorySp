@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import bo.umss.app.inventorySp.business.changePrice.model.ChangePrice;
 
-@Repository
+//@Repository
 public interface ChangePriceRepository extends JpaRepository<ChangePrice, Long> {
 
 }

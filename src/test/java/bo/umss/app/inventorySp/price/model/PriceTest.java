@@ -20,7 +20,7 @@ public class PriceTest {
 
 	@BeforeEach
 	public void setUp() {
-		coin = Coin.at(TestObjectBucket.CODE_USA);
+		coin = Coin.at(TestObjectBucket.CODE_USD);
 		potentialPrice = Price.at(30.0, coin);
 	}
 
@@ -75,5 +75,22 @@ public class PriceTest {
 		potentialPrice.setValue(-8.0);
 
 		assertTrue(potentialPrice.isNegativeValue());
+	}
+
+	@Test
+	public void verifyPriceEqualCoin() {
+		potentialPrice = Price.at(30.0, coin);
+		Price potentialPriceTwo = Price.at(30.0, coin);
+
+		assertTrue(potentialPrice.compareOtherCoin(potentialPriceTwo));
+	}
+
+	@Test
+	public void verifyPriceNotEqualCoin() {
+		Coin coinOther = Coin.at(TestObjectBucket.CODE_BS);
+		potentialPrice = Price.at(30.0, coin);
+		Price potentialPriceTwo = Price.at(30.0, coinOther);
+
+		assertFalse(potentialPrice.compareOtherCoin(potentialPriceTwo));
 	}
 }

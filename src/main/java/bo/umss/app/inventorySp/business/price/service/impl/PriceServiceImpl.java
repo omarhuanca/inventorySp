@@ -13,6 +13,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import bo.umss.app.inventorySp.business.coin.model.Coin;
 import bo.umss.app.inventorySp.business.price.model.Price;
 import bo.umss.app.inventorySp.business.price.repository.PriceRepository;
 import bo.umss.app.inventorySp.business.price.service.PriceService;
@@ -109,6 +110,27 @@ public class PriceServiceImpl implements PriceService {
 
 		try {
 			return repository.existsById(potentialId);
+		} catch (DataAccessException e) {
+			log.error(e.getMessage(), e);
+			throw new CrudException(CrudException.DATA_ACCESS);
+		}
+	}
+
+	@Override
+	public Price findByValue(Double potentialValue, Coin potentialCoin) {
+		
+		if (0 > potentialValue) {
+			throw new NegativeFieldException(Price.VALUE_CAN_NOT_BE_LESS_ZERO);
+		}
+
+		try {
+			Optional<Price> entityOptional = repository.findByValue(potentialValue);
+			if(entityOptional.isPresent()) {
+				return entityOptional.get();
+			} else {
+				return repository.save(Price.at(potentialValue, potentialCoin));				
+			}
+
 		} catch (DataAccessException e) {
 			log.error(e.getMessage(), e);
 			throw new CrudException(CrudException.DATA_ACCESS);

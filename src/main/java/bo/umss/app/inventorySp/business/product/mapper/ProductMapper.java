@@ -3,10 +3,12 @@ package bo.umss.app.inventorySp.business.product.mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import bo.umss.app.inventorySp.business.coin.mapper.CoinMapper;
 import bo.umss.app.inventorySp.business.line.dto.LineDto;
 import bo.umss.app.inventorySp.business.line.mapper.LineMapper;
 import bo.umss.app.inventorySp.business.line.model.Line;
 import bo.umss.app.inventorySp.business.line.service.LineService;
+import bo.umss.app.inventorySp.business.measurement.mapper.MeasurementMapper;
 import bo.umss.app.inventorySp.business.price.dto.PriceDto;
 import bo.umss.app.inventorySp.business.price.mapper.PriceMapper;
 import bo.umss.app.inventorySp.business.price.model.Price;
@@ -54,6 +56,12 @@ public class ProductMapper implements IMapper<Product, ProductDto> {
 	@Autowired
 	private ProductService service;
 
+	@Autowired
+	private CoinMapper coinMapper;
+
+	@Autowired
+	private MeasurementMapper measurementMapper;
+
 	@Override
 	public ProductDto toDto(Product entity) {
 		StockDto stockDto = stockMapper.toDto(entity.getStock());
@@ -68,9 +76,12 @@ public class ProductMapper implements IMapper<Product, ProductDto> {
 
 	@Override
 	public Product toEntity(ProductDto dto, boolean isNew) {
-		Stock stock = stockService.findById(dto.getStock().getId());
-		Price priceCost = priceService.findById(dto.getPriceCost().getId());
-		Price priceSale = priceService.findById(dto.getPriceSale().getId());
+		Stock stock = stockService.findByValue(dto.getStock().getValue(),
+				measurementMapper.toEntity(dto.getStock().getMeasurement(), isNew));
+		Price priceCost = priceService.findByValue(dto.getPriceCost().getValue(),
+				coinMapper.toEntity(dto.getPriceCost().getCoin(), isNew));
+		Price priceSale = priceService.findByValue(dto.getPriceSale().getValue(),
+				coinMapper.toEntity(dto.getPriceSale().getCoin(), isNew));
 		Line line = lineService.findByName(dto.getLine().getName());
 		Provider provider = providerService.findByName(dto.getProvider().getName());
 

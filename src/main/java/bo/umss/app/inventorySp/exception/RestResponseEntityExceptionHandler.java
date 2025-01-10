@@ -47,4 +47,15 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	public ResponseEntity<Object> handleNegativeFieldException(NegativeFieldException ex, WebRequest request) {
 		return new ResponseEntity<Object>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 	}
+
+	@ExceptionHandler(ValueLessThanOtherException.class)
+	public ResponseEntity<Object> handleValueLessThanOtherException(ValueLessThanOtherException ex,
+			WebRequest request) {
+		return new ResponseEntity<Object>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(CompareException.class)
+	public ResponseEntity<Object> handleCompareException(CompareException ex, WebRequest request) {
+		return new ResponseEntity<Object>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+	}
 }

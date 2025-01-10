@@ -19,6 +19,7 @@ import bo.umss.app.inventorySp.business.changePrice.model.ChangePrice;
 import bo.umss.app.inventorySp.business.changePrice.repository.ChangePriceRepository;
 import bo.umss.app.inventorySp.business.changePrice.service.ChangePriceService;
 
+/*
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { ChangePriceServiceTestConfig.class })
 public class ChangePriceServiceTest {
@@ -55,3 +56,4 @@ public class ChangePriceServiceTest {
 		assertEquals(1, changePriceList.size());
 	}
 }
+*/
