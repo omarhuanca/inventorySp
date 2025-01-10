@@ -20,6 +20,8 @@ import bo.umss.app.inventorySp.business.product.model.Product;
 import bo.umss.app.inventorySp.business.provider.model.Provider;
 import bo.umss.app.inventorySp.business.referral.model.StockReferral;
 import bo.umss.app.inventorySp.business.stock.model.Stock;
+import bo.umss.app.inventorySp.exception.CompareException;
+import bo.umss.app.inventorySp.exception.ValueLessThanOtherException;
 
 public class ProductTest {
 
@@ -38,7 +40,7 @@ public class ProductTest {
 	public void setUp() {
 		testObjectBucket = new TestObjectBucket();
 		line = Line.at(TestObjectBucket.PLATE_NAME);
-		coin = Coin.at(TestObjectBucket.CODE_USA);
+		coin = Coin.at(TestObjectBucket.CODE_USD);
 		priceCost = Price.at(5.0, coin);
 		priceSale = Price.at(10.0, coin);
 		measurement = Measurement.at(TestObjectBucket.CODE_PZA);
@@ -251,5 +253,24 @@ public class ProductTest {
 		plate.setProvider(potentialProvider);
 
 		assertFalse(plate.compareProvider(provider));
+	}
+
+	@Test
+	public void verifyPriceCostPriceSaleHasEqualCoin() {
+		Coin coinOther = Coin.at(TestObjectBucket.CODE_BS);
+		Price priceSaleOther = Price.at(12.0, coinOther);
+
+		assertThrows(
+				CompareException.class, () -> Product.at(TestObjectBucket.CUP_CODE,
+						TestObjectBucket.CUP_PURCHASE_DESCRIPTION, stock, priceCost, priceSaleOther, line, provider),
+				Product.PRICE_COST_COIN_DIFF_PRICE_SALE_COIN);
+	}
+
+	@Test
+	public void verifyPriceCostCanNotBeGreatherThanPriceSale() {
+		assertThrows(
+				ValueLessThanOtherException.class, () -> Product.at(TestObjectBucket.CUP_CODE,
+						TestObjectBucket.CUP_PURCHASE_DESCRIPTION, stock, priceSale, priceCost, line, provider),
+				Product.PRICE_SALE_CHEAPER_THAN_PRICE_COST);
 	}
 }

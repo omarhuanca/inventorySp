@@ -29,7 +29,7 @@ public class PaymentTransactionTest {
 
 	@BeforeEach
 	public void setUp() {
-		Coin coin = Coin.at(TestObjectBucket.CODE_USA);
+		Coin coin = Coin.at(TestObjectBucket.CODE_USD);
 		total = Price.at(10.0, coin);
 		discount = Discount.at(0);
 		LocalDate date = testObjectBucket.createDate();
@@ -127,7 +127,7 @@ public class PaymentTransactionTest {
 		Product pot = testObjectBucket.createPot();
 		noteReferral.addProduct(pot, 10);
 		Map<String, Price> partTotal = noteReferral.calculateTotal();
-		Price priceTotal = partTotal.get(TestObjectBucket.CODE_USA);
+		Price priceTotal = partTotal.get(TestObjectBucket.CODE_USD);
 
 		assertTrue(priceTotal.compareOtherValue(17220.0));
 	}
@@ -155,7 +155,7 @@ public class PaymentTransactionTest {
 		noteReferral.addProduct(pot, 10);
 		// pot -> 17220
 		Map<String, Price> partTotal = noteReferral.calculateTotal();
-		Price priceTotal = partTotal.get(TestObjectBucket.CODE_USA);
+		Price priceTotal = partTotal.get(TestObjectBucket.CODE_USD);
 
 		assertTrue(priceTotal.compareOtherValue(17220.0));
 	}

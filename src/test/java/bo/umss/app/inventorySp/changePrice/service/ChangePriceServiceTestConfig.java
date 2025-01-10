@@ -11,10 +11,12 @@ import bo.umss.app.inventorySp.business.changePrice.service.impl.ChangePriceServ
 @Configuration
 public class ChangePriceServiceTestConfig {
 
+	/*
 	@Bean
 	@Primary
 	@Qualifier("changePriceService")
 	ChangePriceService getChangePrice() {
 		return new ChangePriceServiceImpl();
 	}
+	*/
 }

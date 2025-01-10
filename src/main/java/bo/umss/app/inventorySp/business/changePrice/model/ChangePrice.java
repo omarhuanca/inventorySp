@@ -17,6 +17,8 @@ import javax.validation.constraints.NotNull;
 
 import bo.umss.app.inventorySp.business.price.model.Price;
 import bo.umss.app.inventorySp.business.stock.model.Stock;
+import bo.umss.app.inventorySp.exception.CompareException;
+import bo.umss.app.inventorySp.exception.ValueLessThanOtherException;
 
 @Entity
 @Table(name = "chp_change_price")
@@ -49,7 +51,7 @@ public class ChangePrice implements Serializable {
 
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "chp_ms_id", nullable = false)
+	@JoinColumn(name = "chp_st_id", nullable = false)
 	private Stock stock;
 
 	@NotNull
@@ -72,9 +74,9 @@ public class ChangePrice implements Serializable {
 		if (null == oldPrice)
 			throw new RuntimeException(OLD_PRICE_CAN_NOT_BE_NULL);
 		if (newPrice.lessThanValue(oldPrice))
-			throw new RuntimeException(NEW_PRICE_CAN_NOT_LESS_THAN_OLD_PRICE);
+			throw new ValueLessThanOtherException(NEW_PRICE_CAN_NOT_LESS_THAN_OLD_PRICE);
 		if (!newPrice.getCoin().compareCode(oldPrice.getCoin()))
-			throw new RuntimeException(NEW_PRICE_DOES_NOT_HAS_DIFF_MEASUREMENT_TO_OLD_PRICE);
+			throw new CompareException(NEW_PRICE_DOES_NOT_HAS_DIFF_MEASUREMENT_TO_OLD_PRICE);
 		if (null == stock)
 			throw new RuntimeException(STOCK_CAN_NOT_BE_NULL);
 		if (null == currentDate)

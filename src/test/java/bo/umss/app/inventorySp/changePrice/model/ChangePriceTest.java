@@ -23,7 +23,7 @@ public class ChangePriceTest {
 	@BeforeEach
 	public void setUp() {
 		currentDate = LocalDate.now();
-		coin = Coin.at(TestObjectBucket.CODE_USA);
+		coin = Coin.at(TestObjectBucket.CODE_USD);
 		Measurement measurement = Measurement.at(TestObjectBucket.CODE_PZA);
 		stock = Stock.at(2, measurement);
 	}

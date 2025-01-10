@@ -20,9 +20,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import bo.umss.app.inventorySp.TestObjectBucket;
+import bo.umss.app.inventorySp.business.coin.model.Coin;
+import bo.umss.app.inventorySp.business.price.model.Price;
 import bo.umss.app.inventorySp.business.product.model.Product;
 import bo.umss.app.inventorySp.business.product.repository.ProductRepository;
 import bo.umss.app.inventorySp.business.product.service.ProductService;
+import bo.umss.app.inventorySp.exception.CompareException;
 import bo.umss.app.inventorySp.exception.EmptyFieldException;
 import bo.umss.app.inventorySp.exception.EntityNotFoundException;
 import bo.umss.app.inventorySp.exception.UniqueViolationException;
@@ -123,6 +126,17 @@ public class ProductServiceTest {
 
 		assertThrows(EmptyFieldException.class, () -> productService.update(potentialProduct),
 				Product.DESCRIPTION_CAN_NOT_BE_BLANK);
+	}
+
+	@Test
+	public void verifyDiffPriceCoinCanNotBe() {
+		Coin potentialCoin = testObjectBucket.createCoin(TestObjectBucket.CODE_USD);
+		Price potentialPriceSale = testObjectBucket.createPrice(70.0, potentialCoin);
+		Product potentialCup = testObjectBucket.createCup();
+		potentialCup.setPriceSale(potentialPriceSale);
+
+		assertThrows(CompareException.class, () -> productService.update(potentialCup),
+				Product.PRICE_COST_COIN_DIFF_PRICE_SALE_COIN);
 	}
 
 	@Test

@@ -13,6 +13,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import bo.umss.app.inventorySp.business.measurement.model.Measurement;
 import bo.umss.app.inventorySp.business.stock.model.Stock;
 import bo.umss.app.inventorySp.business.stock.repository.StockRepository;
 import bo.umss.app.inventorySp.business.stock.service.StockService;
@@ -110,6 +111,26 @@ public class StockServiceImpl implements StockService {
 
 		try {
 			return repository.existsById(potentialId);
+		} catch (DataAccessException e) {
+			log.error(e.getMessage(), e);
+			throw new CrudException(CrudException.DATA_ACCESS);
+		}
+	}
+
+	@Override
+	public Stock findByValue(Integer potentialValue, Measurement potentialMeasurement) {
+		if (0 > potentialValue) {
+			throw new NegativeFieldException(Stock.VALUE_CAN_NOT_BE_LESS_THAN_ZERO);
+		}
+
+		try {
+			Optional<Stock> entityOptional = repository.findByValue(potentialValue);
+			if (entityOptional.isPresent()) {
+				return entityOptional.get();
+			} else {
+				return repository.save(Stock.at(potentialValue, potentialMeasurement));
+			}
+
 		} catch (DataAccessException e) {
 			log.error(e.getMessage(), e);
 			throw new CrudException(CrudException.DATA_ACCESS);

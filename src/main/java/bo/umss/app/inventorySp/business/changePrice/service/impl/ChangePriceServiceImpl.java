@@ -15,15 +15,15 @@ import bo.umss.app.inventorySp.business.changePrice.service.ChangePriceService;
 import bo.umss.app.inventorySp.exception.BadParamsException;
 import bo.umss.app.inventorySp.exception.CrudException;
 
-@Service
-public class ChangePriceServiceImpl implements ChangePriceService {
+//@Service
+public class ChangePriceServiceImpl {
 
 	private Logger log = LogManager.getLogger(getClass());
 
 	@Autowired
 	private ChangePriceRepository repository;
 
-	@Override
+	//@Override
 	public ChangePrice create(ChangePrice entity) {
 		try {
 			return repository.save(entity);
@@ -34,25 +34,25 @@ public class ChangePriceServiceImpl implements ChangePriceService {
 		}
 	}
 
-	@Override
+	//@Override
 	public ChangePrice update(ChangePrice entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
+	//@Override
 	public void delete(Long key) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
+	//@Override
 	public ChangePrice read(Long key) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
+	//@Override
 	public List<ChangePrice> findAll() {
 		try {
 			return repository.findAll();

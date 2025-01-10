@@ -120,6 +120,7 @@ ALTER TABLE prd_product
 /*==============================================================*/
 CREATE TABLE chp_change_price (
     chp_id              BIGINT          NOT NULL,
+    chp_prd_id          BIGINT          NOT NULL,
     chp_pr_id           BIGINT          NOT NULL,
     chp_sc_pr_id        BIGINT          NOT NULL,
     chp_st_id           BIGINT          NOT NULL,
@@ -129,6 +130,7 @@ CREATE TABLE chp_change_price (
 ALTER TABLE chp_change_price
     ALTER COLUMN    chp_id              SET DEFAULT nextval('chp_seq'),
     ADD CONSTRAINT  pk_chp_id           PRIMARY KEY(chp_id),
+    ADD CONSTRAINT  fk_chp_prd_id    	FOREIGN KEY(chp_prd_id) REFERENCES prd_product(prd_id) ON UPDATE CASCADE ON DELETE CASCADE,
     ADD CONSTRAINT  fk_chp_pr_id    	FOREIGN KEY(chp_pr_id) REFERENCES pr_price(pr_id) ON UPDATE CASCADE ON DELETE CASCADE,
     ADD CONSTRAINT  fk_chp_sc_pr_id    	FOREIGN KEY(chp_sc_pr_id) REFERENCES pr_price(pr_id) ON UPDATE CASCADE ON DELETE CASCADE,
     ADD CONSTRAINT  fk_chp_st_id    	FOREIGN KEY(chp_st_id) REFERENCES st_stock(st_id) ON UPDATE CASCADE ON DELETE CASCADE;
