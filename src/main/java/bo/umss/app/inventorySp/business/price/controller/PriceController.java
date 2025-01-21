@@ -8,7 +8,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,15 +34,9 @@ public class PriceController implements CrudController<PriceDto> {
 	@Autowired
 	private PriceMapper mapper;
 
-	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
 	@Override
-	public PriceDto create(@RequestBody @Valid PriceDto dto) {
-		try {
-			return mapper.toDto(service.create(mapper.toEntity(dto, true)));
-		} catch (BadParamsException e) {
-			throw new BadParamsException();
-		}
+	public PriceDto create(PriceDto dto) {
+		return null;
 	}
 
 	@PutMapping
@@ -82,7 +75,7 @@ public class PriceController implements CrudController<PriceDto> {
 			throw new EntityNotFoundException();
 		}
 	}
-	
+
 	@GetMapping
 	@Override
 	public List<PriceDto> findAll() {

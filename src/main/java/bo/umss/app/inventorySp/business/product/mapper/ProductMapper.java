@@ -99,4 +99,51 @@ public class ProductMapper implements IMapper<Product, ProductDto> {
 		}
 	}
 
+	public Product toEntityCreate(ProductDto dto, boolean isNew) {
+		Stock stock = stockService.create(stockMapper.toEntity(dto.getStock(), isNew));
+
+		Price priceCost = priceService.create(priceMapper.toEntity(dto.getPriceCost(), isNew));
+
+		Price priceSale = priceService.create(priceMapper.toEntity(dto.getPriceSale(), isNew));
+
+		Line line = lineService.findByName(dto.getLine().getName());
+		Provider provider = providerService.findByName(dto.getProvider().getName());
+
+		if (isNew) {
+			return Product.at(dto.getCode(), dto.getDescription(), stock, priceCost, priceSale, line, provider);
+		} else {
+			Product recover = service.findByCode(dto.getCode());
+			recover.setStock(stock);
+			recover.setPriceCost(priceCost);
+			recover.setPriceSale(priceSale);
+			recover.setLine(line);
+			recover.setProvider(provider);
+
+			return recover;
+		}
+	}
+
+	public Product toEntityUpdate(ProductDto dto, boolean isNew) {
+		Stock stock = stockService.create(stockMapper.toEntity(dto.getStock(), !isNew));
+
+		Price priceCost = priceService.create(priceMapper.toEntity(dto.getPriceCost(), !isNew));
+
+		Price priceSale = priceService.create(priceMapper.toEntity(dto.getPriceSale(), !isNew));
+
+		Line line = lineService.findByName(dto.getLine().getName());
+		Provider provider = providerService.findByName(dto.getProvider().getName());
+
+		if (isNew) {
+			return Product.at(dto.getCode(), dto.getDescription(), stock, priceCost, priceSale, line, provider);
+		} else {
+			Product recover = service.findByCode(dto.getCode());
+			recover.setStock(stock);
+			recover.setPriceCost(priceCost);
+			recover.setPriceSale(priceSale);
+			recover.setLine(line);
+			recover.setProvider(provider);
+
+			return recover;
+		}
+	}
 }
