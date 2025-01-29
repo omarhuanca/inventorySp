@@ -88,12 +88,12 @@ public class ProviderController implements CrudController<ProviderDto> {
 	@Override
 	public List<ProviderDto> findAll() {
 		try {
-			List<ProviderDto> lineList = new ArrayList<>();
+			List<ProviderDto> entityList = new ArrayList<>();
 			for (Provider entity : service.findAll()) {
-				lineList.add(mapper.toDto(entity));
+				entityList.add(mapper.toDto(entity));
 			}
 
-			return lineList;
+			return entityList;
 		} catch (CrudException e) {
 			throw new CrudException();
 		}

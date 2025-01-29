@@ -73,12 +73,12 @@ public class MeasurementController implements CrudController<MeasurementDto> {
 	@Override
 	public List<MeasurementDto> findAll() {
 		try {
-			List<MeasurementDto> measurementList = new ArrayList<>();
+			List<MeasurementDto> entityList = new ArrayList<>();
 			for (Measurement object : service.findAll()) {
-				measurementList.add(mapper.toDto(object));
+				entityList.add(mapper.toDto(object));
 			}
 
-			return measurementList;
+			return entityList;
 		} catch (CrudException e) {
 			throw new CrudException();
 		}

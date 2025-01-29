@@ -74,12 +74,12 @@ public class LineController implements CrudController<LineDto> {
 	@Override
 	public List<LineDto> findAll() {
 		try {
-			List<LineDto> lineList = new ArrayList<>();
+			List<LineDto> entityList = new ArrayList<>();
 			for (Line entity : service.findAll()) {
-				lineList.add(mapper.toDto(entity));
+				entityList.add(mapper.toDto(entity));
 			}
 
-			return lineList;
+			return entityList;
 		} catch (CrudException e) {
 			throw new CrudException();
 		}

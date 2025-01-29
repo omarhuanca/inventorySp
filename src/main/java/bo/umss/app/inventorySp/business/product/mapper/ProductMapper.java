@@ -137,6 +137,7 @@ public class ProductMapper implements IMapper<Product, ProductDto> {
 			return Product.at(dto.getCode(), dto.getDescription(), stock, priceCost, priceSale, line, provider);
 		} else {
 			Product recover = service.findByCode(dto.getCode());
+			recover.setDescription(dto.getDescription());
 			recover.setStock(stock);
 			recover.setPriceCost(priceCost);
 			recover.setPriceSale(priceSale);
