@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
@@ -88,14 +89,33 @@ public class ProductController implements CrudController<ProductDto> {
 	@Override
 	public List<ProductDto> findAll() {
 		try {
-			List<ProductDto> lineList = new ArrayList<>();
+			List<ProductDto> list = new ArrayList<>();
 			for (Product entity : service.findAll()) {
-				lineList.add(mapper.toDto(entity));
+				list.add(mapper.toDto(entity));
 			}
 
-			return lineList;
+			return list;
 		} catch (CrudException e) {
 			throw new CrudException();
+		}
+	}
+
+	@GetMapping(value = "/searchByDescription", params = { "criteria" })
+	public List<ProductDto> searchByDescription(@RequestParam("criteria") String criteria) {
+		try {
+
+			List<ProductDto> list = new ArrayList<>();
+			for (Product entity : service.searchByDescription(criteria)) {
+				list.add(mapper.toDto(entity));
+			}
+
+			return list;
+		} catch (NullPointerException e) {
+			throw new BadParamsException();
+		} catch (CrudException e) {
+			throw new CrudException();
+		} catch (EntityNotFoundException e) {
+			throw new EntityNotFoundException();
 		}
 	}
 }

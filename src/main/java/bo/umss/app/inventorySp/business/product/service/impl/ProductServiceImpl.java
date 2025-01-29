@@ -147,4 +147,18 @@ public class ProductServiceImpl implements ProductService {
 			throw new CrudException(CrudException.DATA_ACCESS);
 		}
 	}
+
+	@Override
+	public List<Product> searchByDescription(String criteria) {
+		if (StringUtils.isBlank(criteria)) {
+			throw new EmptyFieldException(Product.DESCRIPTION_CAN_NOT_BE_BLANK);
+		}
+
+		try {
+			return repository.searchByDescription(criteria);
+		} catch (DataAccessException e) {
+			log.error(e.getMessage(), e);
+			throw new CrudException(CrudException.DATA_ACCESS);
+		}
+	}
 }

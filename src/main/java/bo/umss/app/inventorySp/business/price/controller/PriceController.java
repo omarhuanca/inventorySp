@@ -80,12 +80,12 @@ public class PriceController implements CrudController<PriceDto> {
 	@Override
 	public List<PriceDto> findAll() {
 		try {
-			List<PriceDto> priceList = new ArrayList<>();
+			List<PriceDto> entityList = new ArrayList<>();
 			for (Price entity : service.findAll()) {
-				priceList.add(mapper.toDto(entity));
+				entityList.add(mapper.toDto(entity));
 			}
 
-			return priceList;
+			return entityList;
 		} catch (CrudException e) {
 			throw new CrudException();
 		}

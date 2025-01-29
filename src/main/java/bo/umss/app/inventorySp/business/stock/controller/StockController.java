@@ -80,12 +80,12 @@ public class StockController implements CrudController<StockDto> {
 	@Override
 	public List<StockDto> findAll() {
 		try {
-			List<StockDto> lineList = new ArrayList<>();
+			List<StockDto> entityList = new ArrayList<>();
 			for (Stock entity : service.findAll()) {
-				lineList.add(mapper.toDto(entity));
+				entityList.add(mapper.toDto(entity));
 			}
 
-			return lineList;
+			return entityList;
 		} catch (CrudException e) {
 			throw new CrudException();
 		}
