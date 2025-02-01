@@ -8,7 +8,7 @@ import bo.umss.app.inventorySp.business.line.model.Line;
 @Repository
 public interface LineRepository extends JpaRepository<Line, Long> {
 
-	Line findByName(String potentialName);
+	Line findByName(String name);
 
-	boolean existsByName(String potentialName);
+	boolean existsByName(String name);
 }

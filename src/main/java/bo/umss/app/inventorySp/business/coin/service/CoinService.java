@@ -8,4 +8,6 @@ public interface CoinService extends CrudService<Coin, Long> {
 	Coin findByCode(String potentialCode);
 
 	boolean existsByCode(String potentialCode);
+
+	Coin findById(Long potentialId);
 }

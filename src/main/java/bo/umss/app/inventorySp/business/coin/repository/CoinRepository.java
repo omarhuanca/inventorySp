@@ -8,7 +8,7 @@ import bo.umss.app.inventorySp.business.coin.model.Coin;
 @Repository
 public interface CoinRepository extends JpaRepository<Coin, Long> {
 
-	Coin findByCode(String potentialCode);
+	Coin findByCode(String code);
 
-	boolean existsByCode(String potentialCode);
+	boolean existsByCode(String code);
 }

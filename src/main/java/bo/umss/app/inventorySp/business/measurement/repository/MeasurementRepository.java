@@ -8,7 +8,7 @@ import bo.umss.app.inventorySp.business.measurement.model.Measurement;
 @Repository
 public interface MeasurementRepository extends JpaRepository<Measurement, Long> {
 
-	Measurement findByCode(String potentialCode);
+	Measurement findByCode(String code);
 
-	boolean existsByCode(String potentialCode);
+	boolean existsByCode(String code);
 }

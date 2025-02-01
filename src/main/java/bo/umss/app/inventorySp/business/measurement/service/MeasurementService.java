@@ -8,4 +8,6 @@ public interface MeasurementService extends CrudService<Measurement, Long> {
 	Measurement findByCode(String potentialCode);
 
 	boolean existsByCode(String potentialCode);
+
+	Measurement findById(Long potentialId);
 }

@@ -8,4 +8,6 @@ public interface LineService extends CrudService<Line, Long> {
 	Line findByName(String potentialName);
 
 	boolean existsByName(String potentialName);
+
+	Line findById(Long potentialId);
 }

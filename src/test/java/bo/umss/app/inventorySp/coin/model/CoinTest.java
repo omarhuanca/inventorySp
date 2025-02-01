@@ -7,16 +7,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import bo.umss.app.inventorySp.TestObjectBucket;
 import bo.umss.app.inventorySp.business.coin.model.Coin;
 
 public class CoinTest {
 
-	private Coin coin;
+	private Coin potentialCoin;
+	private TestObjectBucket testObjectBucket;
 
 	@BeforeEach
 	public void setUp() {
-		String potentialCode = "EUR";
-		coin = Coin.at(potentialCode);
+		testObjectBucket = new TestObjectBucket();
+		potentialCoin = testObjectBucket.createCoin(TestObjectBucket.CODE_USD);
 	}
 
 	@Test
@@ -26,11 +28,22 @@ public class CoinTest {
 
 	@Test
 	public void verifyWrongName() {
-		assertFalse(coin.compareOtherCode("IN"));
+		assertFalse(potentialCoin.compareOtherCode("IN"));
 	}
 
 	@Test
 	public void verifyCorrectName() {
-		assertTrue(coin.compareOtherCode("euR"));
+		assertTrue(potentialCoin.compareOtherCode("usd"));
+	}
+
+	@Test
+	public void verifyCompareCodeIsCorrect() {
+		assertTrue(potentialCoin.compareOtherCode(TestObjectBucket.CODE_USD));
+	}
+
+	@Test
+	public void verifyCompareCodeIsWrong() {
+		potentialCoin.setCode("coin");
+		assertFalse(potentialCoin.compareOtherCode(TestObjectBucket.CODE_USD));
 	}
 }

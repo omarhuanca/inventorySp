@@ -1,5 +1,6 @@
 package bo.umss.app.inventorySp.business.provider.mapper;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ public class ProviderMapper implements IMapper<Provider, ProviderDto> {
 
 	@Override
 	public ProviderDto toDto(Provider entity) {
-		return ProviderDto.at(entity.getName(), entity.getPhoneNumber());
+		return ProviderDto.at(entity.getId(), entity.getName(), entity.getPhoneNumber());
 	}
 
 	@Override
@@ -24,7 +25,8 @@ public class ProviderMapper implements IMapper<Provider, ProviderDto> {
 		if (isNew) {
 			return Provider.at(dto.getName(), dto.getPhoneNumber());
 		} else {
-			Provider recover = service.findByName(dto.getName());
+			Provider recover = service.findById(dto.getId());
+			recover.setName(StringUtils.upperCase(dto.getName()));
 			recover.setPhoneNumber(dto.getPhoneNumber());
 
 			return recover;

@@ -12,21 +12,29 @@ import bo.umss.app.inventorySp.business.measurement.model.Measurement;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MeasurementDto {
 
+	@NotNull
+	private Long id;
+
 	@NotBlank
 	private String code;
 
-	public MeasurementDto(String code) {
+	public MeasurementDto(Long id, String code) {
+		this.id = id;
 		this.code = code;
 	}
 
 	public MeasurementDto() {
 	}
 
-	public static MeasurementDto at(@NotNull String code) {
+	public static MeasurementDto at(Long id, @NotNull String code) {
 		if (code.isEmpty())
 			throw new RuntimeException(Measurement.CODE_CAN_NOT_BE_BLANK);
 
-		return new MeasurementDto(code);
+		return new MeasurementDto(id, code);
+	}
+
+	public Long getId() {
+		return id;
 	}
 
 	public String getCode() {

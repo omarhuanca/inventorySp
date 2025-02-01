@@ -13,7 +13,7 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "cn_coin", uniqueConstraints = { @UniqueConstraint(columnNames = { "cn_code" }) })
+@Table(name = "cn_coin", uniqueConstraints = { @UniqueConstraint(columnNames = { "cn_id" }) })
 public class Coin implements Serializable {
 
 	private static final long serialVersionUID = -2443110454635682595L;
@@ -58,5 +58,9 @@ public class Coin implements Serializable {
 
 	public Boolean compareOtherCode(String potentialCode) {
 		return code.equalsIgnoreCase(potentialCode);
+	}
+
+	public void setCode(String potentialCode) {
+		code = potentialCode;
 	}
 }

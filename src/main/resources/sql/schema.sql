@@ -23,7 +23,8 @@ CREATE TABLE ln_line (
 
 ALTER TABLE ln_line
     ALTER COLUMN    ln_id       SET DEFAULT nextval('ln_seq'),
-    ADD CONSTRAINT  pk_ln_id    PRIMARY KEY(ln_id);
+    ADD CONSTRAINT  pk_ln_id    PRIMARY KEY(ln_id),
+    ADD CONSTRAINT  uq_ln_name  UNIQUE(ln_name);
 
 /*==============================================================*/
 /* Table: Measurement                                           */
@@ -35,7 +36,8 @@ CREATE TABLE ms_measurement (
 
 ALTER TABLE ms_measurement
     ALTER COLUMN    ms_id       SET DEFAULT nextval('ms_seq'),
-    ADD CONSTRAINT  pk_ms_id    PRIMARY KEY(ms_id);
+    ADD CONSTRAINT  pk_ms_id    PRIMARY KEY(ms_id),
+    ADD CONSTRAINT  uq_ms_code  UNIQUE(ms_code);
 
 /*==============================================================*/
 /* Table: Coin                                                  */
@@ -47,7 +49,8 @@ CREATE TABLE cn_coin (
 
 ALTER TABLE cn_coin
     ALTER COLUMN    cn_id       SET DEFAULT nextval('cn_seq'),
-    ADD CONSTRAINT  pk_cn_id    PRIMARY KEY(cn_id);
+    ADD CONSTRAINT  pk_cn_id    PRIMARY KEY(cn_id),
+    ADD CONSTRAINT  uq_cn_code  UNIQUE(cn_code);
 
 /*==============================================================*/
 /* Table: Stock                                                 */
@@ -89,7 +92,8 @@ CREATE TABLE prv_provider (
 
 ALTER TABLE prv_provider
     ALTER COLUMN    prv_id           SET DEFAULT nextval('prv_seq'),
-    ADD CONSTRAINT  pk_prv_id        PRIMARY KEY(prv_id);
+    ADD CONSTRAINT  pk_prv_id        PRIMARY KEY(prv_id),
+    ADD CONSTRAINT  uq_prv_name      UNIQUE(prv_name);
 
 /*==============================================================*/
 /* Table: Product                                               */
