@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 import bo.umss.app.inventorySp.exception.EmptyFieldException;
 
 @Entity
-@Table(name = "ln_line", uniqueConstraints = { @UniqueConstraint(columnNames = { "ln_name" }) })
+@Table(name = "ln_line", uniqueConstraints = { @UniqueConstraint(columnNames = { "ln_id" }) })
 public class Line implements Serializable {
 
 	private static final long serialVersionUID = -8555506285688382910L;
@@ -46,23 +46,19 @@ public class Line implements Serializable {
 		return new Line(name);
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public Boolean compareOtherName(String potentialName) {
-		return name.equalsIgnoreCase(potentialName);
-	}
-
 	public Long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public String getName() {
+		return name;
 	}
 
 	public void setName(String potentialName) {
 		name = potentialName;
+	}
+
+	public Boolean compareOtherName(String potentialName) {
+		return name.equalsIgnoreCase(potentialName);
 	}
 }

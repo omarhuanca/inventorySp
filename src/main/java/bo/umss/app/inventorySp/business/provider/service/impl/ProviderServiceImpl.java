@@ -122,4 +122,16 @@ public class ProviderServiceImpl implements ProviderService {
 		}
 	}
 
+	@Override
+	public Provider findById(Long potentialId) {
+		try {
+			Provider entity = repository.findById(potentialId).orElseThrow(() -> new EntityNotFoundException());
+
+			return entity;
+		} catch (DataAccessException e) {
+			log.error(e.getMessage(), e);
+			throw new CrudException(CrudException.DATA_ACCESS);
+		}
+	}
+
 }

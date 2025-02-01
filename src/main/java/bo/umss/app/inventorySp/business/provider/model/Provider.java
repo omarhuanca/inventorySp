@@ -15,7 +15,7 @@ import javax.validation.constraints.NotBlank;
 import bo.umss.app.inventorySp.exception.EmptyFieldException;
 
 @Entity
-@Table(name = "prv_provider", uniqueConstraints = { @UniqueConstraint(columnNames = { "prv_name" }) })
+@Table(name = "prv_provider", uniqueConstraints = { @UniqueConstraint(columnNames = { "prv_id" }) })
 public class Provider implements Serializable {
 
 	private static final long serialVersionUID = -481161483247606771L;
@@ -53,6 +53,10 @@ public class Provider implements Serializable {
 		return new Provider(name, phoneNumber);
 	}
 
+	public Long getId() {
+		return id;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -67,5 +71,9 @@ public class Provider implements Serializable {
 
 	public void setPhoneNumber(String potentialPhoneNumber) {
 		phoneNumber = potentialPhoneNumber;
+	}
+
+	public void setName(String potentialName) {
+		name = potentialName;
 	}
 }

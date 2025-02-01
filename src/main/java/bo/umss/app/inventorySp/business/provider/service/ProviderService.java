@@ -8,4 +8,6 @@ public interface ProviderService extends CrudService<Provider, Long> {
 	Provider findByName(String potentialName);
 
 	boolean existsByName(String potentialName);
+
+	Provider findById(Long potentialId);
 }

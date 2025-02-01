@@ -42,4 +42,10 @@ public class ProviderTest {
 	public void verifyFailureEqual() {
 		assertFalse(potentialProvider.compareAnoherName(TestObjectBucket.JUAN_PEREZ_NAME + "t"));
 	}
+
+	@Test
+	public void verifyCompareNameIsWrong() {
+		potentialProvider.setName("Pedro");
+		assertFalse(potentialProvider.compareAnoherName(TestObjectBucket.JUAN_PEREZ_NAME));
+	}
 }

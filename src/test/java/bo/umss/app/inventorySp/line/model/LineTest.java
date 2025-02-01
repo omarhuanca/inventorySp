@@ -4,19 +4,22 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import bo.umss.app.inventorySp.TestObjectBucket;
 import bo.umss.app.inventorySp.business.line.model.Line;
 
 public class LineTest {
 
-	private Line line;
+	private Line potentialLine;
+	private TestObjectBucket testObjectBucket;
 
 	@BeforeEach
 	public void setUp() {
-		String name = "juego de ollas";
-		line = Line.at(name);
+		testObjectBucket = new TestObjectBucket();
+		potentialLine = testObjectBucket.createLinePlate();
 	}
 
 	@Test
@@ -25,12 +28,13 @@ public class LineTest {
 	}
 
 	@Test
-	public void verifySameName() {
-		assertFalse(line.compareOtherName("juego de cubierto"));
+	public void verifyCorrectCompareName() {
+		assertTrue(potentialLine.compareOtherName(StringUtils.upperCase(TestObjectBucket.PLATE_NAME)));
 	}
 
 	@Test
-	public void verifyCorrectCompareName() {
-		assertTrue(line.compareOtherName("JUEGO de OLLas"));
+	public void verifyCompareNameIsWrong() {
+		potentialLine.setName("x");
+		assertFalse(potentialLine.compareOtherName(TestObjectBucket.PLATE_NAME));
 	}
 }

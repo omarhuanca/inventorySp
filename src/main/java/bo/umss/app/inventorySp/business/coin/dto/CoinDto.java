@@ -1,6 +1,7 @@
 package bo.umss.app.inventorySp.business.coin.dto;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -11,10 +12,14 @@ import bo.umss.app.inventorySp.business.coin.model.Coin;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CoinDto {
 
+	@NotNull
+	private Long id;
+
 	@NotBlank
 	private String code;
 
-	private CoinDto(String code) {
+	private CoinDto(Long id, String code) {
+		this.id = id;
 		this.code = code;
 	}
 
@@ -22,11 +27,15 @@ public class CoinDto {
 
 	}
 
-	public static CoinDto at(@NotBlank String code) {
+	public static CoinDto at(Long id, @NotBlank String code) {
 		if (code.isEmpty())
 			throw new RuntimeException(Coin.CODE_CAN_NOT_BE_BLANK);
 
-		return new CoinDto(code);
+		return new CoinDto(id, code);
+	}
+
+	public Long getId() {
+		return id;
 	}
 
 	public String getCode() {

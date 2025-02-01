@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -45,9 +46,22 @@ public class LineController implements CrudController<LineDto> {
 		}
 	}
 
+	@PutMapping
+	@ResponseStatus(HttpStatus.OK)
 	@Override
-	public void update(LineDto dto) {
+	public void update(@RequestBody @Valid LineDto dto) {
+		try {
+			service.update(mapper.toEntity(dto, false));
 
+		} catch (NullPointerException e) {
+			throw new BadParamsException();
+
+		} catch (CrudException e) {
+			throw new CrudException(e.getMessage());
+
+		} catch (EntityNotFoundException e) {
+			throw new EntityNotFoundException();
+		}
 	}
 
 	@Override

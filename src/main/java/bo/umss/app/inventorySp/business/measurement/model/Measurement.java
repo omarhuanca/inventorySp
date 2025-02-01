@@ -13,7 +13,7 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "ms_measurement", uniqueConstraints = { @UniqueConstraint(columnNames = { "ms_code" }) })
+@Table(name = "ms_measurement", uniqueConstraints = { @UniqueConstraint(columnNames = { "ms_id" }) })
 public class Measurement implements Serializable {
 
 	private static final long serialVersionUID = 2181430776512445072L;
@@ -42,6 +42,10 @@ public class Measurement implements Serializable {
 			throw new RuntimeException(CODE_CAN_NOT_BE_BLANK);
 
 		return new Measurement(code);
+	}
+
+	public Long getId() {
+		return id;
 	}
 
 	public String getCode() {

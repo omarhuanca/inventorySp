@@ -1,6 +1,7 @@
 package bo.umss.app.inventorySp.business.provider.dto;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -12,13 +13,17 @@ import bo.umss.app.inventorySp.exception.EmptyFieldException;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProviderDto {
 
+	@NotNull
+	private Long id;
+
 	@NotBlank
 	private String name;
 
 	@NotBlank
 	private String phoneNumber;
 
-	public ProviderDto(String name, String phoneNumber) {
+	public ProviderDto(Long id, String name, String phoneNumber) {
+		this.id = id;
 		this.name = name;
 		this.phoneNumber = phoneNumber;
 	}
@@ -26,12 +31,16 @@ public class ProviderDto {
 	public ProviderDto() {
 	}
 
-	public static ProviderDto at(@NotBlank String name, @NotBlank String phoneNumber) {
+	public static ProviderDto at(Long id, @NotBlank String name, @NotBlank String phoneNumber) {
 		if (name.isEmpty())
 			throw new EmptyFieldException(Provider.NAME_CAN_NOT_BE_BLANK);
 		if (phoneNumber.isEmpty())
 			throw new EmptyFieldException(Provider.PHONE_NUMBER_CAN_NOT_BE_BLANK);
-		return new ProviderDto(name, phoneNumber);
+		return new ProviderDto(id, name, phoneNumber);
+	}
+
+	public Long getId() {
+		return id;
 	}
 
 	public String getName() {
