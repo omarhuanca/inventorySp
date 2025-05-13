@@ -49,6 +49,10 @@ public class ProviderServiceImpl implements ProviderService {
 	@Transactional
 	@Override
 	public Provider update(Provider entity) {
+		if (StringUtils.isBlank(entity.getName())) {
+			throw new EmptyFieldException(Provider.NAME_CAN_NOT_BE_BLANK);
+		}
+
 		try {
 			return repository.save(entity);
 		} catch (ConstraintViolationException e) {
@@ -115,7 +119,10 @@ public class ProviderServiceImpl implements ProviderService {
 		}
 
 		try {
-			return repository.existsByName(potentialName);
+			return repository.existsByNameIgnoreCase(potentialName);
+		} catch (DataIntegrityViolationException e) {
+			log.error(e.getMessage(), e);
+			throw new UniqueViolationException(UniqueViolationException.DATA_DUPLICATE);
 		} catch (DataAccessException e) {
 			log.error(e.getMessage(), e);
 			throw new CrudException(CrudException.DATA_ACCESS);

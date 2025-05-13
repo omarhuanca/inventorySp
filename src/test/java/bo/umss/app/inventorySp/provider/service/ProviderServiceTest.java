@@ -67,7 +67,7 @@ public class ProviderServiceTest {
 	@Test
 	public void verifyCorrectCompareExistsByName() {
 		String potentialName = TestObjectBucket.JUAN_PEREZ_NAME;
-		Mockito.when(providerRepository.existsByName(Mockito.anyString())).thenReturn(true);
+		Mockito.when(providerRepository.existsByNameIgnoreCase(Mockito.anyString())).thenReturn(true);
 
 		assertTrue(providerService.existsByName(potentialName));
 	}
@@ -75,7 +75,7 @@ public class ProviderServiceTest {
 	@Test
 	public void verifyWrongCompareExistsByName() {
 		String potentialName = TestObjectBucket.JUAN_PEREZ_NAME;
-		Mockito.when(providerRepository.existsByName(Mockito.anyString())).thenReturn(false);
+		Mockito.when(providerRepository.existsByNameIgnoreCase(Mockito.anyString())).thenReturn(false);
 
 		assertFalse(providerService.existsByName(potentialName + "t"));
 	}

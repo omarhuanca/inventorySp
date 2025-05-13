@@ -10,5 +10,5 @@ public interface MeasurementRepository extends JpaRepository<Measurement, Long> 
 
 	Measurement findByCode(String code);
 
-	boolean existsByCode(String code);
+	boolean existsByCodeIgnoreCase(String code);
 }

@@ -109,7 +109,10 @@ public class MeasurementServiceImpl implements MeasurementService {
 		}
 
 		try {
-			return repository.existsByCode(potentialCode);
+			return repository.existsByCodeIgnoreCase(potentialCode);
+		} catch (DataIntegrityViolationException e) {
+			log.error(e.getMessage(), e);
+			throw new UniqueViolationException(UniqueViolationException.DATA_DUPLICATE);
 		} catch (DataAccessException e) {
 			log.error(e.getMessage(), e);
 			throw new CrudException(CrudException.DATA_ACCESS);
