@@ -10,5 +10,5 @@ public interface CoinRepository extends JpaRepository<Coin, Long> {
 
 	Coin findByCode(String code);
 
-	boolean existsByCode(String code);
+	boolean existsByCodeIgnoreCase(String code);
 }

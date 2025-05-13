@@ -106,7 +106,10 @@ public class LineServiceImpl implements LineService {
 	@Override
 	public boolean existsByName(String potentialName) {
 		try {
-			return repository.existsByName(potentialName);
+			return repository.existsByNameIgnoreCase(potentialName);
+		} catch (DataIntegrityViolationException e) {
+			log.error(e.getMessage(), e);
+			throw new UniqueViolationException(UniqueViolationException.DATA_DUPLICATE);
 		} catch (DataAccessException e) {
 			log.error(e.getMessage(), e);
 			throw new CrudException(CrudException.DATA_ACCESS);

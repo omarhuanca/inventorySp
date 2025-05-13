@@ -10,5 +10,5 @@ public interface LineRepository extends JpaRepository<Line, Long> {
 
 	Line findByName(String name);
 
-	boolean existsByName(String name);
+	boolean existsByNameIgnoreCase(String name);
 }

@@ -10,5 +10,5 @@ public interface ProviderRepository extends JpaRepository<Provider, Long> {
 
 	Provider findByName(String name);
 
-	boolean existsByName(String name);
+	boolean existsByNameIgnoreCase(String name);
 }

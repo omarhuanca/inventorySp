@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -17,11 +17,17 @@ import bo.umss.app.inventorySp.configs.web.Cors;
 import bo.umss.app.inventorySp.configs.web.WebProperties;
 
 @Configuration
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableWebSecurity
+public class SecurityConfig {
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.cors();
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http.csrf().disable() // Disable CSRF only if you're not using session cookies
+				.authorizeHttpRequests(auth -> auth.antMatchers("/v1/**").permitAll() // Allow public access to /api/**
+						.anyRequest().authenticated() // All other requests need authentication
+				);
+
+		return http.build();
 	}
 
 	@Bean

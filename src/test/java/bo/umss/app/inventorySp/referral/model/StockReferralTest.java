@@ -16,10 +16,11 @@ public class StockReferralTest {
 
 	private Product potentialProduct;
 	private LocalDate date;
-	private final TestObjectBucket testObjectBucket = new TestObjectBucket();
+	private TestObjectBucket testObjectBucket;
 
 	@BeforeEach
 	public void setUp() {
+		testObjectBucket = new TestObjectBucket();
 		potentialProduct = testObjectBucket.createPlate();
 		date = testObjectBucket.createDate();
 	}
