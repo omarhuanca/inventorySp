@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,11 +28,14 @@ import bo.umss.app.inventorySp.exception.EntityNotFoundException;
 @RequestMapping("/v1/measurements")
 public class MeasurementController implements CrudController<MeasurementDto> {
 
-	@Autowired
-	private MeasurementService service;
+	private final MeasurementService service;
 
-	@Autowired
-	private MeasurementMapper mapper;
+	private final MeasurementMapper mapper;
+
+	public MeasurementController(MeasurementService service, MeasurementMapper mapper) {
+		this.service = service;
+		this.mapper = mapper;
+	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)

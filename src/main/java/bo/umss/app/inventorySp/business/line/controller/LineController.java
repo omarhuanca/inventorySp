@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,11 +28,15 @@ import bo.umss.app.inventorySp.exception.EntityNotFoundException;
 @RequestMapping("/v1/lines")
 public class LineController implements CrudController<LineDto> {
 
-	@Autowired
-	private LineService service;
+	private final LineService service;
 
-	@Autowired
-	private LineMapper mapper;
+	private final LineMapper mapper;
+
+	
+	public LineController(LineService service, LineMapper mapper) {
+		this.service = service;
+		this.mapper = mapper;
+	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)

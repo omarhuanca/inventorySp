@@ -1,6 +1,5 @@
 package bo.umss.app.inventorySp.business.price.mapper;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import bo.umss.app.inventorySp.business.coin.dto.CoinDto;
@@ -15,14 +14,17 @@ import bo.umss.app.inventorySp.mapper.IMapper;
 @Service
 public class PriceMapper implements IMapper<Price, PriceDto> {
 
-	@Autowired
-	private PriceService service;
+	private final PriceService service;
 
-	@Autowired
-	private CoinMapper coinMapper;
+	private final CoinMapper coinMapper;
 
-	@Autowired
-	private CoinService coinService;
+	private final CoinService coinService;
+	
+	public PriceMapper(PriceService service, CoinMapper coinMapper, CoinService coinService) {
+		this.service = service;
+		this.coinMapper = coinMapper;
+		this.coinService = coinService;
+	}
 
 	@Override
 	public PriceDto toDto(Price entity) {
