@@ -1,7 +1,6 @@
 package bo.umss.app.inventorySp.business.line.mapper;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import bo.umss.app.inventorySp.business.line.dto.LineDto;
@@ -12,8 +11,11 @@ import bo.umss.app.inventorySp.mapper.IMapper;
 @Service
 public class LineMapper implements IMapper<Line, LineDto> {
 
-	@Autowired
-	private LineService service;
+	private final LineService service;
+
+	public LineMapper(LineService service) {
+		this.service = service;
+	}
 
 	@Override
 	public LineDto toDto(Line entity) {

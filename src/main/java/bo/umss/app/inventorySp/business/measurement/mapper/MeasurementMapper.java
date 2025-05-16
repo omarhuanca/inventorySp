@@ -1,7 +1,6 @@
 package bo.umss.app.inventorySp.business.measurement.mapper;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import bo.umss.app.inventorySp.business.measurement.dto.MeasurementDto;
@@ -12,8 +11,11 @@ import bo.umss.app.inventorySp.mapper.IMapper;
 @Service
 public class MeasurementMapper implements IMapper<Measurement, MeasurementDto> {
 
-	@Autowired
-	private MeasurementService service;
+	private final MeasurementService service;
+
+	public MeasurementMapper(MeasurementService service) {
+		this.service = service;
+	}
 
 	@Override
 	public MeasurementDto toDto(Measurement entity) {

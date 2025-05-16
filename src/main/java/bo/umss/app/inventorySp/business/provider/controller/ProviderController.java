@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,11 +28,14 @@ import bo.umss.app.inventorySp.exception.EntityNotFoundException;
 @RequestMapping("/v1/providers")
 public class ProviderController implements CrudController<ProviderDto> {
 
-	@Autowired
-	private ProviderService service;
+	private final ProviderService service;
 
-	@Autowired
-	private ProviderMapper mapper;
+	private final ProviderMapper mapper;
+
+	public ProviderController(ProviderService service, ProviderMapper mapper) {
+		this.service = service;
+		this.mapper = mapper;
+	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)

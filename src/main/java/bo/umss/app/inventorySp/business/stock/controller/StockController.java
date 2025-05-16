@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -28,11 +27,14 @@ import bo.umss.app.inventorySp.exception.EntityNotFoundException;
 @RequestMapping("/v1/stocks")
 public class StockController implements CrudController<StockDto> {
 
-	@Autowired
-	private StockService service;
+	private final StockService service;
 
-	@Autowired
-	private StockMapper mapper;
+	private final StockMapper mapper;
+
+	public StockController(StockService service, StockMapper mapper) {
+		this.service = service;
+		this.mapper = mapper;
+	}
 
 	@Override
 	public StockDto create(StockDto dto) {

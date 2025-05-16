@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,11 +28,14 @@ import bo.umss.app.inventorySp.exception.EntityNotFoundException;
 @RequestMapping("/v1/coins")
 public class CoinController implements CrudController<CoinDto> {
 
-	@Autowired
-	private CoinService service;
+	private final CoinService service;
 
-	@Autowired
-	private CoinMapper mapper;
+	private final CoinMapper mapper;
+
+	public CoinController(CoinService service, CoinMapper mapper) {
+		this.service = service;
+		this.mapper = mapper;
+	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)

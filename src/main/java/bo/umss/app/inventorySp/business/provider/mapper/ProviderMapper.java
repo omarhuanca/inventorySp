@@ -1,7 +1,6 @@
 package bo.umss.app.inventorySp.business.provider.mapper;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import bo.umss.app.inventorySp.business.provider.dto.ProviderDto;
@@ -12,8 +11,11 @@ import bo.umss.app.inventorySp.mapper.IMapper;
 @Service
 public class ProviderMapper implements IMapper<Provider, ProviderDto> {
 
-	@Autowired
-	private ProviderService service;
+	private final ProviderService service;
+
+	public ProviderMapper(ProviderService service) {
+		this.service = service;
+	}
 
 	@Override
 	public ProviderDto toDto(Provider entity) {

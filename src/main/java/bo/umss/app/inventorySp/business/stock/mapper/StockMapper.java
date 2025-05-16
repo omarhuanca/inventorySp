@@ -1,6 +1,5 @@
 package bo.umss.app.inventorySp.business.stock.mapper;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import bo.umss.app.inventorySp.business.measurement.dto.MeasurementDto;
@@ -15,14 +14,18 @@ import bo.umss.app.inventorySp.mapper.IMapper;
 @Service
 public class StockMapper implements IMapper<Stock, StockDto> {
 
-	@Autowired
-	private StockService service;
+	private final StockService service;
 
-	@Autowired
-	private MeasurementMapper measurementMapper;
+	private final MeasurementMapper measurementMapper;
 
-	@Autowired
-	private MeasurementService measurementService;
+	private final MeasurementService measurementService;
+	
+	public StockMapper(StockService service, MeasurementMapper measurementMapper,
+			MeasurementService measurementService) {
+		this.service = service;
+		this.measurementMapper = measurementMapper;
+		this.measurementService = measurementService;
+	}
 
 	@Override
 	public StockDto toDto(Stock entity) {
