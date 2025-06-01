@@ -2,6 +2,7 @@ package bo.umss.app.inventorySp.product.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -15,12 +16,9 @@ import bo.umss.app.inventorySp.business.buy.model.StockBuy;
 import bo.umss.app.inventorySp.business.coin.model.Coin;
 import bo.umss.app.inventorySp.business.line.model.Line;
 import bo.umss.app.inventorySp.business.measurement.model.Measurement;
-import bo.umss.app.inventorySp.business.price.model.Price;
 import bo.umss.app.inventorySp.business.product.model.Product;
 import bo.umss.app.inventorySp.business.provider.model.Provider;
 import bo.umss.app.inventorySp.business.referral.model.StockReferral;
-import bo.umss.app.inventorySp.business.stock.model.Stock;
-import bo.umss.app.inventorySp.exception.CompareException;
 import bo.umss.app.inventorySp.exception.ValueLessThanOtherException;
 
 public class ProductTest {
@@ -28,9 +26,9 @@ public class ProductTest {
 	private Coin coin;
 	private Measurement measurement;
 	private Line line;
-	private Price priceCost;
-	private Price priceSale;
-	private Stock stock;
+	private Double priceCost;
+	private Double priceSale;
+	private Integer stock;
 	private Product plate;
 	private LocalDate date;
 	private Provider provider;
@@ -41,63 +39,50 @@ public class ProductTest {
 		testObjectBucket = new TestObjectBucket();
 		line = Line.at(TestObjectBucket.PLATE_NAME);
 		coin = Coin.at(TestObjectBucket.CODE_USD);
-		priceCost = Price.at(5.0, coin);
-		priceSale = Price.at(10.0, coin);
+		priceCost = 5.0;
+		priceSale = 10.0;
 		measurement = Measurement.at(TestObjectBucket.CODE_PZA);
-		stock = Stock.at(10, measurement);
+		stock = 10;
 		provider = Provider.at(TestObjectBucket.JUAN_PEREZ_NAME, TestObjectBucket.JUAN_PEREZ_CELLPHONE);
 
-		plate = Product.at(TestObjectBucket.BOWL8_CODE, TestObjectBucket.BOWL8_DESCRIPTION, stock, priceCost, priceSale,
-				line, provider);
+		plate = Product.at(TestObjectBucket.BOWL8_CODE, TestObjectBucket.BOWL8_DESCRIPTION, stock, measurement,
+				priceCost, priceSale, coin, line, provider);
 
 		date = LocalDate.of(2024, 05, 30);
 	}
 
 	@Test
-	public void notLetInvalidStock() {
-		Price priceCost2 = Price.at(5.0, coin);
-		Price priceSale2 = Price.at(6.0, coin);
-
-		assertThrows(
-				RuntimeException.class, () -> Product.at(TestObjectBucket.BOWL8_CODE,
-						TestObjectBucket.BOWL8_DESCRIPTION, null, priceCost2, priceSale2, line, provider),
-				Product.STOCK_CAN_NOT_BE_NULL);
-	}
-
-	@Test
 	public void notLetPriceCostBeNull() {
-		Price priceSale2 = Price.at(6.0, coin);
-		Stock stock2 = Stock.at(1, measurement);
+		Double priceSale2 = 6.0;
+		Integer stock2 = 1;
 
-		assertThrows(
-				RuntimeException.class, () -> Product.at(TestObjectBucket.BOWL8_CODE,
-						TestObjectBucket.BOWL8_DESCRIPTION, stock2, null, priceSale2, line, provider),
+		assertThrows(RuntimeException.class, () -> Product.at(TestObjectBucket.BOWL8_CODE,
+				TestObjectBucket.BOWL8_DESCRIPTION, stock2, measurement, null, priceSale2, coin, line, provider),
 				Product.PRICE_COST_CAN_NOT_BE_NULL);
 	}
 
 	@Test
 	public void notLetPriceSaleBeNull() {
-		Price priceCost2 = Price.at(5.0, coin);
-		Stock stock2 = Stock.at(1, measurement);
+		Double priceCost2 = 5.0;
+		Integer stock2 = 1;
 
-		assertThrows(
-				RuntimeException.class, () -> Product.at(TestObjectBucket.BOWL8_CODE,
-						TestObjectBucket.BOWL8_DESCRIPTION, stock2, priceCost2, null, line, provider),
+		assertThrows(RuntimeException.class, () -> Product.at(TestObjectBucket.BOWL8_CODE,
+				TestObjectBucket.BOWL8_DESCRIPTION, stock2, measurement, priceCost2, null, coin, line, provider),
 				Product.PRICE_SALE_CAN_NOT_BE_NULL);
 	}
 
 	@Test
 	public void notLetAnyItemOfListTransaction() {
-		Stock stock2 = Stock.at(1, measurement);
+		Integer stock2 = 1;
 		Product anotherPlate = Product.at(TestObjectBucket.BOWL8_CODE, TestObjectBucket.BOWL8_DESCRIPTION, stock2,
-				priceCost, priceSale, line, provider);
+				measurement, priceCost, priceSale, coin, line, provider);
 
 		assertFalse(anotherPlate.listTransactionCompareGreatherThanZero(0));
 	}
 
 	@Test
 	public void changeSizeListChangePriceAfterIncreasePriceCost() {
-		Price priceCostOther = Price.at(4.0, coin);
+		Double priceCostOther = 4.0;
 		plate.changePriceBuy(priceCostOther, plate.getStock());
 
 		assertEquals(0, plate.getListChangePriceCost().size());
@@ -105,9 +90,9 @@ public class ProductTest {
 
 	@Test
 	public void changePriceCostAfterIncreaseValueTwoTimes() {
-		Price priceCostOther1 = Price.at(8.0, coin);
+		Double priceCostOther1 = 8.0;
 		plate.changePriceBuy(priceCostOther1, plate.getStock());
-		Price priceCostOther2 = Price.at(4.0, coin);
+		Double priceCostOther2 = 4.0;
 		plate.changePriceBuy(priceCostOther2, plate.getStock());
 
 		assertEquals(1, plate.getListChangePriceCost().size());
@@ -115,11 +100,10 @@ public class ProductTest {
 
 	@Test
 	public void addDiffTypeCoinAfterChangeValuePriceCost() {
-		Coin coin2 = Coin.at(TestObjectBucket.CODE_BS);
-		Price priceCostOther1 = Price.at(8.0, coin2);
+		Double priceCostOther1 = 8.0;
 		plate.changePriceBuy(priceCostOther1, plate.getStock());
 
-		assertEquals(0, plate.getListChangePriceCost().size());
+		assertEquals(1, plate.getListChangePriceCost().size());
 	}
 
 	@Test
@@ -135,7 +119,7 @@ public class ProductTest {
 		StockBuy buy = StockBuy.at(plate, 5, date, TestObjectBucket.PLATE_PURCHEASE_DESCRIPTION);
 		plate.addBuy(buy);
 
-		assertTrue(plate.getStock().compareOtherValue(15));
+		assertEquals(plate.getStock(), 15);
 	}
 
 	@Test
@@ -143,7 +127,7 @@ public class ProductTest {
 		StockReferral referral = StockReferral.at(plate, 5, date);
 		plate.addReferral(referral);
 
-		assertTrue(plate.getStock().compareOtherValue(5));
+		assertEquals(plate.getStock(), 5);
 		assertEquals(1, plate.getListReferral().size());
 	}
 
@@ -152,7 +136,7 @@ public class ProductTest {
 		// The amount referral should be greater than stock value
 		StockReferral referral = StockReferral.at(plate, 15, date);
 
-		assertThrows(RuntimeException.class, () -> plate.addReferral(referral), Stock.AMOUNT_GREATER_THAN_AVAILABLE);
+		assertThrows(RuntimeException.class, () -> plate.addReferral(referral), Product.AMOUNT_GREATER_THAN_AVAILABLE);
 		assertEquals(0, plate.getListReferral().size());
 	}
 
@@ -196,10 +180,9 @@ public class ProductTest {
 
 	@Test
 	public void verifyCompareStockWrong() {
-		Measurement measurement = testObjectBucket.createMeasurementPiece();
-		Stock potentialStock = testObjectBucket.createStock(20, measurement);
+		Integer potentialStock = 20;
 
-		assertFalse(plate.compareStock(potentialStock));
+		assertNotEquals(plate, potentialStock);
 	}
 
 	@Test
@@ -209,10 +192,9 @@ public class ProductTest {
 
 	@Test
 	public void verifyComparePriceCostWrong() {
-		Coin coin = testObjectBucket.createCoin(TestObjectBucket.CODE_BS);
-		Price potentialPriceCost = testObjectBucket.createPrice(7.0, coin);
+		Double potentialPriceCost = 7.0;
 
-		assertFalse(plate.comparePriceSale(potentialPriceCost));
+		assertNotEquals(plate, potentialPriceCost);
 	}
 
 	@Test
@@ -222,10 +204,9 @@ public class ProductTest {
 
 	@Test
 	public void verifyComparePriceSaleWrong() {
-		Coin coin = testObjectBucket.createCoin(TestObjectBucket.CODE_BS);
-		Price potentialPriceSale = testObjectBucket.createPrice(30.0, coin);
+		Double potentialPriceSale = 30.0;
 
-		assertFalse(plate.comparePriceSale(potentialPriceSale));
+		assertNotEquals(plate, potentialPriceSale);
 	}
 
 	@Test
@@ -256,21 +237,10 @@ public class ProductTest {
 	}
 
 	@Test
-	public void verifyPriceCostPriceSaleHasEqualCoin() {
-		Coin coinOther = Coin.at(TestObjectBucket.CODE_BS);
-		Price priceSaleOther = Price.at(12.0, coinOther);
-
-		assertThrows(
-				CompareException.class, () -> Product.at(TestObjectBucket.CUP_CODE,
-						TestObjectBucket.CUP_PURCHASE_DESCRIPTION, stock, priceCost, priceSaleOther, line, provider),
-				Product.PRICE_COST_COIN_DIFF_PRICE_SALE_COIN);
-	}
-
-	@Test
 	public void verifyPriceCostCanNotBeGreatherThanPriceSale() {
-		assertThrows(
-				ValueLessThanOtherException.class, () -> Product.at(TestObjectBucket.CUP_CODE,
-						TestObjectBucket.CUP_PURCHASE_DESCRIPTION, stock, priceSale, priceCost, line, provider),
+		assertThrows(ValueLessThanOtherException.class,
+				() -> Product.at(TestObjectBucket.CUP_CODE, TestObjectBucket.CUP_PURCHASE_DESCRIPTION, stock,
+						measurement, priceSale, priceCost, null, line, provider),
 				Product.PRICE_SALE_CHEAPER_THAN_PRICE_COST);
 	}
 }

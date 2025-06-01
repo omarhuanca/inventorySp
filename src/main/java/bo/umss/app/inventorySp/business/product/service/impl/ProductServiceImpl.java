@@ -18,7 +18,6 @@ import bo.umss.app.inventorySp.business.product.model.Product;
 import bo.umss.app.inventorySp.business.product.repository.ProductRepository;
 import bo.umss.app.inventorySp.business.product.service.ProductService;
 import bo.umss.app.inventorySp.exception.BadParamsException;
-import bo.umss.app.inventorySp.exception.CompareException;
 import bo.umss.app.inventorySp.exception.CrudException;
 import bo.umss.app.inventorySp.exception.EmptyFieldException;
 import bo.umss.app.inventorySp.exception.EntityNotFoundException;
@@ -67,11 +66,7 @@ public class ProductServiceImpl implements ProductService {
 			throw new EmptyFieldException(Product.DESCRIPTION_CAN_NOT_BE_BLANK);
 		}
 
-		if (!entity.getPriceCost().compareOtherCoin(entity.getPriceSale())) {
-			throw new CompareException(Product.PRICE_COST_COIN_DIFF_PRICE_SALE_COIN);
-		}
-
-		if (!entity.getPriceCost().lessThanValue(entity.getPriceSale())) {
+		if (entity.getPriceCost() > entity.getPriceSale()) {
 			throw new ValueLessThanOtherException(Product.PRICE_SALE_CHEAPER_THAN_PRICE_COST);
 		}
 

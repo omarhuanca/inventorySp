@@ -41,7 +41,7 @@ public class ProductController implements CrudController<ProductDto> {
 	@Override
 	public ProductDto create(@RequestBody @Valid ProductDto dto) {
 		try {
-			return mapper.toDto(service.create(mapper.toEntityCreate(dto, true)));
+			return mapper.toDto(service.create(mapper.toEntity(dto, true)));
 		} catch (BadParamsException e) {
 			throw new BadParamsException();
 		}
@@ -52,7 +52,7 @@ public class ProductController implements CrudController<ProductDto> {
 	@Override
 	public void update(@RequestBody @Valid ProductDto dto) {
 		try {
-			service.update(mapper.toEntityUpdate(dto, false));
+			service.update(mapper.toEntity(dto, false));
 
 		} catch (NullPointerException e) {
 			throw new BadParamsException();
