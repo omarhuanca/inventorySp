@@ -1,18 +1,19 @@
 package bo.umss.app.inventorySp.business.product.mapper;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import bo.umss.app.inventorySp.business.coin.dto.CoinDto;
 import bo.umss.app.inventorySp.business.coin.mapper.CoinMapper;
+import bo.umss.app.inventorySp.business.coin.model.Coin;
+import bo.umss.app.inventorySp.business.coin.service.CoinService;
 import bo.umss.app.inventorySp.business.line.dto.LineDto;
 import bo.umss.app.inventorySp.business.line.mapper.LineMapper;
 import bo.umss.app.inventorySp.business.line.model.Line;
 import bo.umss.app.inventorySp.business.line.service.LineService;
+import bo.umss.app.inventorySp.business.measurement.dto.MeasurementDto;
 import bo.umss.app.inventorySp.business.measurement.mapper.MeasurementMapper;
-import bo.umss.app.inventorySp.business.price.dto.PriceDto;
-import bo.umss.app.inventorySp.business.price.mapper.PriceMapper;
-import bo.umss.app.inventorySp.business.price.model.Price;
-import bo.umss.app.inventorySp.business.price.service.PriceService;
+import bo.umss.app.inventorySp.business.measurement.model.Measurement;
+import bo.umss.app.inventorySp.business.measurement.service.MeasurementService;
 import bo.umss.app.inventorySp.business.product.dto.ProductDto;
 import bo.umss.app.inventorySp.business.product.model.Product;
 import bo.umss.app.inventorySp.business.product.service.ProductService;
@@ -20,127 +21,74 @@ import bo.umss.app.inventorySp.business.provider.dto.ProviderDto;
 import bo.umss.app.inventorySp.business.provider.mapper.ProviderMapper;
 import bo.umss.app.inventorySp.business.provider.model.Provider;
 import bo.umss.app.inventorySp.business.provider.service.ProviderService;
-import bo.umss.app.inventorySp.business.stock.dto.StockDto;
-import bo.umss.app.inventorySp.business.stock.mapper.StockMapper;
-import bo.umss.app.inventorySp.business.stock.model.Stock;
-import bo.umss.app.inventorySp.business.stock.service.StockService;
 import bo.umss.app.inventorySp.mapper.IMapper;
 
 @Service
 public class ProductMapper implements IMapper<Product, ProductDto> {
 
-	@Autowired
-	private StockMapper stockMapper;
+	private final ProductService service;
+	
+	private final MeasurementMapper measurementMapper;
 
-	@Autowired
-	private StockService stockService;
+	private final MeasurementService measurementService;
 
-	@Autowired
-	private PriceMapper priceMapper;
+	private final CoinMapper coinMapper;
 
-	@Autowired
-	private PriceService priceService;
+	private final CoinService coinService;
+	
+	private final LineMapper lineMapper;
 
-	@Autowired
-	private LineMapper lineMapper;
+	private final LineService lineService;
 
-	@Autowired
-	private LineService lineService;
+	private final ProviderMapper providerMapper;
 
-	@Autowired
-	private ProviderMapper providerMapper;
-
-	@Autowired
-	private ProviderService providerService;
-
-	@Autowired
-	private ProductService service;
-
-	@Autowired
-	private CoinMapper coinMapper;
-
-	@Autowired
-	private MeasurementMapper measurementMapper;
+	private final ProviderService providerService;
+	
+	public ProductMapper(ProductService service, MeasurementMapper measurementMapper,
+			MeasurementService measurementService, CoinMapper coinMapper, CoinService coinService,
+			LineMapper lineMapper, LineService lineService, ProviderMapper providerMapper,
+			ProviderService providerService) {
+		this.service = service;
+		this.measurementMapper = measurementMapper;
+		this.measurementService = measurementService;
+		this.coinMapper = coinMapper;
+		this.coinService = coinService;
+		this.lineMapper = lineMapper;
+		this.lineService = lineService;
+		this.providerMapper = providerMapper;
+		this.providerService = providerService;
+	}
 
 	@Override
 	public ProductDto toDto(Product entity) {
-		StockDto stockDto = stockMapper.toDto(entity.getStock());
-		PriceDto priceCostDto = priceMapper.toDto(entity.getPriceCost());
-		PriceDto priceSaleDto = priceMapper.toDto(entity.getPriceSale());
+		MeasurementDto measurementDto = measurementMapper.toDto(entity.getMeasurement());
+		CoinDto coinDto = coinMapper.toDto(entity.getCoin());
 		LineDto lineDto = lineMapper.toDto(entity.getLine());
 		ProviderDto providerDto = providerMapper.toDto(entity.getProvider());
 
-		return ProductDto.at(entity.getCode(), entity.getDescription(), stockDto, priceCostDto, priceSaleDto, lineDto,
-				providerDto);
+		return ProductDto.at(entity.getCode(), entity.getDescription(), entity.getStock(), measurementDto,
+				entity.getPriceCost(), entity.getPriceSale(), coinDto, lineDto, providerDto);
 	}
 
 	@Override
 	public Product toEntity(ProductDto dto, boolean isNew) {
-		Stock stock = stockService.findByValue(dto.getStock().getValue(),
-				measurementMapper.toEntity(dto.getStock().getMeasurement(), isNew));
-		Price priceCost = priceService.findByValue(dto.getPriceCost().getValue(),
-				coinMapper.toEntity(dto.getPriceCost().getCoin(), isNew));
-		Price priceSale = priceService.findByValue(dto.getPriceSale().getValue(),
-				coinMapper.toEntity(dto.getPriceSale().getCoin(), isNew));
+		Integer stock = dto.getStock();
+		Measurement measurement = measurementService.findByCode(dto.getMeasurement().getCode());
+		Coin coin = coinService.findByCode(dto.getCoin().getCode());
 		Line line = lineService.findByName(dto.getLine().getName());
 		Provider provider = providerService.findByName(dto.getProvider().getName());
 
 		if (isNew) {
-			return Product.at(dto.getCode(), dto.getDescription(), stock, priceCost, priceSale, line, provider);
-		} else {
-			Product recover = service.findByCode(dto.getCode());
-			recover.setStock(stock);
-			recover.setPriceCost(priceCost);
-			recover.setPriceSale(priceSale);
-			recover.setLine(line);
-			recover.setProvider(provider);
-
-			return recover;
-		}
-	}
-
-	public Product toEntityCreate(ProductDto dto, boolean isNew) {
-		Stock stock = stockService.create(stockMapper.toEntity(dto.getStock(), isNew));
-
-		Price priceCost = priceService.create(priceMapper.toEntity(dto.getPriceCost(), isNew));
-
-		Price priceSale = priceService.create(priceMapper.toEntity(dto.getPriceSale(), isNew));
-
-		Line line = lineService.findByName(dto.getLine().getName());
-		Provider provider = providerService.findByName(dto.getProvider().getName());
-
-		if (isNew) {
-			return Product.at(dto.getCode(), dto.getDescription(), stock, priceCost, priceSale, line, provider);
-		} else {
-			Product recover = service.findByCode(dto.getCode());
-			recover.setStock(stock);
-			recover.setPriceCost(priceCost);
-			recover.setPriceSale(priceSale);
-			recover.setLine(line);
-			recover.setProvider(provider);
-
-			return recover;
-		}
-	}
-
-	public Product toEntityUpdate(ProductDto dto, boolean isNew) {
-		Stock stock = stockService.create(stockMapper.toEntity(dto.getStock(), !isNew));
-
-		Price priceCost = priceService.create(priceMapper.toEntity(dto.getPriceCost(), !isNew));
-
-		Price priceSale = priceService.create(priceMapper.toEntity(dto.getPriceSale(), !isNew));
-
-		Line line = lineService.findByName(dto.getLine().getName());
-		Provider provider = providerService.findByName(dto.getProvider().getName());
-
-		if (isNew) {
-			return Product.at(dto.getCode(), dto.getDescription(), stock, priceCost, priceSale, line, provider);
+			return Product.at(dto.getCode(), dto.getDescription(), stock, measurement, dto.getPriceCost(),
+					dto.getPriceSale(), coin, line, provider);
 		} else {
 			Product recover = service.findByCode(dto.getCode());
 			recover.setDescription(dto.getDescription());
 			recover.setStock(stock);
-			recover.setPriceCost(priceCost);
-			recover.setPriceSale(priceSale);
+			recover.setMeasurement(measurement);
+			recover.setPriceCost(dto.getPriceCost());
+			recover.setPriceSale(dto.getPriceSale());
+			recover.setCoin(coin);
 			recover.setLine(line);
 			recover.setProvider(provider);
 

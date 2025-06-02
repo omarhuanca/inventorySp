@@ -7,11 +7,9 @@ import bo.umss.app.inventorySp.business.changePrice.model.ChangePrice;
 import bo.umss.app.inventorySp.business.coin.model.Coin;
 import bo.umss.app.inventorySp.business.line.model.Line;
 import bo.umss.app.inventorySp.business.measurement.model.Measurement;
-import bo.umss.app.inventorySp.business.price.model.Price;
 import bo.umss.app.inventorySp.business.product.model.Product;
 import bo.umss.app.inventorySp.business.provider.model.Provider;
 import bo.umss.app.inventorySp.business.referral.model.StockReferral;
-import bo.umss.app.inventorySp.business.stock.model.Stock;
 
 public class TestObjectBucket {
 
@@ -38,22 +36,14 @@ public class TestObjectBucket {
 	public Product createPlate() {
 		Line line = createLinePlate();
 		Coin coin = createCoin(CODE_BS);
-		Price priceCost = createPrice(5.0, coin);
-		Price priceSale = createPrice(10.0, coin);
+		Double priceCost = 5.0;
+		Double priceSale = 10.0;
 		Measurement measurement = createMeasurementPiece();
-		Stock stock = createStock(10, measurement);
+		Integer stock = 10;
 		Provider provider = Provider.at(JUAN_PEREZ_NAME, JUAN_PEREZ_CELLPHONE);
 
-		return Product.at(PLATE_CODE, "PLATO ZETA BOWL 8 PORCELANA CUADRADO", stock, priceCost, priceSale, line,
-				provider);
-	}
-
-	public Price createPrice(Double value, Coin coin) {
-		return Price.at(value, coin);
-	}
-
-	public Stock createStock(Integer value, Measurement measurement) {
-		return Stock.at(value, measurement);
+		return Product.at(PLATE_CODE, "PLATO ZETA BOWL 8 PORCELANA CUADRADO", stock, measurement, priceCost, priceSale,
+				coin, line, provider);
 	}
 
 	public Coin createCoin(String code) {
@@ -67,13 +57,14 @@ public class TestObjectBucket {
 	public Product createCup() {
 		Line line = createLineCup();
 		Coin coin = createCoin(CODE_BS);
-		Price priceCost = createPrice(8.0, coin);
-		Price priceSale = createPrice(16.0, coin);
+		Double priceCost = 8.0;
+		Double priceSale = 16.0;
 		Measurement measurement = createMeasurementPiece();
-		Stock stock = createStock(10, measurement);
+		Integer stock = 10;
 		Provider provider = Provider.at(JUAN_PEREZ_NAME, JUAN_PEREZ_CELLPHONE);
 
-		return Product.at(CUP_CODE, CUP_PURCHASE_DESCRIPTION, stock, priceCost, priceSale, line, provider);
+		return Product.at(CUP_CODE, CUP_PURCHASE_DESCRIPTION, stock, measurement, priceCost, priceSale, coin, line,
+				provider);
 	}
 
 	public LocalDate createDate() {
@@ -83,13 +74,14 @@ public class TestObjectBucket {
 	public Product createPot() {
 		Line line = Line.at(POT_NAME);
 		Coin coin = Coin.at(CODE_USD);
-		Price priceCost = createPrice(205.0, coin);
-		Price priceSale = createPrice(246.0, coin);
+		Double priceCost = 205.0;
+		Double priceSale = 246.0;
 		Measurement measurement = createMeasurementPiece();
-		Stock stock = createStock(80, measurement);
+		Integer stock = 80;
 		Provider provider = Provider.at(JUAN_PEREZ_NAME, JUAN_PEREZ_CELLPHONE);
 
-		return Product.at(POT_CODE, "OLLA TRILLIUM INOX 3 PCS", stock, priceCost, priceSale, line, provider);
+		return Product.at(POT_CODE, "OLLA TRILLIUM INOX 3 PCS", stock, measurement, priceCost, priceSale, coin, line,
+				provider);
 	}
 
 	public Line createLinePlate() {
@@ -141,11 +133,12 @@ public class TestObjectBucket {
 
 	public ChangePrice createChangePrice() {
 		Coin coin = createCoin(CODE_BS);
-		Price newPrice = createPrice(5.0, coin);
-		Price oldPrice = createPrice(5.0, coin);
+		Double newPrice = 5.0;
+		Double oldPrice = 5.0;
 		Measurement measurement = createMeasurementPiece();
-		Stock stock = createStock(80, measurement);
+		Integer stock = 80;
 
-		return ChangePrice.at(newPrice, oldPrice, stock, LocalDate.now());
+		return ChangePrice.at(newPrice, oldPrice, coin, stock, measurement, LocalDate.now());
 	}
+
 }
