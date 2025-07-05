@@ -156,4 +156,22 @@ public class ProductServiceImpl implements ProductService {
 			throw new CrudException(CrudException.DATA_ACCESS);
 		}
 	}
+
+	@Override
+	public void deleteByCode(String code) {
+		if (StringUtils.isBlank(code)) {
+			throw new EmptyFieldException(Product.CODE_CAN_NOT_BE_BLANK);
+		}
+
+		try {
+			Product entity = findByCode(code);
+			repository.deleteById(entity.getId());
+		} catch (EntityNotFoundException e) {
+			log.error(e.getMessage(), e);
+			throw new EntityNotFoundException(e.getMessage());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new CrudException(CrudException.DATA_ACCESS);
+		}
+	}
 }
