@@ -12,4 +12,6 @@ public interface ProductService extends CrudService<Product, Long> {
 	boolean existsByCode(String potentialCode);
 
 	List<Product> searchByDescription(String criteria);
+
+	void deleteByCode(String code);
 }

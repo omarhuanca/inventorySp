@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -65,10 +66,20 @@ public class ProductController implements CrudController<ProductDto> {
 		}
 	}
 
+	@DeleteMapping(value = "/{code}")
 	@Override
-	public void delete(String code) {
-		// TODO Auto-generated method stub
+	public void delete(@PathVariable("code") String code) {
+		try {
+			service.deleteByCode(code);
+		} catch (EntityNotFoundException e) {
+			throw new EntityNotFoundException(e.getMessage());
 
+		} catch (CrudException e) {
+			throw new CrudException(e.getMessage());
+
+		} catch (Exception e) {
+			throw new BadParamsException(e.getMessage());
+		}
 	}
 
 	@GetMapping(value = "/{code}")
