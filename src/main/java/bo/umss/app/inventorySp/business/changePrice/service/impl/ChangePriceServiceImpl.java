@@ -7,11 +7,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.stereotype.Service;
 
 import bo.umss.app.inventorySp.business.changePrice.model.ChangePrice;
 import bo.umss.app.inventorySp.business.changePrice.repository.ChangePriceRepository;
-import bo.umss.app.inventorySp.business.changePrice.service.ChangePriceService;
 import bo.umss.app.inventorySp.exception.BadParamsException;
 import bo.umss.app.inventorySp.exception.CrudException;
 
