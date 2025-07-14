@@ -49,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
 		try {
 			return repository.save(entity);
 		} catch (DataIntegrityViolationException e) {
-			throw new BadParamsException();
+			throw new BadParamsException(e.getMessage());
 		} catch (DataAccessException e) {
 			throw new CrudException(CrudException.DATA_ACCESS);
 		}

@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,11 +30,14 @@ import bo.umss.app.inventorySp.exception.EntityNotFoundException;
 @RequestMapping("/v1/products")
 public class ProductController implements CrudController<ProductDto> {
 
-	@Autowired
-	private ProductService service;
+	private final ProductService service;
 
-	@Autowired
-	private ProductMapper mapper;
+	private final ProductMapper mapper;
+
+	public ProductController(ProductService service, ProductMapper mapper) {
+		this.service = service;
+		this.mapper = mapper;
+	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
@@ -44,7 +46,7 @@ public class ProductController implements CrudController<ProductDto> {
 		try {
 			return mapper.toDto(service.create(mapper.toEntity(dto, true)));
 		} catch (BadParamsException e) {
-			throw new BadParamsException();
+			throw new BadParamsException(e.getMessage());
 		}
 	}
 
