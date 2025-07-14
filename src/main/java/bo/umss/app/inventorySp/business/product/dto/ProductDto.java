@@ -39,19 +39,23 @@ public class ProductDto {
 	private CoinDto coin;
 
 	@NotNull
+	private String imageBase64;
+
+	@NotNull
 	private LineDto line;
 
 	@NotNull
 	private ProviderDto provider;
 
 	public ProductDto(String code, String description, Integer stock, MeasurementDto measurement, Double priceCost,
-			Double priceSale, CoinDto coin, LineDto line, ProviderDto provider) {
+			Double priceSale, CoinDto coin, String imageBase64, LineDto line, ProviderDto provider) {
 		this.code = code;
 		this.description = description;
 		this.stock = stock;
 		this.measurement = measurement;
 		this.priceCost = priceCost;
 		this.priceSale = priceSale;
+		this.imageBase64 = imageBase64;
 		this.coin = coin;
 		this.line = line;
 		this.provider = provider;
@@ -59,7 +63,7 @@ public class ProductDto {
 
 	public static ProductDto at(@NotNull String code, @NotNull String description, @NotNull Integer stock,
 			@NotNull MeasurementDto measurement, @NotNull Double priceCost, @NotNull Double priceSale,
-			@NotNull CoinDto coin, @NotNull LineDto line, @NotNull ProviderDto provider) {
+			@NotNull CoinDto coin, @NotNull String imageBase64, @NotNull LineDto line, @NotNull ProviderDto provider) {
 		if (code.isEmpty())
 			throw new EmptyFieldException(Product.CODE_CAN_NOT_BE_BLANK);
 		if (description.isEmpty())
@@ -72,6 +76,8 @@ public class ProductDto {
 			throw new RuntimeException(Product.PRICE_COST_CAN_NOT_BE_NULL);
 		if (null == priceSale)
 			throw new RuntimeException(Product.PRICE_SALE_CAN_NOT_BE_NULL);
+		if (null == imageBase64)
+			throw new RuntimeException(Product.IMAGE_CAN_NOT_BE_NULL);
 		if (null == coin)
 			throw new RuntimeException(Product.COIN_CAN_NOT_BE_NULL);
 		if (null == line)
@@ -79,7 +85,7 @@ public class ProductDto {
 		if (null == provider)
 			throw new EmptyFieldException(Product.PROVIDER_CAN_NOT_BE_NULL);
 
-		return new ProductDto(code, description, stock, measurement, priceCost, priceSale, coin, line, provider);
+		return new ProductDto(code, description, stock, measurement, priceCost, priceSale, coin, imageBase64, line, provider);
 	}
 
 	public ProductDto() {
@@ -111,6 +117,10 @@ public class ProductDto {
 
 	public CoinDto getCoin() {
 		return coin;
+	}
+
+	public String getImageBase64() {
+		return imageBase64;
 	}
 
 	public LineDto getLine() {

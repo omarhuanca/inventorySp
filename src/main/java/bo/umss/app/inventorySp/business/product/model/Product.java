@@ -50,6 +50,7 @@ public class Product implements Serializable {
 	public static final String PRICE_COST_CAN_NOT_BE_NULL = "Price cost can not be null";
 	public static final String PRICE_SALE_CAN_NOT_BE_NULL = "Price sale can not be null";
 	public static final String PRICE_SALE_CAN_NOT_BE_LESS_ZERO = "Price sale can not be less than zero";
+	public static final String IMAGE_CAN_NOT_BE_NULL = "Image can not be null";
 	public static final String COIN_CAN_NOT_BE_NULL = "Coin can not be null";
 	public static final String LINE_CAN_NOT_BE_NULL = "Line can not be null";
 	public static final String PROVIDER_CAN_NOT_BE_NULL = "Provider can not be null";
@@ -87,6 +88,9 @@ public class Product implements Serializable {
 	@Column(name = "prd_price_sale")
 	private Double priceSale;
 
+	@Column(name = "prd_image")
+	private byte[] image;
+
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "prd_cn_id", nullable = false)
@@ -118,13 +122,14 @@ public class Product implements Serializable {
 	private List<StockReferral> listStockReferral;
 
 	public Product(String code, String description, Integer stock, Measurement measurement, Double priceCost, Double priceSale, Coin coin,
-			Line line, Provider provider) {
+			byte[] image, Line line, Provider provider) {
 		this.code = code;
 		this.description = description;
 		this.stock = stock;
 		this.measurement = measurement;
 		this.priceCost = priceCost;
 		this.priceSale = priceSale;
+		this.image = image;
 		this.coin = coin;
 		this.line = line;
 		this.provider = provider;
@@ -134,7 +139,7 @@ public class Product implements Serializable {
 	}
 
 	public static Product at(String code, String description, Integer stock, Measurement measurement, Double priceCost, Double priceSale, Coin coin,
-			Line line, Provider provider) {
+			byte[] image, Line line, Provider provider) {
 		if (code.isEmpty())
 			throw new EmptyFieldException(CODE_CAN_NOT_BE_BLANK);
 		if (description.isEmpty())
@@ -149,6 +154,8 @@ public class Product implements Serializable {
 			throw new NegativeFieldException(PRICE_SALE_CAN_NOT_BE_LESS_ZERO);
 		if (priceCost > priceSale)
 			throw new ValueLessThanOtherException(PRICE_SALE_CHEAPER_THAN_PRICE_COST);
+		if (null == image)
+			throw new RuntimeException(IMAGE_CAN_NOT_BE_NULL);
 		if (null == coin)
 			throw new RuntimeException(COIN_CAN_NOT_BE_NULL);
 		if (null == line)
@@ -156,7 +163,7 @@ public class Product implements Serializable {
 		if (null == provider)
 			throw new EmptyFieldException(PROVIDER_CAN_NOT_BE_NULL);
 
-		return new Product(code, description, stock, measurement, priceCost, priceSale, coin, line, provider);
+		return new Product(code, description, stock, measurement, priceCost, priceSale, coin, image, line, provider);
 	}
 
 	public Product() {
@@ -220,6 +227,14 @@ public class Product implements Serializable {
 
 	public void setCoin(Coin coin) {
 		this.coin = coin;
+	}
+
+	public byte[] getImage() {
+		return image;
+	}
+
+	public void setImage(byte[] image) {
+		this.image = image;
 	}
 
 	public Line getLine() {

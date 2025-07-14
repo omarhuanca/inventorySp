@@ -78,14 +78,15 @@ CREATE TABLE prd_product (
     prd_description VARCHAR(200)    NOT NULL,
     prd_stock       INTEGER         NOT NULL,
     prd_price_cost  NUMERIC         NOT NULL,
-    prd_price_sale  NUMERIC         NOT NULL
+    prd_price_sale  NUMERIC         NOT NULL,
+    prd_image       BYTEA           NOT NULL
 );
 
 ALTER TABLE prd_product
     ALTER COLUMN    prd_id             SET DEFAULT nextval('prd_seq'),
     ADD CONSTRAINT  pk_prd_id          PRIMARY KEY(prd_id),
-    ADD CONSTRAINT  fk_prd_ms_id        FOREIGN KEY(prd_ms_id) REFERENCES ms_measurement(ms_id) ON UPDATE CASCADE ON DELETE CASCADE,
-    ADD CONSTRAINT  fk_prd_cn_id    	FOREIGN KEY(prd_cn_id) REFERENCES cn_coin(cn_id) ON UPDATE CASCADE ON DELETE CASCADE,
+    ADD CONSTRAINT  fk_prd_ms_id       FOREIGN KEY(prd_ms_id) REFERENCES ms_measurement(ms_id) ON UPDATE CASCADE ON DELETE CASCADE,
+    ADD CONSTRAINT  fk_prd_cn_id       FOREIGN KEY(prd_cn_id) REFERENCES cn_coin(cn_id) ON UPDATE CASCADE ON DELETE CASCADE,
     ADD CONSTRAINT  fk_prd_ln_id       FOREIGN KEY(prd_ln_id) REFERENCES ln_line(ln_id) ON UPDATE CASCADE ON DELETE CASCADE,
     ADD CONSTRAINT  fk_prd_prv_id      FOREIGN KEY(prd_prv_id) REFERENCES prv_provider(prv_id) ON UPDATE CASCADE ON DELETE CASCADE;
 
