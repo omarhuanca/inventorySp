@@ -83,8 +83,12 @@ public class ProductMapper implements IMapper<Product, ProductDto> {
 		byte[] imageByte = new byte[0];
 
 		if (dto.getImageBase64() != null && !dto.getImageBase64().isEmpty()) {
+			String base64 = dto.getImageBase64();
+			if (base64.contains(",")) {
+				base64 = base64.split(",")[1];
+			}
 			try {
-				imageByte = Base64.getDecoder().decode(dto.getImageBase64());
+				imageByte = Base64.getDecoder().decode(base64);
 			} catch (IllegalArgumentException e) {
 				throw new BadParamsException("Invalid base64 image");
 			}
