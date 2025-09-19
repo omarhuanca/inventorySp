@@ -99,7 +99,7 @@ public class MeasurementServiceTest {
 
 	@Test
 	public void verifyAlreadyCode() {
-		Mockito.when(measurementRepository.existsByCode(TestObjectBucket.CODE_PZA)).thenReturn(Boolean.TRUE);
+		Mockito.when(measurementRepository.existsByCodeIgnoreCase(TestObjectBucket.CODE_PZA)).thenReturn(Boolean.TRUE);
 
 		assertThrows(UniqueViolationException.class, () -> measurementService.create(potentialMeasurement));
 	}

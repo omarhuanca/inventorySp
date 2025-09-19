@@ -5,11 +5,11 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -28,11 +28,15 @@ import bo.umss.app.inventorySp.exception.EntityNotFoundException;
 @RequestMapping("/v1/lines")
 public class LineController implements CrudController<LineDto> {
 
-	@Autowired
-	private LineService service;
+	private final LineService service;
 
-	@Autowired
-	private LineMapper mapper;
+	private final LineMapper mapper;
+
+	
+	public LineController(LineService service, LineMapper mapper) {
+		this.service = service;
+		this.mapper = mapper;
+	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
@@ -45,9 +49,22 @@ public class LineController implements CrudController<LineDto> {
 		}
 	}
 
+	@PutMapping
+	@ResponseStatus(HttpStatus.OK)
 	@Override
-	public void update(LineDto dto) {
+	public void update(@RequestBody @Valid LineDto dto) {
+		try {
+			service.update(mapper.toEntity(dto, false));
 
+		} catch (NullPointerException e) {
+			throw new BadParamsException();
+
+		} catch (CrudException e) {
+			throw new CrudException(e.getMessage());
+
+		} catch (EntityNotFoundException e) {
+			throw new EntityNotFoundException();
+		}
 	}
 
 	@Override
@@ -74,12 +91,12 @@ public class LineController implements CrudController<LineDto> {
 	@Override
 	public List<LineDto> findAll() {
 		try {
-			List<LineDto> lineList = new ArrayList<>();
+			List<LineDto> entityList = new ArrayList<>();
 			for (Line entity : service.findAll()) {
-				lineList.add(mapper.toDto(entity));
+				entityList.add(mapper.toDto(entity));
 			}
 
-			return lineList;
+			return entityList;
 		} catch (CrudException e) {
 			throw new CrudException();
 		}

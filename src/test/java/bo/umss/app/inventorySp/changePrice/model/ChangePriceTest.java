@@ -11,74 +11,66 @@ import bo.umss.app.inventorySp.TestObjectBucket;
 import bo.umss.app.inventorySp.business.changePrice.model.ChangePrice;
 import bo.umss.app.inventorySp.business.coin.model.Coin;
 import bo.umss.app.inventorySp.business.measurement.model.Measurement;
-import bo.umss.app.inventorySp.business.price.model.Price;
-import bo.umss.app.inventorySp.business.stock.model.Stock;
 
 public class ChangePriceTest {
 
 	private LocalDate currentDate;
 	private Coin coin;
-	private Stock stock;
+	private Integer stock;
+	private Measurement measurement;
 
 	@BeforeEach
 	public void setUp() {
 		currentDate = LocalDate.now();
-		coin = Coin.at(TestObjectBucket.CODE_USA);
-		Measurement measurement = Measurement.at(TestObjectBucket.CODE_PZA);
-		stock = Stock.at("ST-1", 2, measurement);
+		coin = Coin.at(TestObjectBucket.CODE_USD);
+		measurement = Measurement.at(TestObjectBucket.CODE_PZA);
+		stock = 2;
 	}
 
 	@Test
 	public void canNotLetNewPriceBeNull() {
-		Price oldPrice = Price.at("PR-1", 4.0, coin);
+		Double oldPrice = 4.0;
 
-		assertThrows(RuntimeException.class, () -> ChangePrice.at(null, oldPrice, stock, currentDate),
+		assertThrows(RuntimeException.class,
+				() -> ChangePrice.at(null, oldPrice, coin, stock, measurement, currentDate),
 				ChangePrice.NEW_PRICE_CAN_NOT_BE_NULL);
 	}
 
 	@Test
 	public void canNotLetOldPriceBeNull() {
-		Price newPrice = Price.at("PR-1", 5.0, coin);
+		Double newPrice = 5.0;
 
-		assertThrows(RuntimeException.class, () -> ChangePrice.at(newPrice, null, stock, currentDate),
+		assertThrows(RuntimeException.class,
+				() -> ChangePrice.at(newPrice, null, coin, stock, measurement, currentDate),
 				ChangePrice.OLD_PRICE_CAN_NOT_BE_NULL);
 	}
 
 	@Test
 	public void canNotBeNullStock() {
-		Price newPrice = Price.at("PR-1", 5.0, coin);
-		Price oldPrice = Price.at("PR-1", 10.0, coin);
+		Double newPrice = 5.0;
+		Double oldPrice = 10.0;
 
-		assertThrows(RuntimeException.class, () -> ChangePrice.at(newPrice, oldPrice, null, currentDate),
+		assertThrows(RuntimeException.class,
+				() -> ChangePrice.at(newPrice, oldPrice, coin, null, measurement, currentDate),
 				ChangePrice.STOCK_CAN_NOT_BE_NULL);
 	}
 
 	@Test
 	public void canNotBeNullCurrentDate() {
-		Price newPrice = Price.at("PR-1", 5.0, coin);
-		Price oldPrice = Price.at("PR-1", 10.0, coin);
+		Double newPrice = 5.0;
+		Double oldPrice = 10.0;
 
-		assertThrows(RuntimeException.class, () -> ChangePrice.at(newPrice, oldPrice, stock, null),
+		assertThrows(RuntimeException.class, () -> ChangePrice.at(newPrice, oldPrice, coin, stock, measurement, null),
 				ChangePrice.CURRENT_DATE_CAN_NOT_BE_NULL);
 	}
 
 	@Test
 	public void newPriceCanNotBeLessThanOldPrice() {
-		Price newPrice = Price.at("PR-1", 5.0, coin);
-		Price oldPrice = Price.at("PR-1", 10.0, coin);
+		Double newPrice = 5.0;
+		Double oldPrice = 10.0;
 
-		assertThrows(RuntimeException.class, () -> ChangePrice.at(newPrice, oldPrice, stock, currentDate),
+		assertThrows(RuntimeException.class,
+				() -> ChangePrice.at(newPrice, oldPrice, coin, stock, measurement, currentDate),
 				ChangePrice.NEW_PRICE_CAN_NOT_LESS_THAN_OLD_PRICE);
-	}
-
-	@Test
-	public void newPriceDoesNotHasDiffMeasurementToOldPrice() {
-		Coin coin2 = Coin.at(TestObjectBucket.CODE_BS);
-		Price newPrice = Price.at("PR-1", 5.0, coin);
-		Price oldPrice = Price.at("PR-1", 10.0, coin2);
-
-		assertThrows(RuntimeException.class, () -> ChangePrice.at(newPrice, oldPrice, stock, currentDate),
-				ChangePrice.NEW_PRICE_DOES_NOT_HAS_DIFF_MEASUREMENT_TO_OLD_PRICE);
-
 	}
 }

@@ -78,7 +78,7 @@ public class LineServiceTest {
 	@Test
 	public void verifyGetCorectName() {
 		String potentialName = "calderas";
-		Mockito.when(lineRepository.existsByName(potentialName)).thenReturn(Boolean.TRUE);
+		Mockito.when(lineRepository.existsByNameIgnoreCase(potentialName)).thenReturn(Boolean.TRUE);
 
 		assertTrue(lineService.existsByName(potentialName));
 	}
@@ -102,7 +102,7 @@ public class LineServiceTest {
 
 	@Test
 	public void verifyAlreadyExistLine() {
-		Mockito.when(lineRepository.existsByName(TestObjectBucket.PLATE_NAME)).thenReturn(Boolean.TRUE);
+		Mockito.when(lineRepository.existsByNameIgnoreCase(TestObjectBucket.PLATE_NAME)).thenReturn(Boolean.TRUE);
 
 		assertThrows(RuntimeException.class, () -> lineService.create(potentialLine));
 	}

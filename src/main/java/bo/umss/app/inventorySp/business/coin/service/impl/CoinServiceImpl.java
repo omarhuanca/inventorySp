@@ -2,6 +2,9 @@ package bo.umss.app.inventorySp.business.coin.service.impl;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+import javax.validation.ConstraintViolationException;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -42,10 +45,20 @@ public class CoinServiceImpl implements CoinService {
 		}
 	}
 
+	@Transactional
 	@Override
 	public Coin update(Coin entity) {
-		// TODO Auto-generated method stub
-		return null;
+		if (StringUtils.isBlank(entity.getCode())) {
+			throw new EmptyFieldException(Coin.CODE_CAN_NOT_BE_BLANK);
+		}
+
+		try {
+			return repository.save(entity);
+		} catch (ConstraintViolationException e) {
+			throw new BadParamsException(e.getMessage());
+		} catch (DataAccessException e) {
+			throw new CrudException(CrudException.DATA_ACCESS);
+		}
 	}
 
 	@Override
@@ -96,7 +109,22 @@ public class CoinServiceImpl implements CoinService {
 		}
 
 		try {
-			return repository.existsByCode(potentialCode);
+			return repository.existsByCodeIgnoreCase(potentialCode);
+		} catch (DataIntegrityViolationException e) {
+			log.error(e.getMessage(), e);
+			throw new UniqueViolationException(UniqueViolationException.DATA_DUPLICATE);
+		} catch (DataAccessException e) {
+			log.error(e.getMessage(), e);
+			throw new CrudException(CrudException.DATA_ACCESS);
+		}
+	}
+
+	@Override
+	public Coin findById(Long potentialId) {
+		try {
+			Coin entity = repository.findById(potentialId).orElseThrow(() -> new EntityNotFoundException());
+
+			return entity;
 		} catch (DataAccessException e) {
 			log.error(e.getMessage(), e);
 			throw new CrudException(CrudException.DATA_ACCESS);

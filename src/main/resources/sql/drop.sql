@@ -1,19 +1,23 @@
 /* **********************************************
  * TABLES                                       *
  ************************************************/
-DROP TABLE IF EXISTS ntp_not_provided_provider;
+DROP TABLE IF EXISTS stc_stock_buy;
+DROP TABLE IF EXISTS stcr_stock_referral;
+DROP TABLE IF EXISTS prd_product;
 DROP TABLE IF EXISTS ln_line;
+DROP TABLE IF EXISTS chp_change_price;
 DROP TABLE IF EXISTS ms_measurement;
 DROP TABLE IF EXISTS cn_coin;
-DROP TABLE IF EXISTS st_stock;
-DROP TABLE IF EXISTS pr_price;
+DROP TABLE IF EXISTS prv_provider;
 
 /* **********************************************
  * SEQUENCES                                    *
  ************************************************/
-DROP SEQUENCE IF EXISTS ntp_seq;
+DROP SEQUENCE IF EXISTS stc_seq;
+DROP SEQUENCE IF EXISTS stcr_seq;
+DROP SEQUENCE IF EXISTS prd_seq;
 DROP SEQUENCE IF EXISTS ln_seq;
+DROP SEQUENCE IF EXISTS chp_seq;
 DROP SEQUENCE IF EXISTS ms_seq;
 DROP SEQUENCE IF EXISTS cn_seq;
-DROP SEQUENCE IF EXISTS st_seq;
-DROP SEQUENCE IF EXISTS pr_seq;
+DROP SEQUENCE IF EXISTS prv_seq;

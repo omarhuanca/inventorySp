@@ -1,6 +1,6 @@
 package bo.umss.app.inventorySp.business.coin.mapper;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import bo.umss.app.inventorySp.business.coin.dto.CoinDto;
@@ -11,12 +11,15 @@ import bo.umss.app.inventorySp.mapper.IMapper;
 @Service
 public class CoinMapper implements IMapper<Coin, CoinDto> {
 
-	@Autowired
-	private CoinService service;
+	private final CoinService service;
+
+	public CoinMapper(CoinService service) {
+		this.service = service;
+	}
 
 	@Override
 	public CoinDto toDto(Coin entity) {
-		return CoinDto.at(entity.getCode());
+		return CoinDto.at(entity.getId(), entity.getCode());
 	}
 
 	@Override
@@ -24,7 +27,10 @@ public class CoinMapper implements IMapper<Coin, CoinDto> {
 		if (isNew) {
 			return Coin.at(dto.getCode());
 		} else {
-			return service.findByCode(dto.getCode());
+			Coin recover = service.findById(dto.getId());
+			recover.setCode(StringUtils.upperCase(dto.getCode()));
+
+			return recover;
 		}
 	}
 

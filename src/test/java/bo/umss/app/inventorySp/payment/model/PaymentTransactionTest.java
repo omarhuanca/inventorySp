@@ -1,7 +1,7 @@
 package bo.umss.app.inventorySp.payment.model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -12,26 +12,25 @@ import org.junit.jupiter.api.Test;
 import bo.umss.app.inventorySp.NoteTransaction;
 import bo.umss.app.inventorySp.TestObjectBucket;
 import bo.umss.app.inventorySp.business.coin.model.Coin;
-import bo.umss.app.inventorySp.business.discount.model.Discount;
 import bo.umss.app.inventorySp.business.payment.model.PaymentTransaction;
-import bo.umss.app.inventorySp.business.price.model.Price;
 import bo.umss.app.inventorySp.business.product.model.Product;
 import bo.umss.app.inventorySp.business.referral.model.NoteReferral;
 import bo.umss.app.inventorySp.business.sale.model.NoteSale;
 
 public class PaymentTransactionTest {
 
-	private Price total;
-	private Discount discount;
+	private Double total;
+	private Integer discount;
+	private Coin coin;
 	private NoteTransaction noteReferral;
 	private NoteSale noteSale;
 	private final TestObjectBucket testObjectBucket = new TestObjectBucket();
 
 	@BeforeEach
 	public void setUp() {
-		Coin coin = Coin.at(TestObjectBucket.CODE_USA);
-		total = Price.at("PR-1", 10.0, coin);
-		discount = Discount.at(0);
+		coin = Coin.at(TestObjectBucket.CODE_USD);
+		total = 10.0;
+		discount = 0;
 		LocalDate date = testObjectBucket.createDate();
 		noteReferral = NoteReferral.at(date);
 
@@ -41,33 +40,33 @@ public class PaymentTransactionTest {
 
 	@Test
 	public void canNotBeNullTotal() {
-		assertThrows(RuntimeException.class, () -> PaymentTransaction.at(null, discount, noteReferral),
+		assertThrows(RuntimeException.class, () -> PaymentTransaction.at(null, discount, coin, noteReferral),
 				PaymentTransaction.TOTAL_CAN_NOT_BE_NULL);
 	}
 
 	@Test
 	public void canNotBeNullDiscount() {
-		assertThrows(RuntimeException.class, () -> PaymentTransaction.at(total, null, noteReferral),
+		assertThrows(RuntimeException.class, () -> PaymentTransaction.at(total, null, coin, noteReferral),
 				PaymentTransaction.DISCOUNT_CAN_NOT_BE_NULL);
 	}
 
 	@Test
 	public void canNotBeNullNoteReferral() {
-		assertThrows(RuntimeException.class, () -> PaymentTransaction.at(total, discount, null),
+		assertThrows(RuntimeException.class, () -> PaymentTransaction.at(total, discount, coin, null),
 				PaymentTransaction.NOTE_TRANSACTION_CAN_NOT_BE_NULL);
 	}
 
 	@Test
 	public void verifyListProductIsGreaterThanZero() {
-		assertThrows(RuntimeException.class, () -> PaymentTransaction.at(total, discount, noteReferral),
+		assertThrows(RuntimeException.class, () -> PaymentTransaction.at(total, discount, coin, noteReferral),
 				PaymentTransaction.PRODUCT_SIZE_GREATER_THAN);
 	}
 
 	@Test
 	public void verifyNotTotalValueLessThanDiscountValue() {
-		Discount discount2 = Discount.at(15);
+		Integer discount2 = 15;
 
-		assertThrows(RuntimeException.class, () -> PaymentTransaction.at(total, discount2, noteReferral),
+		assertThrows(RuntimeException.class, () -> PaymentTransaction.at(total, discount2, coin, noteReferral),
 				PaymentTransaction.TOTAL_VALUE_LESS_THAN_DISCOUNT_VALUE);
 	}
 
@@ -75,10 +74,10 @@ public class PaymentTransactionTest {
 	public void todoSingleProductSingleReferral() {
 		Product plate = testObjectBucket.createPlate();
 		noteReferral.addProduct(plate, 5);
-		Map<String, Price> partTotal = noteReferral.calculateTotal();
-		Price priceTotal = partTotal.get(TestObjectBucket.CODE_BS);
+		Map<String, Double> partTotal = noteReferral.calculateTotal();
+		Double priceTotal = partTotal.get(TestObjectBucket.CODE_BS);
 
-		assertTrue(priceTotal.compareOtherValue(50.0));
+		assertEquals(priceTotal, 50.0);
 	}
 
 	@Test
@@ -86,10 +85,10 @@ public class PaymentTransactionTest {
 		Product plate = testObjectBucket.createPlate();
 		noteReferral.addProduct(plate, 5);
 		noteReferral.addProduct(plate, 3);
-		Map<String, Price> partTotal = noteReferral.calculateTotal();
-		Price priceTotal = partTotal.get(TestObjectBucket.CODE_BS);
+		Map<String, Double> partTotal = noteReferral.calculateTotal();
+		Double priceTotal = partTotal.get(TestObjectBucket.CODE_BS);
 
-		assertTrue(priceTotal.compareOtherValue(20.0));
+		assertEquals(priceTotal, 20.0);
 
 	}
 
@@ -97,13 +96,13 @@ public class PaymentTransactionTest {
 	public void verifyApplyDiscountSingleProduct() {
 		Product plate = testObjectBucket.createPlate();
 		noteReferral.addProduct(plate, 5);
-		Map<String, Price> partTotal = noteReferral.calculateTotal();
-		Price priceTotal = partTotal.get(TestObjectBucket.CODE_BS);
-		Discount discountTwo = Discount.at(10);
-		PaymentTransaction paymentTransaction = PaymentTransaction.at(priceTotal, discountTwo, noteReferral);
-		Price amountToPay = paymentTransaction.generateAmountToPay();
+		Map<String, Double> partTotal = noteReferral.calculateTotal();
+		Double priceTotal = partTotal.get(TestObjectBucket.CODE_BS);
+		Integer discountTwo = 10;
+		PaymentTransaction paymentTransaction = PaymentTransaction.at(priceTotal, discountTwo, coin, noteReferral);
+		Double amountToPay = paymentTransaction.generateAmountToPay();
 
-		assertTrue(amountToPay.compareOtherValue(40.0));
+		assertEquals(amountToPay, 40.0);
 	}
 
 	@Test
@@ -113,23 +112,23 @@ public class PaymentTransactionTest {
 		Product cup = testObjectBucket.createCup();
 		noteReferral.addProduct(cup, 6);
 
-		Map<String, Price> partTotal = noteReferral.calculateTotal();
-		Price priceTotal = partTotal.get(TestObjectBucket.CODE_BS);
-		Discount discountTwo = Discount.at(30);
-		PaymentTransaction paymentTransaction = PaymentTransaction.at(priceTotal, discountTwo, noteReferral);
-		Price amountToPay = paymentTransaction.generateAmountToPay();
+		Map<String, Double> partTotal = noteReferral.calculateTotal();
+		Double priceTotal = partTotal.get(TestObjectBucket.CODE_BS);
+		Integer discountTwo = 30;
+		PaymentTransaction paymentTransaction = PaymentTransaction.at(priceTotal, discountTwo, coin, noteReferral);
+		Double amountToPay = paymentTransaction.generateAmountToPay();
 
-		assertTrue(amountToPay.compareOtherValue(104.0));
+		assertEquals(amountToPay, 104.0);
 	}
 
 	@Test
 	public void todoSingleProductPotSingleReferral() {
 		Product pot = testObjectBucket.createPot();
 		noteReferral.addProduct(pot, 10);
-		Map<String, Price> partTotal = noteReferral.calculateTotal();
-		Price priceTotal = partTotal.get(TestObjectBucket.CODE_USA);
+		Map<String, Double> partTotal = noteReferral.calculateTotal();
+		Double priceTotal = partTotal.get(TestObjectBucket.CODE_USD);
 
-		assertTrue(priceTotal.compareOtherValue(17220.0));
+		assertEquals(priceTotal, 17220.0);
 	}
 
 	@Test
@@ -140,10 +139,10 @@ public class PaymentTransactionTest {
 		Product pot = testObjectBucket.createPot();
 		noteReferral.addProduct(pot, 10);
 		// pot -> 17220
-		Map<String, Price> partTotal = noteReferral.calculateTotal();
-		Price priceTotal = partTotal.get(TestObjectBucket.CODE_BS);
+		Map<String, Double> partTotal = noteReferral.calculateTotal();
+		Double priceTotal = partTotal.get(TestObjectBucket.CODE_BS);
 
-		assertTrue(priceTotal.compareOtherValue(50.0));
+		assertEquals(priceTotal, 50.0);
 	}
 
 	@Test
@@ -154,19 +153,19 @@ public class PaymentTransactionTest {
 		Product pot = testObjectBucket.createPot();
 		noteReferral.addProduct(pot, 10);
 		// pot -> 17220
-		Map<String, Price> partTotal = noteReferral.calculateTotal();
-		Price priceTotal = partTotal.get(TestObjectBucket.CODE_USA);
+		Map<String, Double> partTotal = noteReferral.calculateTotal();
+		Double priceTotal = partTotal.get(TestObjectBucket.CODE_USD);
 
-		assertTrue(priceTotal.compareOtherValue(17220.0));
+		assertEquals(priceTotal, 17220.0);
 	}
 
 	@Test
 	public void verifyAmountToPaySingleProduct() {
 		Product plate = testObjectBucket.createPlate();
 		noteSale.addProduct(plate, 3);
-		Map<String, Price> partTotal = noteSale.calculateTotal();
-		Price priceTotal = partTotal.get(TestObjectBucket.CODE_BS);
+		Map<String, Double> partTotal = noteSale.calculateTotal();
+		Double priceTotal = partTotal.get(TestObjectBucket.CODE_BS);
 
-		assertTrue(priceTotal.compareOtherValue(70.0));
+		assertEquals(priceTotal, 70.0);
 	}
 }

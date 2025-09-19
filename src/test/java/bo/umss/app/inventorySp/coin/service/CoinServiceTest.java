@@ -84,7 +84,7 @@ public class CoinServiceTest {
 	@Test
 	public void verifyCorrectExistsCode() {
 		String potentialCode = "USD";
-		Mockito.when(coinRepository.existsByCode(potentialCode)).thenReturn(Boolean.TRUE);
+		Mockito.when(coinRepository.existsByCodeIgnoreCase(potentialCode)).thenReturn(Boolean.TRUE);
 
 		assertTrue(coinService.existsByCode(potentialCode));
 	}
@@ -108,7 +108,7 @@ public class CoinServiceTest {
 
 	@Test
 	public void test10() {
-		Mockito.when(coinRepository.existsByCode(TestObjectBucket.CODE_BS)).thenReturn(Boolean.TRUE);
+		Mockito.when(coinRepository.existsByCodeIgnoreCase(TestObjectBucket.CODE_BS)).thenReturn(Boolean.TRUE);
 
 		assertThrows(RuntimeException.class, () -> coinService.create(potentialCoin));
 	}

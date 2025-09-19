@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Set;
 
 import bo.umss.app.inventorySp.NoteTransaction;
-import bo.umss.app.inventorySp.business.price.model.Price;
 import bo.umss.app.inventorySp.business.product.model.Product;
 
 public class NoteReferral extends NoteTransaction {
@@ -45,17 +44,15 @@ public class NoteReferral extends NoteTransaction {
 	}
 
 	@Override
-	public Map<String, Price> calculateTotal() {
-		Map<String, Price> mapResponse = new HashMap<>();
+	public Map<String, Double> calculateTotal() {
+		Map<String, Double> mapResponse = new HashMap<>();
 		for (Product productOutput : setProductOutput) {
-			Price subtotal = productOutput.generateSubtotal();
-			Double sumarizePrice = subtotal.getValue();
-			if (0 < mapResponse.size() && null != mapResponse.get(productOutput.getPriceSale().getCoin().getCode())) {
-				sumarizePrice = mapResponse.get(productOutput.getPriceSale().getCoin().getCode())
-						.addWithOtherPrice(subtotal);
+			Double subtotal = productOutput.generateSubtotal();
+			Double sumarizePrice = Double.valueOf(subtotal);
+			if (0 < mapResponse.size() && null != mapResponse.get(productOutput.getCoin().getCode())) {
+				sumarizePrice = mapResponse.get(productOutput.getCoin().getCode()) + subtotal;
 			}
-			mapResponse.put(productOutput.getPriceSale().getCoin().getCode(),
-					Price.at(subtotal.getCode(), sumarizePrice, subtotal.getCoin()));
+			mapResponse.put(productOutput.getCoin().getCode(), sumarizePrice);
 		}
 
 		return mapResponse;
