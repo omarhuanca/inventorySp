@@ -14,4 +14,6 @@ public interface ProductService extends CrudService<Product, Long> {
 	List<Product> searchByDescription(String criteria);
 
 	void deleteByCode(String code);
+
+	List<Product> filterByNameLine(String nameLine);
 }

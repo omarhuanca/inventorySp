@@ -84,7 +84,7 @@ public class ProductController implements CrudController<ProductDto> {
 		}
 	}
 
-	@GetMapping(value = "/{code}")
+    @GetMapping(value = "/{code}")
 	@Override
 	public ProductDto read(@PathVariable("code") String code) {
 		try {
@@ -97,7 +97,7 @@ public class ProductController implements CrudController<ProductDto> {
 			throw new EntityNotFoundException();
 		}
 	}
-
+	
 	@GetMapping
 	@Override
 	public List<ProductDto> findAll() {
@@ -123,6 +123,24 @@ public class ProductController implements CrudController<ProductDto> {
 			}
 
 			return list;
+		} catch (NullPointerException e) {
+			throw new BadParamsException();
+		} catch (CrudException e) {
+			throw new CrudException();
+		} catch (EntityNotFoundException e) {
+			throw new EntityNotFoundException();
+		}
+	}
+
+	@GetMapping(value = "/filterByNameLine/{nameLine}")
+	public List<ProductDto> filterByNameLine(@PathVariable("nameLine") String nameLine) {
+		try {
+			List<ProductDto> list = new ArrayList<>();
+			for (Product entity: service.filterByNameLine(nameLine)) {
+				list.add(mapper.toDto(entity));
+			}
+
+			return list;			
 		} catch (NullPointerException e) {
 			throw new BadParamsException();
 		} catch (CrudException e) {
