@@ -14,6 +14,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import bo.umss.app.inventorySp.business.line.model.Line;
 import bo.umss.app.inventorySp.business.product.model.Product;
 import bo.umss.app.inventorySp.business.product.repository.ProductRepository;
 import bo.umss.app.inventorySp.business.product.service.ProductService;
@@ -170,6 +171,20 @@ public class ProductServiceImpl implements ProductService {
 			log.error(e.getMessage(), e);
 			throw new EntityNotFoundException(e.getMessage());
 		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new CrudException(CrudException.DATA_ACCESS);
+		}
+	}
+
+	@Override
+	public List<Product> filterByNameLine(String nameLine) {
+		if(nameLine.isEmpty()) {
+			throw new BadParamsException(Line.NAME_CAN_NOT_BE_BLANK);
+		}
+
+		try {
+			return repository.filterByNameLine(nameLine);
+		} catch (DataAccessException e) {
 			log.error(e.getMessage(), e);
 			throw new CrudException(CrudException.DATA_ACCESS);
 		}

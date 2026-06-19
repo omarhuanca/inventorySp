@@ -16,6 +16,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
 	boolean existsByCode(String code);
 
-	@Query(nativeQuery = true, value = "SELECT pp.prd_id, pp.prd_code, pp.prd_description, pp.prd_stock, pp.prd_ms_id, pp.prd_price_cost, pp.prd_price_sale, prd_cn_id, pp.prd_image, pp.prd_ln_id, pp.prd_prv_id FROM prd_product pp WHERE pp.prd_description ILIKE %:criteria%")
+	@Query("SELECT p FROM Product p WHERE LOWER(p.description) LIKE LOWER(CONCAT('%', :criteria, '%'))")
 	List<Product> searchByDescription(@Param("criteria") String criteria);
+	
+	@Query("SELECT p FROM Product p JOIN p.line l WHERE LOWER(l.name) LIKE LOWER(CONCAT('%', :nameLine, '%'))")
+	List<Product> filterByNameLine(@Param("nameLine") String nameLine);
 }
