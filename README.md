@@ -20,12 +20,23 @@ en un entorno de trabajo externo.
 
 ```
 $ docker build -t spring-boot .
-
 ```
 
 Ejecución de la imagen
 
 ```
 $ docker run --net=host -p 8080:8080 spring-boot
+```
+Subida de ejecutable
 
+```
+$ rsync -a target/inventory.jar root@ip:/root/java
+```
+
+
+Ejecución servidor
+
+```
+$ 
+nohup java -jar inventory.jar --spring.profiles.active=test &
 ```
