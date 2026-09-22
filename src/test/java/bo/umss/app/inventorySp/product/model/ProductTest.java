@@ -80,7 +80,7 @@ public class ProductTest {
 		Product anotherPlate = Product.at(TestObjectBucket.BOWL8_CODE, TestObjectBucket.BOWL8_DESCRIPTION, stock2,
 				measurement, priceCost, priceSale, coin, image, line, provider);
 
-		assertFalse(anotherPlate.listTransactionCompareGreatherThanZero(0));
+		assertFalse(anotherPlate.listTransactionCompareGreaterThanZero(0));
 	}
 
 	@Test
@@ -114,7 +114,7 @@ public class ProductTest {
 		StockBuy buy = StockBuy.at(plate, 5, date, TestObjectBucket.PLATE_PURCHEASE_DESCRIPTION);
 		plate.addBuy(buy);
 
-		assertTrue(plate.listTransactionCompareGreatherThanZero(0));
+		assertTrue(plate.listTransactionCompareGreaterThanZero(0));
 	}
 
 	@Test
@@ -122,7 +122,7 @@ public class ProductTest {
 		StockBuy buy = StockBuy.at(plate, 5, date, TestObjectBucket.PLATE_PURCHEASE_DESCRIPTION);
 		plate.addBuy(buy);
 
-		assertEquals(plate.getStock(), 15);
+        assertTrue(plate.compareOtherStock(15));
 	}
 
 	@Test
@@ -130,7 +130,7 @@ public class ProductTest {
 		StockReferral referral = StockReferral.at(plate, 5, date);
 		plate.addReferral(referral);
 
-		assertEquals(plate.getStock(), 5);
+        assertTrue(plate.compareOtherStock(5));
 		assertEquals(1, plate.getListReferral().size());
 	}
 
@@ -178,43 +178,43 @@ public class ProductTest {
 
 	@Test
 	public void verifyCompareStockCorrect() {
-		assertTrue(plate.compareStock(stock));
+		assertTrue(plate.compareOtherStock(stock));
 	}
 
 	@Test
 	public void verifyCompareStockWrong() {
 		Integer potentialStock = 20;
 
-		assertNotEquals(plate, potentialStock);
+        assertFalse(plate.compareOtherStock(potentialStock));
 	}
 
 	@Test
 	public void verifyComparePriceCostCorrect() {
-		assertTrue(plate.comparePriceCost(priceCost));
+		assertTrue(plate.compareOtherPriceCost(priceCost));
 	}
 
 	@Test
 	public void verifyComparePriceCostWrong() {
 		Double potentialPriceCost = 7.0;
 
-		assertNotEquals(plate, potentialPriceCost);
+        assertFalse(plate.compareOtherPriceCost(potentialPriceCost));
 	}
 
 	@Test
 	public void verifyComparePriceSaleCorrect() {
-		assertTrue(plate.comparePriceSale(priceSale));
+		assertTrue(plate.compareOtherPriceSale(priceSale));
 	}
 
 	@Test
 	public void verifyComparePriceSaleWrong() {
 		Double potentialPriceSale = 30.0;
 
-		assertNotEquals(plate, potentialPriceSale);
+        assertFalse(plate.compareOtherPriceSale(potentialPriceSale));
 	}
 
 	@Test
 	public void verifyCompareLineCorrect() {
-		assertTrue(plate.compareLine(line));
+		assertTrue(plate.compareOtherLine(line));
 	}
 
 	@Test
@@ -222,12 +222,12 @@ public class ProductTest {
 		Line potentialLine = testObjectBucket.createLinePlate();
 		plate.setLine(potentialLine);
 
-		assertFalse(plate.compareLine(line));
+		assertFalse(plate.compareOtherLine(line));
 	}
 
 	@Test
 	public void verifyCompareProviderCorrect() {
-		assertTrue(plate.compareProvider(provider));
+		assertTrue(plate.compareOtherProvider(provider));
 	}
 
 	@Test
@@ -236,7 +236,7 @@ public class ProductTest {
 				TestObjectBucket.JUAN_PEREZ_CELLPHONE);
 		plate.setProvider(potentialProvider);
 
-		assertFalse(plate.compareProvider(provider));
+		assertFalse(plate.compareOtherProvider(provider));
 	}
 
 	@Test

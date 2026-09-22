@@ -89,13 +89,13 @@ public class Product implements Serializable {
     @Column(name = "prd_price_sale")
     private Double priceSale;
 
-    @Column(name = "prd_image")
-    private byte[] image;
-
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "prd_cn_id", nullable = false)
     private Coin coin;
+
+    @Column(name = "prd_image")
+    private byte[] image;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -130,8 +130,8 @@ public class Product implements Serializable {
         this.measurement = measurement;
         this.priceCost = priceCost;
         this.priceSale = priceSale;
-        this.image = image;
         this.coin = coin;
+        this.image = image;
         this.line = line;
         this.provider = provider;
         listChangePriceCost = new ArrayList<>();
@@ -155,10 +155,10 @@ public class Product implements Serializable {
             throw new NegativeFieldException(PRICE_SALE_CAN_NOT_BE_LESS_ZERO);
         if (priceCost > priceSale)
             throw new ValueLessThanOtherException(PRICE_SALE_CHEAPER_THAN_PRICE_COST);
-        if (null == image)
-            throw new RuntimeException(IMAGE_CAN_NOT_BE_NULL);
         if (null == coin)
             throw new RuntimeException(COIN_CAN_NOT_BE_NULL);
+        if (null == image)
+            throw new RuntimeException(IMAGE_CAN_NOT_BE_NULL);
         if (null == line)
             throw new EmptyFieldException(LINE_CAN_NOT_BE_NULL);
         if (null == provider)
@@ -274,7 +274,7 @@ public class Product implements Serializable {
         return code.equalsIgnoreCase(potentialProduct.getCode());
     }
 
-    public Boolean listTransactionCompareGreatherThanZero(Integer count) {
+    public Boolean listTransactionCompareGreaterThanZero(Integer count) {
         return listStockBuy.size() > count;
     }
 
@@ -310,7 +310,7 @@ public class Product implements Serializable {
         return verifyValueGreaterThanPotentialStock(amount);
     }
 
-    public void changeMesurementStock(Integer potentialStock) {
+    public void changeMeasurementStock(Integer potentialStock) {
         if (compareOtherStock(potentialStock)) {
             setStock(potentialStock);
         }
@@ -337,23 +337,23 @@ public class Product implements Serializable {
         return description.equalsIgnoreCase(potentialDescription);
     }
 
-    public Boolean compareStock(Integer potentialStock) {
+    public Boolean compareOtherStock(Integer potentialStock) {
         return stock.equals(potentialStock);
     }
 
-    public Boolean comparePriceSale(Double potentialPriceSale) {
+    public Boolean compareOtherPriceSale(Double potentialPriceSale) {
         return priceSale.equals(potentialPriceSale);
     }
 
-    public Boolean comparePriceCost(Double potentialPriceCost) {
+    public Boolean compareOtherPriceCost(Double potentialPriceCost) {
         return priceCost.equals(potentialPriceCost);
     }
 
-    public Boolean compareLine(Line potentialLine) {
+    public Boolean compareOtherLine(Line potentialLine) {
         return line.equals(potentialLine);
     }
 
-    public Boolean compareProvider(Provider potentialProvider) {
+    public Boolean compareOtherProvider(Provider potentialProvider) {
         return provider.equals(potentialProvider);
     }
 
@@ -381,9 +381,5 @@ public class Product implements Serializable {
         } else {
             throw new RuntimeException(AMOUNT_GREATER_THAN_AVAILABLE);
         }
-    }
-
-    public Boolean compareOtherStock(Integer potentialValue) {
-        return stock.equals(potentialValue);
     }
 }
