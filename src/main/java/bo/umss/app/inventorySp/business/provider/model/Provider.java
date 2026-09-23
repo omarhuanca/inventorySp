@@ -21,7 +21,6 @@ public class Provider implements Serializable {
 	private static final long serialVersionUID = -481161483247606771L;
 
 	public static final String NAME_CAN_NOT_BE_BLANK = "Name can not be blank.";
-	public static final String PHONE_NUMBER_CAN_NOT_BE_BLANK = "Phone number can not be blank.";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,24 +32,17 @@ public class Provider implements Serializable {
 	@Column(name = "prv_name")
 	private String name;
 
-	@NotBlank
-	@Column(name = "prv_phone_number")
-	private String phoneNumber;
-
-	public Provider(String name, String phoneNumber) {
+	public Provider(String name) {
 		this.name = name;
-		this.phoneNumber = phoneNumber;
 	}
 
 	public Provider() {
 	}
 
-	public static Provider at(String name, String phoneNumber) {
+	public static Provider at(String name) {
 		if (name.isEmpty())
 			throw new EmptyFieldException(NAME_CAN_NOT_BE_BLANK);
-		if (phoneNumber.isEmpty())
-			throw new EmptyFieldException(PHONE_NUMBER_CAN_NOT_BE_BLANK);
-		return new Provider(name, phoneNumber);
+		return new Provider(name);
 	}
 
 	public Long getId() {
@@ -61,16 +53,8 @@ public class Provider implements Serializable {
 		return name;
 	}
 
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	public Boolean compareAnoherName(String potentialName) {
+	public Boolean compareAnotherName(String potentialName) {
 		return name.equalsIgnoreCase(potentialName);
-	}
-
-	public void setPhoneNumber(String potentialPhoneNumber) {
-		phoneNumber = potentialPhoneNumber;
 	}
 
 	public void setName(String potentialName) {

@@ -48,7 +48,7 @@ public class TestObjectBucket {
 		Double priceSale = 10.0;
 		Measurement measurement = createMeasurementPiece();
 		Integer stock = 10;
-		Provider provider = Provider.at(JUAN_PEREZ_NAME, JUAN_PEREZ_CELLPHONE);
+		Provider provider = Provider.at(JUAN_PEREZ_NAME);
 
 		return Product.at(PLATE_CODE, "PLATO ZETA BOWL 8 PORCELANA CUADRADO", stock, measurement, priceCost, priceSale,
 				coin, arrayByte, line, provider);
@@ -69,7 +69,7 @@ public class TestObjectBucket {
 		Double priceSale = 16.0;
 		Measurement measurement = createMeasurementPiece();
 		Integer stock = 10;
-		Provider provider = Provider.at(JUAN_PEREZ_NAME, JUAN_PEREZ_CELLPHONE);
+		Provider provider = Provider.at(JUAN_PEREZ_NAME);
 
 		return Product.at(CUP_CODE, CUP_PURCHASE_DESCRIPTION, stock, measurement, priceCost, priceSale, coin, arrayByte,
 				line, provider);
@@ -86,7 +86,7 @@ public class TestObjectBucket {
 		Double priceSale = 246.0;
 		Measurement measurement = createMeasurementPiece();
 		Integer stock = 80;
-		Provider provider = Provider.at(JUAN_PEREZ_NAME, JUAN_PEREZ_CELLPHONE);
+		Provider provider = Provider.at(JUAN_PEREZ_NAME);
 
 		return Product.at(POT_CODE, "OLLA TRILLIUM INOX 3 PCS", stock, measurement, priceCost, priceSale, coin,
 				arrayByte, line, provider);
@@ -102,7 +102,7 @@ public class TestObjectBucket {
 	}
 
 	public Provider createDefaultProvider() {
-		return Provider.at(JUAN_PEREZ_NAME, JUAN_PEREZ_CELLPHONE);
+		return Provider.at(JUAN_PEREZ_NAME);
 	}
 
 	public StockBuy createStockBuyPlate() {

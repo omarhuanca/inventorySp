@@ -56,8 +56,7 @@ ALTER TABLE cn_coin
 /*==============================================================*/
 CREATE TABLE prv_provider (
     prv_id              BIGINT          NOT NULL,
-    prv_name            VARCHAR(45)     NOT NULL,
-    prv_phone_number    VARCHAR(45)     NOT NULL
+    prv_name            VARCHAR(45)     NOT NULL
 );
 
 ALTER TABLE prv_provider

@@ -91,7 +91,7 @@ public class ProviderServiceTest {
 		Mockito.when(providerRepository.findByName(Mockito.anyString())).thenReturn(potentialProvider);
 		Provider recover = providerService.findByName(potentialName);
 
-		assertTrue(recover.compareAnoherName(potentialName));
+		assertTrue(recover.compareAnotherName(potentialName));
 	}
 
 	@Test
@@ -100,6 +100,6 @@ public class ProviderServiceTest {
 		Mockito.when(providerRepository.findByName(Mockito.anyString())).thenReturn(potentialProvider);
 		Provider recover = providerService.findByName(potentialName);
 
-		assertFalse(recover.compareAnoherName(potentialName + "t"));
+		assertFalse(recover.compareAnotherName(potentialName + "t"));
 	}
 }

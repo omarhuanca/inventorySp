@@ -19,24 +19,18 @@ public class ProviderDto {
 	@NotBlank
 	private String name;
 
-	@NotBlank
-	private String phoneNumber;
-
-	public ProviderDto(Long id, String name, String phoneNumber) {
+	public ProviderDto(Long id, String name) {
 		this.id = id;
 		this.name = name;
-		this.phoneNumber = phoneNumber;
 	}
 
 	public ProviderDto() {
 	}
 
-	public static ProviderDto at(Long id, @NotBlank String name, @NotBlank String phoneNumber) {
+	public static ProviderDto at(Long id, @NotBlank String name) {
 		if (name.isEmpty())
 			throw new EmptyFieldException(Provider.NAME_CAN_NOT_BE_BLANK);
-		if (phoneNumber.isEmpty())
-			throw new EmptyFieldException(Provider.PHONE_NUMBER_CAN_NOT_BE_BLANK);
-		return new ProviderDto(id, name, phoneNumber);
+		return new ProviderDto(id, name);
 	}
 
 	public Long getId() {
@@ -45,9 +39,5 @@ public class ProviderDto {
 
 	public String getName() {
 		return name;
-	}
-
-	public String getPhoneNumber() {
-		return phoneNumber;
 	}
 }

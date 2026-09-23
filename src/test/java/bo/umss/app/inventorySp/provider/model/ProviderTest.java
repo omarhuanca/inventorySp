@@ -23,29 +23,23 @@ public class ProviderTest {
 
 	@Test
 	public void canNotCreateEmptyName() {
-		assertThrows(RuntimeException.class, () -> Provider.at("", TestObjectBucket.JUAN_PEREZ_CELLPHONE),
-				Provider.NAME_CAN_NOT_BE_BLANK);
-	}
-
-	@Test
-	public void canNotCreateEmptyPhoneNumber() {
-		assertThrows(RuntimeException.class, () -> Provider.at(TestObjectBucket.JUAN_PEREZ_NAME, ""),
+		assertThrows(RuntimeException.class, () -> Provider.at(""),
 				Provider.NAME_CAN_NOT_BE_BLANK);
 	}
 
 	@Test
 	public void verifySuccessEqual() {
-		assertTrue(potentialProvider.compareAnoherName(TestObjectBucket.JUAN_PEREZ_NAME));
+		assertTrue(potentialProvider.compareAnotherName(TestObjectBucket.JUAN_PEREZ_NAME));
 	}
 
 	@Test
 	public void verifyFailureEqual() {
-		assertFalse(potentialProvider.compareAnoherName(TestObjectBucket.JUAN_PEREZ_NAME + "t"));
+		assertFalse(potentialProvider.compareAnotherName(TestObjectBucket.JUAN_PEREZ_NAME + "t"));
 	}
 
 	@Test
 	public void verifyCompareNameIsWrong() {
 		potentialProvider.setName("Pedro");
-		assertFalse(potentialProvider.compareAnoherName(TestObjectBucket.JUAN_PEREZ_NAME));
+		assertFalse(potentialProvider.compareAnotherName(TestObjectBucket.JUAN_PEREZ_NAME));
 	}
 }

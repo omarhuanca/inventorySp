@@ -19,17 +19,16 @@ public class ProviderMapper implements IMapper<Provider, ProviderDto> {
 
 	@Override
 	public ProviderDto toDto(Provider entity) {
-		return ProviderDto.at(entity.getId(), entity.getName(), entity.getPhoneNumber());
+		return ProviderDto.at(entity.getId(), entity.getName());
 	}
 
 	@Override
 	public Provider toEntity(ProviderDto dto, boolean isNew) {
 		if (isNew) {
-			return Provider.at(dto.getName(), dto.getPhoneNumber());
+			return Provider.at(dto.getName());
 		} else {
 			Provider recover = service.findById(dto.getId());
 			recover.setName(StringUtils.upperCase(dto.getName()));
-			recover.setPhoneNumber(dto.getPhoneNumber());
 
 			return recover;
 		}
